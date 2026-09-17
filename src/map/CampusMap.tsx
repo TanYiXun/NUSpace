@@ -5,8 +5,13 @@ import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_EXTRUSION_LAYER_ID = 'prototype-com3-extrusion';
+const COM3_OUTLINE_LAYER_ID = 'prototype-com3-outline';
 const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
 const com3Building = JSON.parse(com3BuildingRaw) as GeoJSON.FeatureCollection;
+
+function getFirstSymbolLayerId(map: maplibregl.Map) {
+  return map.getStyle().layers?.find((layer) => layer.type === 'symbol')?.id;
+}
 
 export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -45,6 +50,8 @@ export function CampusMap() {
         data: com3Building,
       });
 
+      const firstSymbolLayerId = getFirstSymbolLayerId(map);
+
       map.addLayer({
         id: COM3_EXTRUSION_LAYER_ID,
         type: 'fill-extrusion',
@@ -53,15 +60,31 @@ export function CampusMap() {
           'fill-extrusion-color': [
             'case',
             ['boolean', ['feature-state', 'selected'], false],
-            '#226f8f',
-            '#6f8792',
+            '#78939b',
+            '#9aa5a5',
           ],
           'fill-extrusion-height': ['get', 'height_m'],
           'fill-extrusion-base': 0,
-          'fill-extrusion-opacity': 0.86,
+          'fill-extrusion-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            0.68,
+            0.5,
+          ],
           'fill-extrusion-vertical-gradient': true,
         },
-      });
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: COM3_OUTLINE_LAYER_ID,
+        type: 'line',
+        source: COM3_SOURCE_ID,
+        paint: {
+          'line-color': '#385863',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 15, 1.2, 18, 2],
+          'line-opacity': 0.82,
+        },
+      }, firstSymbolLayerId);
 
       map.addLayer({
         id: COM3_LABEL_LAYER_ID,
@@ -76,9 +99,9 @@ export function CampusMap() {
           'text-ignore-placement': false,
         },
         paint: {
-          'text-color': '#162330',
+          'text-color': '#24333f',
           'text-halo-color': '#ffffff',
-          'text-halo-width': 1.4,
+          'text-halo-width': 1.7,
         },
       });
 

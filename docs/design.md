@@ -32,3 +32,9 @@ Visual QA notes must be added after running the map in desktop and mobile viewpo
 - The selected detail panel exposes source truth: OSM footprint, OSM level count, estimated height.
 - The label uses collision handling and a white halo for readability.
 - Direct desktop and mobile visual QA is still required to confirm alignment, label placement, and click interaction in the browser.
+
+Visual QA follow-up:
+
+- Initial visual pass made COM3 look like a heavy blue slab over the basemap.
+- The extrusion should stay quiet during Prototype B because the goal is alignment validation, not final building art direction.
+- Custom buildings should render below basemap symbol labels where possible, use neutral low-opacity materials, and include a subtle outline for footprint readability.

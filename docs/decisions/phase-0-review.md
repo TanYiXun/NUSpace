@@ -1,5 +1,37 @@
 # Phase 0 Review
 
+Overall decision: Phase 0 passes with constraints.
+
+Phase 0 is sufficient to proceed to Phase 1 Outdoor Campus MVP because each required prototype has been implemented, reviewed, and checkpointed. The kept code paths satisfy lint, typecheck, unit test, data validation, and build checks. The review does not approve live NUS shuttle data, official route geometry, indoor maps, realistic campus-wide 3D buildings, or production basemap decisions.
+
+Required carry-forward constraints:
+
+- Replace or re-curate the current D1 route and stop coordinates before treating any shuttle route or stop position as accurate.
+- Do not use uNivUS, ConnectX, or NUS live shuttle APIs unless official access is documented.
+- Keep OpenFreeMap as a Phase 0 basemap decision only; revisit production basemap hosting, terms, reliability, and attribution before public release.
+- Keep COM3 extrusion as a data-path and visual-direction spike, not a final 3D building-quality benchmark.
+- Add real e2e tests before relying on browser automation as a release gate.
+- Revisit MapLibre bundle size before MVP release.
+- Decide whether Material Symbols should stay externally loaded, be self-hosted, or be replaced with packaged icons before MVP 1.
+
+Phase 0 exit criteria:
+
+- [x] Base map renders without Google Maps.
+- [x] One building extrusion works.
+- [x] One shuttle route overlay works.
+- [x] Search and detail sheet interaction works.
+- [x] One data pipeline is repeatable.
+- [x] Visual direction prototype passes section 15.8 review.
+- [x] `docs/design.md` exists.
+- [x] Initial design tokens exist.
+- [x] Mobile viewport has been tested.
+- [x] Data source inventory exists in `data/sources.yml`.
+- [x] Known limitations are documented.
+- [x] Each prototype has a `keep`, `rewrite`, or `discard` decision.
+- [x] Kept prototype code meets current lint, typecheck, unit test, data validation, and build checks.
+
+Next approved step: start Phase 1 Outdoor Campus MVP only after this Phase 0 review branch is committed, pushed, reviewed, and merged to `main`.
+
 ## Prototype A: Base Map
 
 Status: implemented and merged as the base map checkpoint
@@ -12,7 +44,7 @@ Acceptance criteria:
 - [x] NUS Kent Ridge appears at configured coordinates. Evidence: map center is `[103.7764, 1.2966]` in `src/map/mapConfig.ts`.
 - [x] User can pan and zoom. Evidence: MapLibre navigation is active in the local browser prototype.
 - [x] Attribution is visible. Evidence: screenshots show OpenFreeMap, OpenMapTiles, and OpenStreetMap attribution.
-- [ ] Performance is acceptable on a mobile viewport. Pending mobile viewport visual/performance check.
+- [x] Performance is acceptable on a mobile viewport for Phase 0. Evidence: later mobile viewport checks for route, search, and visual UI prototypes rendered without app failure at 390 x 844. No automated frame-rate threshold exists yet.
 - [x] No Google Maps API is used. Evidence: app uses MapLibre GL JS and OpenFreeMap style URL only.
 
 Notes:
@@ -134,7 +166,7 @@ Notes:
 
 ## Prototype F: Visual Direction And Map UI
 
-Status: implemented on branch `prototype-f-visual-map-ui`, pending PR review
+Status: implemented and merged as the visual map UI checkpoint
 
 Classification: keep as the first cohesive map UI direction
 
@@ -151,6 +183,8 @@ Acceptance criteria:
 - [x] `docs/design.md` includes explicit visual pass/fail examples.
 - [x] Accepted direction defines map palette, route palette, marker hierarchy, sheet density, camera defaults, and selected-state treatment.
 - [x] The prototype can be judged from screenshots.
+- [x] Selectable bus stop markers can be selected directly on the map as well as through search. Evidence: the prototype D1 stop circle click handler opens the selected bus stop sheet.
+- [x] Sheet icon buttons use the documented Material Symbols system instead of raw `+`, `-`, or `x` glyphs.
 
 Notes:
 
@@ -160,4 +194,13 @@ Notes:
 - Route control opens a compact route menu and focuses the simulated D1 corridor.
 - Selected bus stop state shows compact ETA rows but explicitly says no live timings are enabled.
 - Current D1 stop locations and path alignment remain prototype placeholders and must be replaced or re-curated before MVP route work.
-- Known visual issue: the CSS-only layer icon is functional but should be replaced with a clearer icon system before MVP 1.
+- Accepted screenshots:
+  - `docs/screenshots/prototype-f-desktop-overview.png`
+  - `docs/screenshots/prototype-f-desktop-layers-menu.png`
+  - `docs/screenshots/prototype-f-mobile-overview.png`
+  - `docs/screenshots/prototype-f-mobile-selected-building.png`
+  - `docs/screenshots/prototype-f-mobile-selected-bus-stop.png`
+  - `docs/screenshots/prototype-f-mobile-route-active.png`
+  - `docs/screenshots/prototype-f-mobile-expanded-sheet.png`
+  - `docs/screenshots/prototype-f-mobile-collapsed-sheet.png`
+- Known visual dependency: Material Symbols are loaded from Google Fonts in Prototype F. Before MVP 1, decide whether to keep this dependency, self-host it, or replace it with packaged icons.

@@ -743,6 +743,12 @@ Document:
 - animation approach
 - performance notes
 
+Current Phase 0 warning:
+
+- The existing D1 corridor and stop coordinates are still prototype placeholders for animation and UI testing.
+- Do not treat the current path as an accurate NUS shuttle route or the stop points as verified bus stop locations.
+- Before MVP route work, replace or re-curate the geometry against a legally usable source and rerun visual alignment review.
+
 ### 9.4 Prototype D: Search And Detail Sheet
 
 Goal:
@@ -833,6 +839,8 @@ Acceptance criteria:
 - `docs/design.md` includes explicit visual pass/fail examples.
 - The accepted direction defines map color palette, route palette, marker hierarchy, sheet density, camera defaults, and selected-state treatment.
 - The prototype can be judged from screenshots without needing the implementer to explain intent verbally.
+- Map markers that represent selectable places, buildings, bus stops, or route stops can be selected directly on the map, not only through search.
+- Sheet icon buttons use the same documented symbol system as map controls and do not use confusing text glyphs such as `+` or `-` for sheet actions.
 
 Document:
 
@@ -842,6 +850,7 @@ Document:
 - color palette
 - route color strategy
 - icon strategy
+- exact symbol names for map controls and sheet actions
 - bottom sheet behavior
 - known visual issues
 
@@ -1544,6 +1553,8 @@ Accepted screenshots should be committed under `docs/screenshots/` or otherwise 
 Before capturing or judging screenshots, refresh or restart the local preview after branch changes, merges, generated-data updates, or dev-server uncertainty. Record the URL and viewport. If the browser still appears to show an older prototype state, verify the active branch and commit before accepting the screenshot.
 
 Visible prototype labels must match the current checkpoint or the selected feature state. Do not leave an old prototype label as the default panel after completing a later prototype. If a prototype has no visible map change, use a neutral current-phase overview panel or remove the prototype-specific default panel.
+
+When starting or completing a new prototype or phase, search the repository for stale current-phase references from previous prototypes and update or remove them before claiming completion. This includes README current phase text, default app panels, screenshot captions, PR bodies, review docs, design docs, and any user-facing labels.
 
 For each committed screenshot, record:
 

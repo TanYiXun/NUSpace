@@ -1,0 +1,25 @@
+:root {
+  --color-ink: #17212b;
+  --color-ink-soft: #536271;
+  --color-muted: #61707f;
+  --color-panel: rgb(255 255 255 / 96%);
+  --color-panel-border: rgb(218 226 232 / 92%);
+  --color-map-control: rgb(255 255 255 / 96%);
+  --color-route-d1: #7f42bd;
+  --color-route-d1-dark: #5c2a91;
+  --color-nus-blue: #1d5f8f;
+  --color-nus-orange: #ef7c22;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --radius-control: 8px;
+  --radius-sheet: 8px;
+  --shadow-control: 0 12px 28px rgb(24 35 45 / 18%);
+  --shadow-sheet: 0 18px 45px rgb(26 35 43 / 20%);
+  --z-map-control: 2;
+  --z-sheet: 3;
+  --motion-quick: 160ms ease;
+}

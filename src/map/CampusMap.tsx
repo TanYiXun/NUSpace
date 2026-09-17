@@ -4,7 +4,7 @@ import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
 import d1StopsRaw from '../../data/prototype/d1-stops.geojson?raw';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
-import { searchEntities, type SearchEntity } from './searchIndex';
+import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -16,6 +16,7 @@ const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
 const D1_ROUTE_SOURCE_ID = 'prototype-d1-route';
 const D1_STOPS_SOURCE_ID = 'prototype-d1-stops';
 const D1_BUS_SOURCE_ID = 'prototype-d1-simulated-bus';
+const CAMPUS_BUS_STOPS_SOURCE_ID = 'mvp1-campus-bus-stops';
 const USER_LOCATION_SOURCE_ID = 'user-location';
 const D1_ROUTE_CASING_LAYER_ID = 'prototype-d1-route-casing';
 const D1_ROUTE_LAYER_ID = 'prototype-d1-route-line';
@@ -24,6 +25,8 @@ const D1_STOP_CIRCLES_LAYER_ID = 'prototype-d1-stop-circles';
 const D1_STOP_LABELS_LAYER_ID = 'prototype-d1-stop-labels';
 const D1_BUS_CIRCLE_LAYER_ID = 'prototype-d1-bus-circle';
 const D1_BUS_LABEL_LAYER_ID = 'prototype-d1-bus-label';
+const CAMPUS_BUS_STOP_CIRCLES_LAYER_ID = 'mvp1-campus-bus-stop-circles';
+const CAMPUS_BUS_STOP_LABELS_LAYER_ID = 'mvp1-campus-bus-stop-labels';
 const USER_LOCATION_ACCURACY_LAYER_ID = 'user-location-accuracy';
 const USER_LOCATION_DOT_LAYER_ID = 'user-location-dot';
 const com3Building = JSON.parse(com3BuildingRaw) as GeoJSON.FeatureCollection;
@@ -44,6 +47,8 @@ const ROUTE_LAYER_IDS = [
   D1_ROUTE_ARROWS_LAYER_ID,
   D1_STOP_CIRCLES_LAYER_ID,
   D1_STOP_LABELS_LAYER_ID,
+  CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
+  CAMPUS_BUS_STOP_LABELS_LAYER_ID,
   D1_BUS_CIRCLE_LAYER_ID,
   D1_BUS_LABEL_LAYER_ID,
 ];
@@ -199,6 +204,34 @@ function createUserLocationFeature(coordinates: LngLatPosition, accuracy: number
     ],
   };
 }
+
+function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: searchIndex
+      .filter((entity) => entity.type === 'bus_stop' && entity.sourceId === 'osm-api-nus-kent-ridge-map')
+      .map((entity) => ({
+        type: 'Feature' as const,
+        id: entity.id,
+        properties: {
+          entity_id: entity.id,
+          name: entity.name,
+          source_id: entity.sourceId,
+          source_status: entity.sourceStatus,
+          note: entity.detail,
+        },
+        geometry: {
+          type: 'Point' as const,
+          coordinates: entity.coordinates as LngLatPosition,
+        },
+      })),
+  };
+}
+
+const campusBusStops = createCampusBusStopsFeatureCollection();
+const campusPlaceCount = searchIndex.filter((entity) => entity.type !== 'route').length;
+const campusBuildingCount = searchIndex.filter((entity) => entity.type === 'building').length;
+const campusBusStopCount = searchIndex.filter((entity) => entity.type === 'bus_stop').length;
 
 export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -411,6 +444,11 @@ export function CampusMap() {
         data: createSimulatedBusFeature(interpolateRoutePosition(d1RouteCoordinates, 0)),
       });
 
+      map.addSource(CAMPUS_BUS_STOPS_SOURCE_ID, {
+        type: 'geojson',
+        data: campusBusStops,
+      });
+
       map.addSource(USER_LOCATION_SOURCE_ID, {
         type: 'geojson',
         data: {
@@ -584,6 +622,40 @@ export function CampusMap() {
       });
 
       map.addLayer({
+        id: CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
+        type: 'circle',
+        source: CAMPUS_BUS_STOPS_SOURCE_ID,
+        minzoom: 14.3,
+        paint: {
+          'circle-color': '#ffffff',
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 3, 18, 6],
+          'circle-stroke-color': '#2f80ed',
+          'circle-stroke-width': 2,
+          'circle-opacity': 0.96,
+        },
+      });
+
+      map.addLayer({
+        id: CAMPUS_BUS_STOP_LABELS_LAYER_ID,
+        type: 'symbol',
+        source: CAMPUS_BUS_STOPS_SOURCE_ID,
+        minzoom: 16,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 16, 10, 18, 12],
+          'text-font': ['Open Sans Semibold'],
+          'text-anchor': 'top',
+          'text-offset': [0, 0.75],
+          'text-allow-overlap': false,
+        },
+        paint: {
+          'text-color': '#1f4f7a',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.4,
+        },
+      });
+
+      map.addLayer({
         id: D1_BUS_CIRCLE_LAYER_ID,
         type: 'circle',
         source: D1_BUS_SOURCE_ID,
@@ -699,12 +771,28 @@ export function CampusMap() {
         }
       });
 
+      map.on('mouseenter', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, () => {
+        map.getCanvas().style.cursor = '';
+      });
+      map.on('click', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, (event) => {
+        const stopId = event.features?.[0]?.properties?.entity_id as string | undefined;
+        const stopEntity = searchIndex.find((entity) => entity.id === stopId && entity.type === 'bus_stop');
+
+        if (stopEntity) {
+          selectBusStop(stopEntity);
+        }
+      });
+
       map.on('click', (event) => {
         const selectedFeatures = map.queryRenderedFeatures(event.point, {
           layers: [
             COM3_EXTRUSION_LAYER_ID,
             D1_ROUTE_LAYER_ID,
             D1_STOP_CIRCLES_LAYER_ID,
+            CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
             D1_BUS_CIRCLE_LAYER_ID,
           ],
         });
@@ -839,19 +927,19 @@ export function CampusMap() {
         <div className="floatingMenu" data-menu="layers">
           <div className="floatingMenuHeader">
             <h2>Layers</h2>
-            <p>Phase 0</p>
+            <p>Phase 1</p>
           </div>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
             <span className="choiceText">
-              <strong>Prototype buildings</strong>
-              <small>COM3 sourced footprint with placeholder visual detail</small>
+              <strong>Building detail</strong>
+              <small>COM3 extrusion plus OSM-sourced search points</small>
             </span>
             <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
           </button>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('routes')}>
             <span className="choiceText">
-              <strong>Shuttle simulation</strong>
-              <small>D1 corridor, stops, and animated marker</small>
+              <strong>Transit seed</strong>
+              <small>OSM bus stops plus prototype D1 simulation</small>
             </span>
             <span className="layerState">{visibleLayers.routes ? 'On' : 'Off'}</span>
           </button>
@@ -961,20 +1049,37 @@ export function CampusMap() {
               </div>
             </div>
             <div className="sheetBody">
-              <div className="etaRows" aria-label="Prototype bus arrival rows">
-                <div className="etaRow">
-                  <span className="etaRoute">D1</span>
-                  <span className="etaStatus">Simulated marker only</span>
-                  <span className="etaTime">No ETA</span>
+              {selectedBusStop.sourceId === 'osm-api-nus-kent-ridge-map' ? (
+                <dl className="buildingFacts">
+                  <div>
+                    <dt>Source</dt>
+                    <dd>{selectedBusStop.sourceLabel}</dd>
+                  </div>
+                  <div>
+                    <dt>Status</dt>
+                    <dd>{selectedBusStop.sourceStatus}</dd>
+                  </div>
+                  <div>
+                    <dt>Arrivals</dt>
+                    <dd>Not enabled</dd>
+                  </div>
+                </dl>
+              ) : (
+                <div className="etaRows" aria-label="Prototype bus arrival rows">
+                  <div className="etaRow">
+                    <span className="etaRoute">D1</span>
+                    <span className="etaStatus">Simulated marker only</span>
+                    <span className="etaTime">No ETA</span>
+                  </div>
+                  <div className="etaRow">
+                    <span className="etaRoute">D2</span>
+                    <span className="etaStatus">Not enabled</span>
+                    <span className="etaTime">--</span>
+                  </div>
                 </div>
-                <div className="etaRow">
-                  <span className="etaRoute">D2</span>
-                  <span className="etaStatus">Not enabled</span>
-                  <span className="etaTime">--</span>
-                </div>
-              </div>
+              )}
               <p className="truthNote">
-                Prototype stop coordinate only. No live NUS shuttle timings, crowd level, or vehicle positions.
+                {selectedBusStop.detail}
               </p>
             </div>
           </>
@@ -1025,27 +1130,27 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 0 Prototype F</p>
+            <p className="eyebrow">Phase 1 data foundation</p>
             <h1>NUSpace</h1>
             <p>
-              Visual map UI checkpoint. Use search, location, route, and layer controls to inspect prototype states.
+              Search now uses an OSM-sourced Kent Ridge place seed with selectable bus stop markers.
             </p>
             <dl className="buildingFacts">
               <div>
-                <dt>Controls</dt>
-                <dd>Location, routes, layers</dd>
+                <dt>Places</dt>
+                <dd>{campusPlaceCount} searchable</dd>
               </div>
               <div>
-                <dt>Sheet</dt>
-                <dd>Collapsed, half, expanded</dd>
+                <dt>Buildings</dt>
+                <dd>{campusBuildingCount} sourced points</dd>
               </div>
               <div>
-                <dt>Routes</dt>
-                <dd>Prototype simulation only</dd>
+                <dt>Bus stops</dt>
+                <dd>{campusBusStopCount} OSM markers</dd>
               </div>
             </dl>
             <p className="truthNote">
-              No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
+              OSM places are community map data, not official NUS data. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>
             {locationStatus !== 'idle' ? (
               <p className="locationNote">

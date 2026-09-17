@@ -45,3 +45,39 @@ Known data quality issues:
 - Exact height is not sourced. `height_m=24` remains a prototype estimate.
 - The output does not contain building parts, facade details, roof cutouts, room data, floor plans, entrances, accessibility routes, or indoor connectivity.
 - This pipeline has no network fetch step yet. Future import work should add a separate raw-data stage with licensing and attribution review before broad campus generation.
+
+## MVP 1 Campus Place Seed
+
+Phase 1 adds the first curated campus place seed:
+
+- `data/curated/mvp1-campus-places.json`
+- Source id: `osm-api-nus-kent-ridge-map`
+- Source owner: OpenStreetMap contributors
+- Status: verified as OSM community map data, not official NUS data
+
+The source was checked on 2026-09-18 using a bounded OpenStreetMap API extract:
+
+```text
+https://api.openstreetmap.org/api/0.6/map?bbox=103.770,1.290,103.785,1.306
+```
+
+The full raw XML extract is not committed. The curated JSON preserves the OSM object type, OSM id, source id, source label, coordinate, and user-facing limitation text for each displayed entity.
+
+Validation:
+
+```bash
+npm run validate:data
+```
+
+Validation checks the curated place schema, unique ids, allowed place types, WGS84 coordinate order, NUS-area bounds, source ids in `data/sources.yml`, OSM object provenance, and MVP 1 seed minimums:
+
+- at least 20 searchable places
+- at least 10 buildings
+- at least 8 bus stops
+
+Known data quality issues:
+
+- The dataset is intentionally a seed, not full campus coverage.
+- OSM building and bus stop data is community-maintained and not official NUS data.
+- OSM bus stops do not provide live NUS shuttle arrivals, crowd levels, route membership, or official NUS ISB operating data.
+- The current D1 route remains a prototype simulation and is not generated from this dataset.

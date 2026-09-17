@@ -4,6 +4,7 @@ const sourceFile = new URL('../../data/sources.yml', import.meta.url);
 const contents = await readFile(sourceFile, 'utf8');
 const generatedBuildingsFile = new URL('../../data/generated/campus-buildings.geojson', import.meta.url);
 const generatedManifestFile = new URL('../../data/generated/manifest.json', import.meta.url);
+const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', import.meta.url);
 
 const NUS_BOUNDS = {
   minLng: 103.76,
@@ -16,6 +17,7 @@ const requiredFragments = [
   'id: openfreemap',
   'id: osm-overpass-com3',
   'id: manual-osm-d1-prototype-route',
+  'id: osm-api-nus-kent-ridge-map',
   'source_owner:',
   'source_url:',
   'documentation_url:',
@@ -84,8 +86,33 @@ function validateGeneratedBuilding(feature, index) {
   });
 }
 
+const allowedPlaceTypes = new Set(['building', 'bus_stop', 'food', 'facility']);
+const allowedSourceStatuses = new Set(['verified', 'manual-reference', 'prototype-placeholder']);
+
+function validateCuratedPlace(place, index, seenIds) {
+  const context = `curated place ${place.id ?? index}`;
+
+  assert(typeof place.id === 'string' && place.id.length > 0, `${context} must have an id`);
+  assert(!seenIds.has(place.id), `${context} id must be unique`);
+  seenIds.add(place.id);
+
+  assert(typeof place.name === 'string' && place.name.length > 0, `${context} must have a name`);
+  assert(Array.isArray(place.aliases), `${context} aliases must be an array`);
+  assert(allowedPlaceTypes.has(place.type), `${context} has unsupported type ${place.type}`);
+  assertPosition(place.coordinates, `${context} coordinates`);
+  assert(typeof place.sourceId === 'string' && contents.includes(`id: ${place.sourceId}`), `${context} sourceId must exist in data/sources.yml`);
+  assert(allowedSourceStatuses.has(place.sourceStatus), `${context} has unsupported sourceStatus ${place.sourceStatus}`);
+  assert(typeof place.sourceLabel === 'string' && place.sourceLabel.length > 0, `${context} must have a sourceLabel`);
+  assert(typeof place.detail === 'string' && place.detail.length > 0, `${context} must have a detail note`);
+
+  if (place.sourceId.startsWith('osm-')) {
+    assert(place.osm?.type && place.osm?.id, `${context} must preserve OSM object type and id`);
+  }
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
+const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
 assert(Array.isArray(generatedBuildings.features), 'generated buildings features must be an array');
@@ -99,6 +126,21 @@ assert(
 
 generatedBuildings.features.forEach(validateGeneratedBuilding);
 
+assert(curatedPlaces.schema === 'mvp1-campus-places-v1', 'curated places must use the MVP 1 schema');
+assert(Array.isArray(curatedPlaces.places), 'curated places must include a places array');
+
+const seenPlaceIds = new Set();
+curatedPlaces.places.forEach((place, index) => validateCuratedPlace(place, index, seenPlaceIds));
+
+const placeTypeCounts = curatedPlaces.places.reduce((counts, place) => {
+  counts[place.type] = (counts[place.type] ?? 0) + 1;
+  return counts;
+}, {});
+
+assert(curatedPlaces.places.length >= 20, 'curated places must seed at least 20 searchable places for MVP 1');
+assert((placeTypeCounts.building ?? 0) >= 10, 'curated places must seed at least 10 buildings for MVP 1');
+assert((placeTypeCounts.bus_stop ?? 0) >= 8, 'curated places must seed at least 8 bus stops for MVP 1');
+
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
 assert(
@@ -106,4 +148,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml and generated data contain required Phase 0 metadata.');
+console.log('data/sources.yml, generated data, and curated MVP 1 places contain required metadata.');

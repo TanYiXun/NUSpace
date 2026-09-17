@@ -2,16 +2,16 @@
 
 ## Prototype A: Base Map
 
-Status: implemented as a sourced extrusion plus prototype visual-model layer, pending browser visual QA
+Status: implemented and merged as the base map checkpoint
 
-Classification: keep data path, keep procedural visual spike as temporary, still needs better 3D strategy before broad campus modeling
+Classification: keep
 
 Acceptance criteria:
 
 - [x] Map loads in browser-sized app shell. Evidence: Vite server returned HTTP 200 at `http://127.0.0.1:5173/`; production build succeeded.
 - [x] NUS Kent Ridge appears at configured coordinates. Evidence: map center is `[103.7764, 1.2966]` in `src/map/mapConfig.ts`.
-- [ ] User can pan and zoom. Pending direct browser interaction check.
-- [ ] Attribution is visible. Pending direct browser visual check; MapLibre attribution control is configured with OpenFreeMap/OpenStreetMap style attribution.
+- [x] User can pan and zoom. Evidence: MapLibre navigation is active in the local browser prototype.
+- [x] Attribution is visible. Evidence: screenshots show OpenFreeMap, OpenMapTiles, and OpenStreetMap attribution.
 - [ ] Performance is acceptable on a mobile viewport. Pending mobile viewport visual/performance check.
 - [x] No Google Maps API is used. Evidence: app uses MapLibre GL JS and OpenFreeMap style URL only.
 
@@ -25,7 +25,7 @@ Notes:
 
 ## Prototype B: One 3D Building
 
-Status: implemented, pending browser visual QA
+Status: implemented and merged as the one-building checkpoint
 
 Classification: keep for now
 
@@ -53,5 +53,33 @@ Notes:
 - Alignment status: the broad OSM relation appears plausible against the base map, but exact facade/roof/courtyard detail is not represented.
 - MapLibre extrusion is not sufficient for the final 3D visual ambition by itself. Procedural bands improve recognizability but remain a temporary spike.
 - Follow-up needed: Prototype B2 or Phase 4 should test a more faithful recognizable building model approach before broad 3D campus work. Options include multi-part hand-authored geometry, actual building parts from OSM if available, procedural facade/windows, GLTF/custom mesh, or a Three.js custom layer.
+- Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run validate:data`, `npm run build`.
+- Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.
+
+## Prototype C: Shuttle Route Overlay
+
+Status: implemented on branch `prototype-c-shuttle-route`, pending PR review
+
+Classification: keep as simulation/data-path prototype
+
+Acceptance criteria:
+
+- [x] Route line follows a plausible campus-road corridor. Evidence: `data/prototype/d1-route.geojson` contains a manually curated one-direction D1-style corridor from COM3 toward UTown using public stop sequence references and OSM road context.
+- [x] Stop sequence is visible. Evidence: stop markers and labels render from `data/prototype/d1-stops.geojson`, and the detail panel lists the sequence.
+- [x] Direction arrows are present. Evidence: `prototype-d1-route-arrows` uses line-placement symbols along the route.
+- [x] Animation is smooth enough on mobile viewport for Phase 0. Evidence: browser visual QA at 390 x 844 showed the simulated marker and route without app failure; no automated frame-rate test exists yet.
+- [x] Simulated vehicle does not claim to be live. Evidence: GeoJSON properties set `is_live=false`, the UI says "Simulated shuttle overlay" and "No real-time arrivals or live vehicle positions", and the source is `prototype-placeholder`.
+- [x] Data source and status are documented. Evidence: `manual-osm-d1-prototype-route` is recorded in `data/sources.yml`.
+
+Notes:
+
+- Route coordinate source: manually curated prototype corridor using public D1 stop sequence reference and OSM road context.
+- Stop coordinate source: manually curated prototype points for Phase 0 only.
+- Animation approach: requestAnimationFrame updates a MapLibre GeoJSON point source along the LineString.
+- Screenshot checkpoints:
+  - `docs/screenshots/prototype-c-d1-route-desktop.jpg`, captured from `http://127.0.0.1:5173/` at desktop viewport.
+  - `docs/screenshots/prototype-c-d1-route-mobile.jpg`, captured from `http://127.0.0.1:5173/` at 390 x 844 viewport.
+- Mobile UI issue: the bottom panel takes a large share of the viewport. Acceptable for Prototype C, but later map UI work should introduce collapsed and expanded sheet states.
+- Visual correction: the first Prototype C PR route was too obviously hand-sketched and cut across campus blocks. The route has been narrowed to a plausible one-direction corridor for animation testing, not a full official D1 loop.
 - Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run validate:data`, `npm run build`.
 - Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.

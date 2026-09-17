@@ -1,0 +1,50 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "prototype_d1_route_loop_manual_2026_09_17",
+      "properties": {
+        "name": "D1 simulated route",
+        "route_code": "D1",
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "reference_source": "Public D1 stop sequence reference and OpenStreetMap road context",
+        "created_on": "2026-09-17",
+        "created_by": "manual prototype curation",
+        "method": "Approximate one-direction corridor manually curated around known D1 stop names and visible OSM road context for Phase 0 overlay and animation testing.",
+        "estimated_accuracy_m": 60,
+        "can_ship": false,
+        "review_status": "prototype-only",
+        "is_live": false,
+        "animation_status": "simulated",
+        "note": "Prototype route corridor only. Not official NUS shuttle route geometry and not live vehicle data."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [103.77345, 1.29412],
+          [103.77295, 1.29395],
+          [103.77235, 1.2938],
+          [103.7718, 1.29375],
+          [103.77118, 1.29392],
+          [103.77086, 1.29434],
+          [103.77108, 1.29492],
+          [103.77155, 1.29554],
+          [103.77205, 1.29608],
+          [103.77255, 1.2965],
+          [103.77308, 1.29678],
+          [103.77352, 1.2971],
+          [103.77382, 1.29782],
+          [103.77392, 1.29858],
+          [103.77366, 1.29935],
+          [103.77338, 1.30012],
+          [103.77322, 1.30095],
+          [103.77318, 1.30172],
+          [103.77342, 1.30242],
+          [103.7739, 1.30325]
+        ]
+      }
+    }
+  ]
+}

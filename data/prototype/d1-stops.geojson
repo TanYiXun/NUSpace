@@ -1,0 +1,83 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_com3",
+      "properties": {
+        "name": "COM3",
+        "route_code": "D1",
+        "stop_order": 1,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.77345, 1.29412] }
+    },
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_opp_hssml",
+      "properties": {
+        "name": "Opp HSSML",
+        "route_code": "D1",
+        "stop_order": 2,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.77086, 1.29434] }
+    },
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_opp_nuss",
+      "properties": {
+        "name": "Opp NUSS",
+        "route_code": "D1",
+        "stop_order": 3,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.77308, 1.29678] }
+    },
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_ventus",
+      "properties": {
+        "name": "Ventus",
+        "route_code": "D1",
+        "stop_order": 4,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.77352, 1.2971] }
+    },
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_utown",
+      "properties": {
+        "name": "UTown",
+        "route_code": "D1",
+        "stop_order": 5,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.7739, 1.30325] }
+    },
+    {
+      "type": "Feature",
+      "id": "prototype_d1_stop_clb",
+      "properties": {
+        "name": "CLB",
+        "route_code": "D1",
+        "stop_order": 6,
+        "source_id": "manual-osm-d1-prototype-route",
+        "source_status": "prototype-placeholder",
+        "is_live": false
+      },
+      "geometry": { "type": "Point", "coordinates": [103.77366, 1.29935] }
+    }
+  ]
+}

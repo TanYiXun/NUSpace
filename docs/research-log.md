@@ -18,3 +18,12 @@
 - Decision: use OSM relation `15780831` as the Prototype B footprint and level-count source.
 - Height treatment: OSM provides level count but not exact height, so the 24 m extrusion is a prototype placeholder estimate.
 - Confidence: high for prototype geometry, medium for visual alignment until browser QA is completed, low for exact height.
+
+## 2026-09-17 - Phase 0 Prototype C D1 Route Overlay
+
+- Task: render one NUS shuttle route overlay and animate one fake vehicle marker.
+- Sources checked: public D1 stop sequence references and OpenStreetMap road context.
+- Finding: D1 can be prototyped as a manually curated one-direction corridor overlay, but this does not establish official NUS route geometry, a full loop, live arrival data, or live vehicle positions.
+- Decision: keep the Prototype C route and stop coordinates as `prototype-placeholder` data under `data/prototype/`, with source metadata in `data/sources.yml`.
+- Animation treatment: one MapLibre GeoJSON point is moved along the route with `requestAnimationFrame`.
+- Confidence: medium for testing map interaction and animation behavior, low for production route geometry.

@@ -114,6 +114,37 @@ input {
   line-height: 1.42;
 }
 
+.routeTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.routeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 34px;
+  border-radius: 7px;
+  background: #7f42bd;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.routeFacts {
+  display: grid;
+  gap: 7px;
+  margin: 14px 0 0;
+}
+
+.routeFacts div {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  gap: 12px;
+}
+
 .buildingFacts {
   display: grid;
   gap: 8px;
@@ -126,6 +157,7 @@ input {
   gap: 12px;
 }
 
+.routeFacts dt,
 .buildingFacts dt {
   color: #61707f;
   font-size: 12px;
@@ -133,10 +165,22 @@ input {
   text-transform: uppercase;
 }
 
+.routeFacts dd,
 .buildingFacts dd {
   margin: 0;
   color: #1e2c38;
   font-size: 14px;
+}
+
+.routeStops {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 14px;
+  margin: 14px 0 0;
+  padding-left: 20px;
+  color: #334352;
+  font-size: 13px;
+  line-height: 1.35;
 }
 
 .truthNote {
@@ -175,5 +219,9 @@ input {
 
   .statusPanel h1 {
     font-size: 21px;
+  }
+
+  .routeStops {
+    grid-template-columns: 1fr;
   }
 }

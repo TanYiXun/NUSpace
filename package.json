@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "echo \"test:e2e not implemented for Phase 0 Prototype A\"",
+    "test:e2e": "echo \"test:e2e not implemented for Phase 0 prototypes\"",
     "validate:data": "node scripts/data/validate-sources.mjs",
     "build": "tsc -b && vite build"
   },

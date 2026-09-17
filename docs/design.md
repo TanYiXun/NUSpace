@@ -52,3 +52,22 @@ Visual realism finding:
 - The procedural facade-band spike improves visual separation, but it still does not equal a real building model.
 - Before broad 3D campus work, add a follow-up prototype that tests one recognizable building using multi-part geometry, verified building parts, more realistic procedural facade detail, or a custom 3D model layer.
 - If roads, paths, or labels appear through a custom extrusion, first check opacity and layer ordering, then check whether the source footprint represents an outer shell that includes real under-building circulation, podium areas, or voids. Do not assume a latitude/longitude mismatch without comparing against the source geometry and nearby basemap features.
+
+## Phase 0 Prototype C
+
+- D1 is rendered as a simulated shuttle corridor overlay with a purple route line, white casing, direction arrows, stop markers, and one animated vehicle marker.
+- The route uses a single route identity color so it reads as transit without overwhelming the basemap.
+- The panel explicitly states that the corridor is manually curated and the vehicle is an animated simulation.
+- The UI must not imply live NUS shuttle access, live arrivals, or official route geometry.
+- Accepted desktop visual checkpoint: [Prototype C D1 desktop](screenshots/prototype-c-d1-route-desktop.jpg).
+- Accepted mobile visual checkpoint: [Prototype C D1 mobile](screenshots/prototype-c-d1-route-mobile.jpg).
+- Capture source: running local app at `http://127.0.0.1:5173/`.
+- Viewports: desktop browser viewport and 390 x 844 mobile viewport.
+- Feature state: D1 corridor overlay, stop labels, simulated vehicle, attribution, search control, and route detail panel visible.
+
+Visual QA follow-up:
+
+- The mobile panel is readable but takes too much of the available map area.
+- Later map UI work should add collapsed and expanded bottom-sheet states before transit overlays become dense.
+- Route labels and stop markers are acceptable for one route, but broader transit work will need collision, filtering, and selected-route emphasis.
+- The corridor must not be treated as a complete official D1 route. It is an animation and rendering prototype until approved NUS route geometry is available.

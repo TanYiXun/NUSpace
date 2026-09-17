@@ -4,15 +4,16 @@ NUSpace is an independent NUS-first campus map prototype. Phase 0 is validating 
 
 ## Current Phase
 
-Phase 0 Prototypes A through E are complete and merged:
+Phase 0 Prototypes A through F are complete and merged:
 
 - Prototype A: MapLibre base map centered on NUS without Google Maps.
 - Prototype B: one sourced COM3 building footprint with prototype extrusion styling.
 - Prototype C: manually curated simulated D1-style shuttle corridor and animated vehicle marker.
 - Prototype D: local search and detail sheet interaction for prototype entities.
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
+- Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 0 Prototype F, visual direction and map UI controls. The default app panel should identify the current checkpoint. Earlier prototype panels may appear only after selecting their corresponding building, search result, bus stop, or route state.
+Current work: Phase 0 review. The review gate decides whether the completed prototypes are sufficient to proceed to Phase 1 Outdoor Campus MVP and records required follow-up constraints.
 
 ## Commands
 

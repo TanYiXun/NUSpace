@@ -8,18 +8,15 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `prototype-f-visual-map-ui`.
-- Latest local commit: `168b523 Implement visual map UI prototype`.
-- Current uncommitted handoff edits:
-  - `AGENTS.md` now requires reading `docs/context-handoff.md` for continuation, resume, phase/prototype, PR workflow, or ambiguous "continue" tasks.
-  - `docs/context-handoff.md` was added as the repo-local working-memory summary.
-- Prototype A through E were completed and merged to `main`.
-- Prototype F is implemented locally but has not been pushed, opened as a PR, or merged yet.
+- Current branch: `phase-0-review`.
+- Latest merged `main` commit: `a87cff1 Merge pull request #5 from TanYiXun/prototype-f-visual-map-ui`.
+- Prototype A through F were completed and merged to `main`.
+- Active uncommitted work: Phase 0 review documentation updates.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 9.6, Prototype F: Visual Direction And Map UI.
-- Prototype F status: functionally complete from implementation side, pending user visual approval before push/PR/merge.
+- Active plan section: `PLAN.md` section 9.7, Phase 0 Exit Criteria.
+- Phase 0 review status: in progress on branch `phase-0-review`.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Prototype F Implemented Scope
@@ -103,14 +100,16 @@ Known build warning:
 - UI/map PRs should include implementer-captured screenshots from the running app or deployed preview.
 - `docs/context-handoff.md` is a checkpoint file, not a live changelog. Update it at useful handoff triggers: long/context-heavy sessions, phase/prototype completion, push/PR/merge, branch switch, major decisions, or when automatic compaction has already happened and the file is stale.
 - Automatic Codex compaction cannot reliably be announced before it happens. If compaction happens, continue from the provided summary and refresh this file at the next safe checkpoint.
-- User indicated Prototype F/current stage is ready to continue, subject to the normal push/PR/merge checkpoint workflow.
+- Prototype F PR #5 was pushed, opened with screenshots, and merged to `main`.
 
 ## Next Recommended Action
 
-Prototype F has user approval to continue. Next:
+Finish Phase 0 review. Next:
 
-1. Push branch `prototype-f-visual-map-ui`.
-2. Open a PR with the required plain engineering description.
-3. Include current screenshot links or embeds in the PR body.
-4. Merge to `main` if checks and user approval are satisfied.
-5. Start the next phase only after confirming Prototype F is committed, pushed, and merged or otherwise recorded on `main`.
+1. Complete the Phase 0 review branch.
+2. Run relevant checks.
+3. Commit the review updates.
+4. Push branch `phase-0-review`.
+5. Open a PR with the required plain engineering description.
+6. Merge to `main` if checks and user approval are satisfied.
+7. Start Phase 1 Outdoor Campus MVP only after the review branch is merged.

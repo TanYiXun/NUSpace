@@ -360,6 +360,8 @@ Update documentation when changing:
 - deployment behavior
 - secrets/env requirements
 
+Keep `README.md` current when a task changes the current prototype status, setup commands, generated-data workflow, local server behavior, or user-facing data policy. A stale README is a task-completion failure for prototype checkpoints.
+
 Required docs once scaffolded:
 
 - `README.md`
@@ -426,5 +428,9 @@ Before saying a task is complete, report:
 6. Any incomplete acceptance criteria.
 7. Any plan updates needed.
 8. Any blocked items requiring user or official data-owner action.
+
+For any UI or map-visible task, refresh or restart the local preview after branch changes, merges, generated-data updates, or dev-server uncertainty before judging the screen. If the current browser still appears stale, report the branch, commit, server URL, and whether the server was restarted.
+
+Visible prototype labels must match the current checkpoint or the selected feature state. Do not leave an old prototype label as the default panel after completing a later prototype. If the current task has no UI change, either show a neutral current-phase overview or remove the prototype-specific default panel.
 
 Do not claim live data, production readiness, or official API access unless the evidence is documented.

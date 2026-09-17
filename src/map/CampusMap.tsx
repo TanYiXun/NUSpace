@@ -162,7 +162,7 @@ export function CampusMap() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'error'>('loading');
-  const [selectedPanel, setSelectedPanel] = useState<'route' | 'building' | 'search'>('route');
+  const [selectedPanel, setSelectedPanel] = useState<'overview' | 'route' | 'building' | 'search'>('overview');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchEntity[]>([]);
   const [selectedSearchEntity, setSelectedSearchEntity] = useState<SearchEntity | null>(null);
@@ -588,7 +588,7 @@ export function CampusMap() {
               {selectedSearchEntity.detail}
             </p>
           </>
-        ) : (
+        ) : selectedPanel === 'route' ? (
           <>
             <p className="eyebrow">Phase 0 Prototype C</p>
             <div className="routeTitleRow">
@@ -620,6 +620,31 @@ export function CampusMap() {
             </ol>
             <p className="truthNote">
               Prototype corridor only. No official route geometry, real-time arrivals, or live vehicle positions.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="eyebrow">Phase 0 Prototype E</p>
+            <h1>NUSpace</h1>
+            <p>
+              Repeatable campus data pipeline checkpoint. Search or select map features to inspect earlier prototype layers.
+            </p>
+            <dl className="buildingFacts">
+              <div>
+                <dt>Data</dt>
+                <dd>Generated COM3 GeoJSON</dd>
+              </div>
+              <div>
+                <dt>Source</dt>
+                <dd>OSM relation 15780831</dd>
+              </div>
+              <div>
+                <dt>Routes</dt>
+                <dd>Prototype simulation only</dd>
+              </div>
+            </dl>
+            <p className="truthNote">
+              No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>
           </>
         )}

@@ -1,0 +1,41 @@
+{
+  "pipeline": "scripts/data/build-campus-data.mjs",
+  "generated_from_date_checked": "2026-09-17",
+  "inputs": [
+    {
+      "path": "data/prototype/com3-building.geojson",
+      "source_id": "osm-overpass-com3",
+      "status": "verified"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "data/generated/campus-buildings.geojson",
+      "feature_count": 1,
+      "schema": "generated-campus-buildings-v1",
+      "source_ids": [
+        "osm-overpass-com3"
+      ]
+    }
+  ],
+  "validation": {
+    "coordinate_reference_system": "WGS84 / EPSG:4326",
+    "coordinate_order": "[longitude, latitude]",
+    "bounds": {
+      "minLng": 103.76,
+      "maxLng": 103.79,
+      "minLat": 1.285,
+      "maxLat": 1.31
+    },
+    "geometry_checks": [
+      "polygon rings closed",
+      "coordinates inside NUS bounds"
+    ],
+    "provenance_checks": [
+      "source_id",
+      "geometry_source_status",
+      "height_source_status",
+      "date_checked"
+    ]
+  }
+}

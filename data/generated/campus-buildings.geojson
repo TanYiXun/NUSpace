@@ -1,0 +1,170 @@
+{
+  "type": "FeatureCollection",
+  "name": "generated_campus_buildings",
+  "properties": {
+    "generated_from": "data/prototype/com3-building.geojson",
+    "pipeline": "scripts/data/build-campus-data.mjs",
+    "source_ids": [
+      "osm-overpass-com3"
+    ],
+    "generated_from_date_checked": "2026-09-17"
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "id": "prototype_com3_osm_relation_15780831",
+      "properties": {
+        "entity_type": "building",
+        "name": "COM3",
+        "full_name": "Computing 3",
+        "address": "11 Research Link, Singapore 119391",
+        "source_id": "osm-overpass-com3",
+        "source_status": "verified",
+        "height_m": 24,
+        "height_source_status": "prototype-placeholder",
+        "building_levels": 6,
+        "building_levels_source_status": "verified",
+        "date_checked": "2026-09-17",
+        "render": {
+          "selectable": true,
+          "extrudable": true
+        }
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              103.7748792,
+              1.295188
+            ],
+            [
+              103.7749054,
+              1.2951982
+            ],
+            [
+              103.7750734,
+              1.2948203
+            ],
+            [
+              103.7750759,
+              1.2948137
+            ],
+            [
+              103.7748594,
+              1.2947306
+            ],
+            [
+              103.7747911,
+              1.2947009
+            ],
+            [
+              103.7747169,
+              1.2946511
+            ],
+            [
+              103.7746548,
+              1.2945834
+            ],
+            [
+              103.7746023,
+              1.2944976
+            ],
+            [
+              103.7745689,
+              1.2943694
+            ],
+            [
+              103.7745568,
+              1.2942628
+            ],
+            [
+              103.7745654,
+              1.2941683
+            ],
+            [
+              103.7745117,
+              1.2941435
+            ],
+            [
+              103.7745487,
+              1.2940634
+            ],
+            [
+              103.7745255,
+              1.2940527
+            ],
+            [
+              103.7743649,
+              1.2939771
+            ],
+            [
+              103.7743415,
+              1.2939669
+            ],
+            [
+              103.7741622,
+              1.2943598
+            ],
+            [
+              103.7741935,
+              1.2944536
+            ],
+            [
+              103.7742267,
+              1.2944598
+            ],
+            [
+              103.7742879,
+              1.2945169
+            ],
+            [
+              103.7743224,
+              1.2945793
+            ],
+            [
+              103.7743281,
+              1.2946462
+            ],
+            [
+              103.7743211,
+              1.2946835
+            ],
+            [
+              103.7742971,
+              1.2947214
+            ],
+            [
+              103.7740877,
+              1.2949992
+            ],
+            [
+              103.7742218,
+              1.2951105
+            ],
+            [
+              103.7743245,
+              1.2950748
+            ],
+            [
+              103.7744386,
+              1.2950633
+            ],
+            [
+              103.7745501,
+              1.2950699
+            ],
+            [
+              103.7746538,
+              1.2951
+            ],
+            [
+              103.7748792,
+              1.295188
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -35,3 +35,12 @@
 - Finding: a local typed index is sufficient for Phase 0 interaction testing, but mixed food/facility entries need verified production sources later.
 - Ranking treatment: exact name or alias matches rank first, followed by prefix, substring, and all-query-token matches.
 - Confidence: high for interaction pattern, low for unverified non-building place coordinates.
+
+## 2026-09-17 - Phase 0 Prototype E Data Pipeline
+
+- Task: prove one campus dataset can be transformed repeatably into app-ready GeoJSON.
+- Source checked: existing COM3 OSM prototype data from `data/prototype/com3-building.geojson`.
+- Finding: the COM3 footprint can be normalized into generated building data while preserving OSM source id, source status, height status, and checked date.
+- Validation treatment: generated building geometry is checked for WGS84 longitude-latitude coordinate order, closed polygon rings, and NUS-area bounds.
+- Decision: commit generated Phase 0 output under `data/generated/` and keep the script deterministic so reruns do not create timestamp-only diffs.
+- Confidence: high for pipeline mechanics, medium for OSM footprint suitability, low for exact 3D building realism.

@@ -58,7 +58,7 @@ Notes:
 
 ## Prototype C: Shuttle Route Overlay
 
-Status: implemented on branch `prototype-c-shuttle-route`, pending PR review
+Status: implemented and merged as the shuttle corridor checkpoint
 
 Classification: keep as simulation/data-path prototype
 
@@ -82,4 +82,29 @@ Notes:
 - Mobile UI issue: the bottom panel takes a large share of the viewport. Acceptable for Prototype C, but later map UI work should introduce collapsed and expanded sheet states.
 - Visual correction: the first Prototype C PR route was too obviously hand-sketched and cut across campus blocks. The route has been narrowed to a plausible one-direction corridor for animation testing, not a full official D1 loop.
 - Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run validate:data`, `npm run build`.
+- Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.
+
+## Prototype D: Search And Detail Sheet
+
+Status: implemented on branch `prototype-d-search-detail`, pending PR review
+
+Classification: keep as local search interaction prototype
+
+Acceptance criteria:
+
+- [x] Search works for aliases such as `COM3`, `COM 3`, and `Computing 3`. Evidence: `src/map/searchIndex.test.ts` covers all three aliases and ranks COM3 first.
+- [x] Detail sheet uses source status labels internally or in debug view. Evidence: non-building search detail displays source and status, including `manual-reference` for The Deck and `prototype-placeholder` for corridor stops.
+- [x] Result selection updates map camera. Evidence: selecting a result calls `map.easeTo` with the entity coordinates, zoom, pitch, and bearing.
+- [x] No layout overlap on mobile viewport. Evidence: browser visual QA at 390 x 844 shows search results and the selected COM3 detail state without status-bar overlap.
+
+Notes:
+
+- Search implementation: local typed index in `src/map/searchIndex.ts`, queried on input changes.
+- Ranking behavior: exact name or alias match scores first, prefix match second, substring match third, and all-query-token matches last.
+- Included entities: COM3, D1 corridor, COM3 bus stop, Opp HSSML, Opp NUSS, Ventus, UTown, CLB, and The Deck.
+- Screenshot checkpoints:
+  - `docs/screenshots/prototype-d-search-detail-desktop.jpg`, captured from `http://127.0.0.1:5173/` at desktop viewport.
+  - `docs/screenshots/prototype-d-search-detail-mobile.jpg`, captured from `http://127.0.0.1:5173/` at 390 x 844 viewport.
+- Mobile UI issue: search results and the bottom detail panel are usable, but the combined vertical density reinforces the need for proper collapsed and expanded sheet states.
+- Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e`, `npm run validate:data`, `npm run build`.
 - Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.

@@ -514,7 +514,7 @@ export function CampusMap() {
             <p>
               {mapState === 'error'
                 ? 'Basemap failed to load.'
-                : 'Simulated shuttle overlay from COM3 toward UTown. Not live NUS bus data.'}
+                : 'Simulated shuttle corridor from COM3 toward UTown. Not live NUS bus data.'}
             </p>
             <dl className="routeFacts">
               <div>
@@ -535,7 +535,7 @@ export function CampusMap() {
               <li>CLB</li>
             </ol>
             <p className="truthNote">
-              Prototype route geometry only. No real-time arrivals or live vehicle positions.
+              Prototype corridor only. No official route geometry, real-time arrivals, or live vehicle positions.
             </p>
           </>
         )}

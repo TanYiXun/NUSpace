@@ -53,7 +53,7 @@ sources:
     documentation_url: https://www.openstreetmap.org/copyright
     terms_or_license_url: https://www.openstreetmap.org/copyright
     license: Prototype manual curation with OpenStreetMap context; not official NUS shuttle data
-    allowed_use: Phase 0 Prototype C route rendering and simulated vehicle animation only
+    allowed_use: Phase 0 Prototype C corridor rendering and simulated vehicle animation only
     disallowed_use: Do not present as official NUS route geometry, live vehicle data, real-time ETA data, accessibility routing, or production shuttle data
     attribution_text: Prototype route manually curated with OpenStreetMap context; not official NUS shuttle data
     attribution_required: true
@@ -64,10 +64,10 @@ sources:
     next_review_date: 2026-10-17
     source_status: prototype-placeholder
     used_for:
-      - Phase 0 Prototype C simulated D1 route line
+      - Phase 0 Prototype C simulated D1 route corridor
       - Phase 0 Prototype C simulated D1 stop markers
       - Phase 0 Prototype C fake vehicle animation path
     limitations:
       - Stop sequence reference is public but not treated as an official data license
-      - Coordinates are manually curated for visual and animation testing
+      - Coordinates are manually curated for visual and animation testing and are not a complete official D1 loop
       - No real-time arrivals or live vehicle positions are included

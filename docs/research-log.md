@@ -23,7 +23,7 @@
 
 - Task: render one NUS shuttle route overlay and animate one fake vehicle marker.
 - Sources checked: public D1 stop sequence references and OpenStreetMap road context.
-- Finding: D1 can be prototyped as a manually curated route overlay, but this does not establish official NUS route geometry, live arrival data, or live vehicle positions.
+- Finding: D1 can be prototyped as a manually curated one-direction corridor overlay, but this does not establish official NUS route geometry, a full loop, live arrival data, or live vehicle positions.
 - Decision: keep the Prototype C route and stop coordinates as `prototype-placeholder` data under `data/prototype/`, with source metadata in `data/sources.yml`.
 - Animation treatment: one MapLibre GeoJSON point is moved along the route with `requestAnimationFrame`.
 - Confidence: medium for testing map interaction and animation behavior, low for production route geometry.

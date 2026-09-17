@@ -55,18 +55,19 @@ Visual realism finding:
 
 ## Phase 0 Prototype C
 
-- D1 is rendered as a simulated shuttle route overlay with a purple route line, white casing, direction arrows, stop markers, and one animated vehicle marker.
+- D1 is rendered as a simulated shuttle corridor overlay with a purple route line, white casing, direction arrows, stop markers, and one animated vehicle marker.
 - The route uses a single route identity color so it reads as transit without overwhelming the basemap.
-- The panel explicitly states that the route is manually curated and the vehicle is an animated simulation.
+- The panel explicitly states that the corridor is manually curated and the vehicle is an animated simulation.
 - The UI must not imply live NUS shuttle access, live arrivals, or official route geometry.
 - Accepted desktop visual checkpoint: [Prototype C D1 desktop](screenshots/prototype-c-d1-route-desktop.jpg).
 - Accepted mobile visual checkpoint: [Prototype C D1 mobile](screenshots/prototype-c-d1-route-mobile.jpg).
 - Capture source: running local app at `http://127.0.0.1:5173/`.
 - Viewports: desktop browser viewport and 390 x 844 mobile viewport.
-- Feature state: D1 route overlay, stop labels, simulated vehicle, attribution, search control, and route detail panel visible.
+- Feature state: D1 corridor overlay, stop labels, simulated vehicle, attribution, search control, and route detail panel visible.
 
 Visual QA follow-up:
 
 - The mobile panel is readable but takes too much of the available map area.
 - Later map UI work should add collapsed and expanded bottom-sheet states before transit overlays become dense.
 - Route labels and stop markers are acceptable for one route, but broader transit work will need collision, filtering, and selected-route emphasis.
+- The corridor must not be treated as a complete official D1 route. It is an animation and rendering prototype until approved NUS route geometry is available.

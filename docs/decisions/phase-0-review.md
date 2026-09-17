@@ -64,7 +64,7 @@ Classification: keep as simulation/data-path prototype
 
 Acceptance criteria:
 
-- [x] Route line follows plausible roads. Evidence: `data/prototype/d1-route.geojson` contains a manually curated D1-style route line around COM3, Kent Ridge, and UTown using public stop sequence references and OSM road context.
+- [x] Route line follows a plausible campus-road corridor. Evidence: `data/prototype/d1-route.geojson` contains a manually curated one-direction D1-style corridor from COM3 toward UTown using public stop sequence references and OSM road context.
 - [x] Stop sequence is visible. Evidence: stop markers and labels render from `data/prototype/d1-stops.geojson`, and the detail panel lists the sequence.
 - [x] Direction arrows are present. Evidence: `prototype-d1-route-arrows` uses line-placement symbols along the route.
 - [x] Animation is smooth enough on mobile viewport for Phase 0. Evidence: browser visual QA at 390 x 844 showed the simulated marker and route without app failure; no automated frame-rate test exists yet.
@@ -73,12 +73,13 @@ Acceptance criteria:
 
 Notes:
 
-- Route coordinate source: manually curated prototype line using public D1 stop sequence reference and OSM road context.
+- Route coordinate source: manually curated prototype corridor using public D1 stop sequence reference and OSM road context.
 - Stop coordinate source: manually curated prototype points for Phase 0 only.
 - Animation approach: requestAnimationFrame updates a MapLibre GeoJSON point source along the LineString.
 - Screenshot checkpoints:
   - `docs/screenshots/prototype-c-d1-route-desktop.jpg`, captured from `http://127.0.0.1:5173/` at desktop viewport.
   - `docs/screenshots/prototype-c-d1-route-mobile.jpg`, captured from `http://127.0.0.1:5173/` at 390 x 844 viewport.
 - Mobile UI issue: the bottom panel takes a large share of the viewport. Acceptable for Prototype C, but later map UI work should introduce collapsed and expanded sheet states.
+- Visual correction: the first Prototype C PR route was too obviously hand-sketched and cut across campus blocks. The route has been narrowed to a plausible one-direction corridor for animation testing, not a full official D1 loop.
 - Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run validate:data`, `npm run build`.
 - Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.

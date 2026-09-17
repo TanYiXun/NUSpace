@@ -34,10 +34,11 @@ When implementation begins, follow the repository shape in `PLAN.md` section 6.0
 Before making any code, data, design, or documentation change:
 
 1. Read the relevant `PLAN.md` sections for the requested phase or task.
-2. Identify the exact section being worked on.
-3. State the target phase and acceptance criteria.
-4. Check whether the task touches external data, map geometry, API behavior, UI styling, or secrets.
-5. If the task touches any source/API/data, confirm it is represented in `data/sources.yml` or add it before using it.
+2. If `docs/context-handoff.md` exists and the task is a continuation, resume, phase/prototype task, PR workflow, or ambiguous "continue" request, read it before acting.
+3. Identify the exact section being worked on.
+4. State the target phase and acceptance criteria.
+5. Check whether the task touches external data, map geometry, API behavior, UI styling, or secrets.
+6. If the task touches any source/API/data, confirm it is represented in `data/sources.yml` or add it before using it.
 
 Read the full `PLAN.md` before starting a new milestone, creating an ADR, changing architecture, changing data-source policy, or declaring a phase complete.
 
@@ -243,6 +244,10 @@ Avoid these patterns unless an ADR explicitly justifies them and visual review p
 
 Every UI element must serve map use, navigation, search, route understanding, data trust, or accessibility.
 
+Use the documented icon system in `docs/design.md` for map controls, sheet actions, markers, and menus. Do not mix raw text glyph buttons with symbol icons when a documented icon exists.
+
+If a selectable map feature is implemented, it must be selectable directly on the map as well as through search or lists unless the phase explicitly documents why it is display-only.
+
 ## 11. UI Review Requirements
 
 Any UI-affecting task must produce screenshots or visual notes for relevant states:
@@ -416,7 +421,27 @@ Commit and PR text rules:
 - PR descriptions should include the targeted `PLAN.md` section, files changed, checks run, and remaining acceptance criteria.
 - UI or map PR descriptions should include screenshot links or embedded images for the current visual state.
 
-## 19. Task Completion Checklist
+## 19. Context Handoff Rules
+
+When a conversation becomes long, context-heavy, or likely to be continued in a fresh task, update `docs/context-handoff.md` before stopping if there is time.
+
+The handoff note must be concise and factual. Include:
+
+- current branch and latest local commit
+- current phase/prototype and completion status
+- what has been merged to `main`
+- what remains unpushed, unmerged, or awaiting user approval
+- commands/checks last run and their results
+- current server or browser state if relevant
+- important product decisions made in the conversation
+- known issues, placeholders, and data-truth warnings
+- exact next recommended action
+
+Do not use the handoff file as a second plan. `PLAN.md` remains the contract. The handoff file is only the current working memory needed to resume safely after compaction or in a new task.
+
+If compacting happens automatically, continue from the provided summary and then refresh `docs/context-handoff.md` at the next safe checkpoint.
+
+## 20. Task Completion Checklist
 
 Before saying a task is complete, report:
 
@@ -432,5 +457,7 @@ Before saying a task is complete, report:
 For any UI or map-visible task, refresh or restart the local preview after branch changes, merges, generated-data updates, or dev-server uncertainty before judging the screen. If the current browser still appears stale, report the branch, commit, server URL, and whether the server was restarted.
 
 Visible prototype labels must match the current checkpoint or the selected feature state. Do not leave an old prototype label as the default panel after completing a later prototype. If the current task has no UI change, either show a neutral current-phase overview or remove the prototype-specific default panel.
+
+When starting or completing a new prototype or phase, search the repository for stale current-phase references from previous prototypes and update or remove them before claiming completion. This includes README current phase text, default app panels, screenshot captions, PR bodies, review docs, design docs, and any user-facing labels.
 
 Do not claim live data, production readiness, or official API access unless the evidence is documented.

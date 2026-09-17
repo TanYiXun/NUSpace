@@ -103,3 +103,115 @@ Visual QA follow-up:
 
 - The default panel is intentionally plain because the data pipeline itself is not a user-facing feature.
 - Prototype F should replace this temporary always-open overview with proper current-location, layer, route, and bottom-sheet controls.
+
+## Phase 0 Prototype F
+
+Prototype F establishes the first cohesive NUSpace map UI direction. The accepted direction is Apple Maps restraint with NTU Map campus specificity: calm map-first chrome, compact controls, route and layer affordances, and bottom sheets that preserve map context.
+
+Accepted visual checkpoints:
+
+- [Prototype F desktop overview](screenshots/prototype-f-desktop-overview.png).
+- [Prototype F desktop layers menu](screenshots/prototype-f-desktop-layers-menu.png).
+- [Prototype F mobile overview](screenshots/prototype-f-mobile-overview.png).
+- [Prototype F selected building](screenshots/prototype-f-mobile-selected-building.png).
+- [Prototype F selected bus stop](screenshots/prototype-f-mobile-selected-bus-stop.png).
+- [Prototype F active route](screenshots/prototype-f-mobile-route-active.png).
+- [Prototype F expanded sheet](screenshots/prototype-f-mobile-expanded-sheet.png).
+- [Prototype F collapsed sheet](screenshots/prototype-f-mobile-collapsed-sheet.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Mobile viewport: 390 x 844.
+- Desktop viewport: 1280 x 720.
+
+Design tokens:
+
+- Token file: `src/styles/tokens.css`.
+- Typography: system sans stack, matching native map-product expectations.
+- Radius: 8px for panels and list rows, circular icon controls.
+- Spacing: 4px and 8px rhythm through tokenized spacing.
+- Shadows: functional elevation only, used to separate controls from the map.
+- Motion: short purposeful transitions for sheet size changes.
+
+Map color palette:
+
+- Basemap stays OpenFreeMap Liberty for Phase 0.
+- UI panels use off-white translucent surfaces with dark ink text.
+- NUS identity is restrained. NUS blue and orange are available as tokens but do not dominate the map.
+
+Route color strategy:
+
+- `D1` uses purple as the prototype route identity inherited from Prototype C.
+- Route lines use a white casing plus route color for legibility.
+- Route color must later move into a route registry before multiple services are added.
+
+Marker hierarchy:
+
+- COM3 building label remains a large map label with white halo.
+- D1 stop markers use white circles with purple stroke.
+- The animated D1 marker remains visually stronger than static stops but is explicitly simulated.
+
+Icon strategy:
+
+- The Phase 0 icon vocabulary covers current location, shuttle routes, and layers.
+- Icons use Material Symbols because they are familiar map-control symbols and match the reference interaction pattern.
+- Floating map controls use 52 px circular buttons with Material Symbols at 28 px.
+- Sheet action controls use smaller 36 px circular buttons with Material Symbols at 22 px so they read as secondary controls.
+- Current symbol names:
+  - current location: `my_location`
+  - shuttle routes: `directions_bus`
+  - layers: `layers`
+  - collapse sheet/details: `keyboard_arrow_down`
+  - expand sheet/details: `open_in_full`
+  - close selected details: `close`
+- Do not use raw text glyphs such as `+`, `-`, or `x` for sheet controls because they conflict with map zoom semantics and look inconsistent beside the map controls.
+- Before MVP 1, decide whether to keep the external Material Symbols font, self-host it, or replace it with packaged icons.
+
+Current-location treatment:
+
+- The current-location control requests browser geolocation only after the user taps it.
+- When permission succeeds, the map shows a blue location dot with a soft accuracy ring.
+- The app does not store, log, or transmit the precise user location in Prototype F.
+- If permission is denied or unavailable, the overview sheet reports the location state instead of adding a fake marker.
+
+Bottom sheet behavior:
+
+- Mobile sheets support collapsed, half, and expanded states.
+- Default half state preserves the route and campus context.
+- Collapsed state keeps the selected title visible and restores more map area.
+- Expanded state supports denser selected-place or route content without leaving the map surface.
+
+Selected-state treatment:
+
+- Selected building state emphasizes source truth: footprint source, levels, placeholder height, and visual detail status.
+- Selected bus stop state uses compact ETA-style rows, but values are labelled simulated or unavailable.
+- Active route state focuses the D1 simulated corridor and keeps the no-live-data warning visible.
+- Selectable bus stops and route stops must respond to direct map clicks as well as search result selection. Prototype F supports this for the current D1 prototype stop circles; future verified bus-stop layers must preserve the same interaction.
+
+Visual teardown:
+
+- Borrowed from Apple Maps: restrained controls, search-first map chrome, compact sheets, subtle shadows, no decorative UI.
+- Borrowed from NTU Map: vertical map controls, shuttle route sheet, route tracing, campus-specific 3D ambition.
+- Adapted for NUS: route and ETA content is truth-labelled because official live NUS shuttle access has not been approved.
+- Rejected direction: a dashboard-style map with floating feature cards, bright gradient route panels, multiple marketing blocks, and large explanatory cards. That direction fails because it makes the map secondary and would look generic rather than like a navigation product.
+
+Pass examples:
+
+- Compact controls do not obscure primary map content.
+- Bottom sheets expose source truth without turning into docs.
+- Search, route, and layer controls are available within one tap.
+
+Fail examples:
+
+- A large welcome card covering the map by default.
+- Route controls that imply official live bus data.
+- Colored feature cards, gradients, icon spam, or marketing copy over the map.
+- Any screenshot where the controls overlap the search bar, bottom sheet handle, attribution, or each other.
+
+Known visual issues:
+
+- Material Symbols are loaded from Google Fonts in Prototype F. Before MVP 1, make an explicit dependency decision and consider self-hosting or bundling icons.
+- The route overlay remains prototype geometry and should not be judged as final NUS shuttle routing.
+- Current D1 stop locations and path alignment are still wrong or approximate in places. They are for UI and animation testing only until replaced with verified or carefully re-curated route geometry.
+- The current panel design is acceptable for Phase 0 but needs a real sheet gesture model for production mobile use.

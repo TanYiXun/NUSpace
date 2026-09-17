@@ -111,7 +111,7 @@ Notes:
 
 ## Prototype E: Data Pipeline
 
-Status: implemented on branch `prototype-e-data-pipeline`, pending PR review
+Status: implemented and merged as the data-pipeline checkpoint
 
 Classification: keep as the first repeatable generated-data path
 
@@ -131,3 +131,33 @@ Notes:
 - Known data quality issues: only COM3 is included, exact height is still a placeholder estimate, and no building-part or indoor data exists.
 - UI note: Prototype E does not add a new map layer. The default panel now identifies the Prototype E data-pipeline checkpoint, while earlier Prototype B, C, and D panels appear only after selecting their corresponding feature states.
 - Screenshot checkpoint: `docs/screenshots/prototype-e-data-pipeline-overview.png`, captured from the running local app at `http://127.0.0.1:5173/`.
+
+## Prototype F: Visual Direction And Map UI
+
+Status: implemented on branch `prototype-f-visual-map-ui`, pending PR review
+
+Classification: keep as the first cohesive map UI direction
+
+Acceptance criteria:
+
+- [x] The default screen is map-first and not a landing page. Evidence: the map remains full viewport with compact search, vertical controls, and one restrained sheet.
+- [x] UI controls follow one coherent design system. Evidence: `src/styles/tokens.css` defines colors, spacing, radii, shadows, z-index, and motion tokens used by controls and sheets.
+- [x] Bottom sheet states preserve map context. Evidence: mobile screenshots include overview, selected building, selected bus stop, route active, collapsed sheet, and expanded sheet states.
+- [x] Layer and route controls are visible map controls. Evidence: screenshots include Material Symbols-style current-location, shuttle, and layer controls plus the desktop layer menu state.
+- [x] Markers, labels, route overlays, and panels do not compete equally for attention. Evidence: route controls and layer menus are compact, and the sheet avoids dashboard layout.
+- [x] No banned vibecoded pattern appears. Evidence: no gradient hero text, glass cards, decorative blobs, emoji headings, feature-card grids, or generic marketing sections were added.
+- [x] Design tokens or a documented token plan exist. Evidence: `src/styles/tokens.css` and `docs/design.md` define the token plan.
+- [x] Screenshots are attached or linked from `docs/design.md`.
+- [x] `docs/design.md` includes explicit visual pass/fail examples.
+- [x] Accepted direction defines map palette, route palette, marker hierarchy, sheet density, camera defaults, and selected-state treatment.
+- [x] The prototype can be judged from screenshots.
+
+Notes:
+
+- Current-location control requests geolocation only after the user clicks it.
+- Successful geolocation renders a blue user-position dot with an accuracy ring. The location is not stored or sent to an external service by app code.
+- Layer control toggles prototype buildings and shuttle simulation layers.
+- Route control opens a compact route menu and focuses the simulated D1 corridor.
+- Selected bus stop state shows compact ETA rows but explicitly says no live timings are enabled.
+- Current D1 stop locations and path alignment remain prototype placeholders and must be replaced or re-curated before MVP route work.
+- Known visual issue: the CSS-only layer icon is functional but should be replaced with a clearer icon system before MVP 1.

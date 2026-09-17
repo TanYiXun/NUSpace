@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
@@ -16,6 +16,7 @@ const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
 const D1_ROUTE_SOURCE_ID = 'prototype-d1-route';
 const D1_STOPS_SOURCE_ID = 'prototype-d1-stops';
 const D1_BUS_SOURCE_ID = 'prototype-d1-simulated-bus';
+const USER_LOCATION_SOURCE_ID = 'user-location';
 const D1_ROUTE_CASING_LAYER_ID = 'prototype-d1-route-casing';
 const D1_ROUTE_LAYER_ID = 'prototype-d1-route-line';
 const D1_ROUTE_ARROWS_LAYER_ID = 'prototype-d1-route-arrows';
@@ -23,13 +24,35 @@ const D1_STOP_CIRCLES_LAYER_ID = 'prototype-d1-stop-circles';
 const D1_STOP_LABELS_LAYER_ID = 'prototype-d1-stop-labels';
 const D1_BUS_CIRCLE_LAYER_ID = 'prototype-d1-bus-circle';
 const D1_BUS_LABEL_LAYER_ID = 'prototype-d1-bus-label';
+const USER_LOCATION_ACCURACY_LAYER_ID = 'user-location-accuracy';
+const USER_LOCATION_DOT_LAYER_ID = 'user-location-dot';
 const com3Building = JSON.parse(com3BuildingRaw) as GeoJSON.FeatureCollection;
 const d1Route = JSON.parse(d1RouteRaw) as GeoJSON.FeatureCollection;
 const d1Stops = JSON.parse(d1StopsRaw) as GeoJSON.FeatureCollection;
 const COM3_FEATURE_ID = 'prototype_com3_osm_relation_15780831';
 const D1_ANIMATION_DURATION_MS = 26000;
+const BUILDING_LAYER_IDS = [
+  COM3_EXTRUSION_LAYER_ID,
+  COM3_FLOOR_BANDS_LAYER_ID,
+  COM3_ROOF_CAP_LAYER_ID,
+  COM3_OUTLINE_LAYER_ID,
+  COM3_LABEL_LAYER_ID,
+];
+const ROUTE_LAYER_IDS = [
+  D1_ROUTE_CASING_LAYER_ID,
+  D1_ROUTE_LAYER_ID,
+  D1_ROUTE_ARROWS_LAYER_ID,
+  D1_STOP_CIRCLES_LAYER_ID,
+  D1_STOP_LABELS_LAYER_ID,
+  D1_BUS_CIRCLE_LAYER_ID,
+  D1_BUS_LABEL_LAYER_ID,
+];
 
 type LngLatPosition = [number, number];
+type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop';
+type SheetState = 'collapsed' | 'half' | 'expanded';
+type LayerKey = 'buildings' | 'routes';
+type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   const baseFeature = source.features[0];
@@ -157,23 +180,167 @@ function createSimulatedBusFeature(coordinates: LngLatPosition): GeoJSON.Feature
   };
 }
 
+function createUserLocationFeature(coordinates: LngLatPosition, accuracy: number): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        id: 'browser_user_location',
+        properties: {
+          accuracy_m: accuracy,
+          source_status: 'browser-permission',
+        },
+        geometry: {
+          type: 'Point',
+          coordinates,
+        },
+      },
+    ],
+  };
+}
+
 export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'error'>('loading');
-  const [selectedPanel, setSelectedPanel] = useState<'overview' | 'route' | 'building' | 'search'>('overview');
+  const [selectedPanel, setSelectedPanel] = useState<SelectedPanel>('overview');
+  const [sheetState, setSheetState] = useState<SheetState>('half');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<SearchEntity[]>([]);
   const [selectedSearchEntity, setSelectedSearchEntity] = useState<SearchEntity | null>(null);
+  const [selectedBusStop, setSelectedBusStop] = useState<SearchEntity | null>(null);
+  const [layerMenuOpen, setLayerMenuOpen] = useState(false);
+  const [routeMenuOpen, setRouteMenuOpen] = useState(false);
+  const [visibleLayers, setVisibleLayers] = useState<Record<LayerKey, boolean>>({
+    buildings: true,
+    routes: true,
+  });
+  const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
+
+  const updateSheet = useCallback((panel: SelectedPanel, nextSheetState: SheetState = 'half') => {
+    setSelectedPanel(panel);
+    setSheetState(nextSheetState);
+  }, []);
+
+  const clearSelection = useCallback(() => {
+    const map = mapRef.current;
+
+    setSelectedSearchEntity(null);
+    setSelectedBusStop(null);
+    setSearchResults([]);
+    setRouteMenuOpen(false);
+    setLayerMenuOpen(false);
+    updateSheet('overview', 'half');
+
+    if (map?.getSource(COM3_SOURCE_ID)) {
+      map.setFeatureState(
+        { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
+        { selected: false },
+      );
+    }
+  }, [updateSheet]);
+
+  const setMapLayerVisibility = (layerIds: string[], visible: boolean) => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    layerIds.forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
+      }
+    });
+  };
+
+  const toggleLayer = (layer: LayerKey) => {
+    const nextValue = !visibleLayers[layer];
+    const layerIds = layer === 'buildings' ? BUILDING_LAYER_IDS : ROUTE_LAYER_IDS;
+
+    setVisibleLayers((current) => ({ ...current, [layer]: nextValue }));
+    setMapLayerVisibility(layerIds, nextValue);
+  };
+
+  const focusRoute = () => {
+    const map = mapRef.current;
+
+    setSelectedSearchEntity(null);
+    setSelectedBusStop(null);
+    updateSheet('route', 'half');
+    setRouteMenuOpen(false);
+    setLayerMenuOpen(false);
+
+    if (map) {
+      map.easeTo({
+        center: [103.77295, 1.29864],
+        zoom: 15.8,
+        pitch: 54,
+        bearing: -24,
+        duration: 900,
+      });
+    }
+  };
+
+  const focusCurrentLocation = () => {
+    const map = mapRef.current;
+
+    if (!navigator.geolocation || !map) {
+      setLocationStatus('unavailable');
+      return;
+    }
+
+    setLocationStatus('locating');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const coordinates: LngLatPosition = [position.coords.longitude, position.coords.latitude];
+        const locationSource = map.getSource(USER_LOCATION_SOURCE_ID);
+
+        if (locationSource && 'setData' in locationSource) {
+          (locationSource as maplibregl.GeoJSONSource).setData(createUserLocationFeature(
+            coordinates,
+            position.coords.accuracy,
+          ));
+        }
+
+        setLocationStatus('found');
+        map.easeTo({
+          center: coordinates,
+          zoom: 17,
+          pitch: 52,
+          bearing: map.getBearing(),
+          duration: 900,
+        });
+      },
+      (error) => {
+        setLocationStatus(error.code === error.PERMISSION_DENIED ? 'denied' : 'unavailable');
+      },
+      {
+        enableHighAccuracy: true,
+        maximumAge: 30_000,
+        timeout: 8_000,
+      },
+    );
+  };
+
+  const selectBusStop = useCallback((entity: SearchEntity) => {
+    setSelectedBusStop(entity);
+    setSelectedSearchEntity(entity);
+    updateSheet('busStop', 'half');
+  }, [updateSheet]);
 
   const openSearchEntity = (entity: SearchEntity) => {
     const map = mapRef.current;
 
     setSelectedSearchEntity(entity);
-    setSelectedPanel(entity.id === 'com3' ? 'building' : 'search');
+    setSelectedBusStop(entity.type === 'bus_stop' ? entity : null);
+    updateSheet(entity.id === 'com3' ? 'building' : entity.type === 'bus_stop' ? 'busStop' : entity.type === 'route' ? 'route' : 'search');
     setSearchQuery(entity.name);
     setSearchResults([]);
+    setLayerMenuOpen(false);
+    setRouteMenuOpen(false);
 
     if (map) {
       map.easeTo({
@@ -242,6 +409,14 @@ export function CampusMap() {
       map.addSource(D1_BUS_SOURCE_ID, {
         type: 'geojson',
         data: createSimulatedBusFeature(interpolateRoutePosition(d1RouteCoordinates, 0)),
+      });
+
+      map.addSource(USER_LOCATION_SOURCE_ID, {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: [],
+        },
       });
 
       const firstSymbolLayerId = getFirstSymbolLayerId(map);
@@ -436,6 +611,41 @@ export function CampusMap() {
         },
       });
 
+      map.addLayer({
+        id: USER_LOCATION_ACCURACY_LAYER_ID,
+        type: 'circle',
+        source: USER_LOCATION_SOURCE_ID,
+        paint: {
+          'circle-color': '#2f80ed',
+          'circle-radius': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14,
+            16,
+            18,
+            42,
+          ],
+          'circle-opacity': 0.16,
+          'circle-stroke-color': '#2f80ed',
+          'circle-stroke-opacity': 0.28,
+          'circle-stroke-width': 1,
+        },
+      });
+
+      map.addLayer({
+        id: USER_LOCATION_DOT_LAYER_ID,
+        type: 'circle',
+        source: USER_LOCATION_SOURCE_ID,
+        paint: {
+          'circle-color': '#1677ff',
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 7, 18, 10],
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 3,
+          'circle-opacity': 0.98,
+        },
+      });
+
       map.on('mouseenter', COM3_EXTRUSION_LAYER_ID, () => {
         map.getCanvas().style.cursor = 'pointer';
       });
@@ -445,14 +655,16 @@ export function CampusMap() {
       });
 
       map.on('click', COM3_EXTRUSION_LAYER_ID, () => {
-        setSelectedPanel('building');
+        updateSheet('building');
+        setSelectedSearchEntity(null);
+        setSelectedBusStop(null);
         map.setFeatureState(
           { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
           { selected: true },
         );
       });
 
-      [D1_ROUTE_LAYER_ID, D1_STOP_CIRCLES_LAYER_ID, D1_BUS_CIRCLE_LAYER_ID].forEach((layerId) => {
+      [D1_ROUTE_LAYER_ID, D1_BUS_CIRCLE_LAYER_ID].forEach((layerId) => {
         map.on('mouseenter', layerId, () => {
           map.getCanvas().style.cursor = 'pointer';
         });
@@ -461,12 +673,45 @@ export function CampusMap() {
         });
         map.on('click', layerId, () => {
           setSelectedSearchEntity(null);
-          setSelectedPanel('route');
+          setSelectedBusStop(null);
+          updateSheet('route');
           map.setFeatureState(
             { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
             { selected: false },
           );
         });
+      });
+
+      map.on('mouseenter', D1_STOP_CIRCLES_LAYER_ID, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', D1_STOP_CIRCLES_LAYER_ID, () => {
+        map.getCanvas().style.cursor = '';
+      });
+      map.on('click', D1_STOP_CIRCLES_LAYER_ID, (event) => {
+        const stopName = event.features?.[0]?.properties?.name as string | undefined;
+        const stopEntity = searchEntities(stopName ?? '').find((entity) => entity.type === 'bus_stop');
+
+        if (stopEntity) {
+          selectBusStop(stopEntity);
+        } else {
+          updateSheet('route');
+        }
+      });
+
+      map.on('click', (event) => {
+        const selectedFeatures = map.queryRenderedFeatures(event.point, {
+          layers: [
+            COM3_EXTRUSION_LAYER_ID,
+            D1_ROUTE_LAYER_ID,
+            D1_STOP_CIRCLES_LAYER_ID,
+            D1_BUS_CIRCLE_LAYER_ID,
+          ],
+        });
+
+        if (selectedFeatures.length === 0) {
+          clearSelection();
+        }
       });
 
       const animateBus = (timestamp: number) => {
@@ -497,7 +742,7 @@ export function CampusMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [clearSelection, selectBusStop, updateSheet]);
 
   return (
     <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge">
@@ -537,39 +782,146 @@ export function CampusMap() {
           </div>
         ) : null}
       </div>
-      <div className="statusPanel" data-state={mapState}>
+      <div className="mapControlStack" aria-label="Map controls">
+        <button
+          className="mapControlButton"
+          type="button"
+          aria-label="Use current location"
+          title="Use current location"
+          onClick={focusCurrentLocation}
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">my_location</span>
+        </button>
+        <button
+          className="mapControlButton"
+          type="button"
+          data-active={routeMenuOpen || selectedPanel === 'route'}
+          aria-label="View shuttle routes"
+          title="View shuttle routes"
+          onClick={() => {
+            setRouteMenuOpen((open) => !open);
+            setLayerMenuOpen(false);
+          }}
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">directions_bus</span>
+        </button>
+        <button
+          className="mapControlButton"
+          type="button"
+          data-active={layerMenuOpen}
+          aria-label="Change map layers"
+          title="Change map layers"
+          onClick={() => {
+            setLayerMenuOpen((open) => !open);
+            setRouteMenuOpen(false);
+          }}
+        >
+          <span className="material-symbols-outlined" aria-hidden="true">layers</span>
+        </button>
+      </div>
+      {routeMenuOpen ? (
+        <div className="floatingMenu" data-menu="routes">
+          <div className="floatingMenuHeader">
+            <h2>Shuttle routes</h2>
+            <p>Prototype</p>
+          </div>
+          <button className="routeChoice" type="button" onClick={focusRoute}>
+            <span className="routeSwatch" aria-hidden="true" />
+            <span className="choiceText">
+              <strong>D1 simulated corridor</strong>
+              <small>COM3 toward UTown, not official geometry</small>
+            </span>
+            <span className="choiceMeta">1 running</span>
+          </button>
+        </div>
+      ) : null}
+      {layerMenuOpen ? (
+        <div className="floatingMenu" data-menu="layers">
+          <div className="floatingMenuHeader">
+            <h2>Layers</h2>
+            <p>Phase 0</p>
+          </div>
+          <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
+            <span className="choiceText">
+              <strong>Prototype buildings</strong>
+              <small>COM3 sourced footprint with placeholder visual detail</small>
+            </span>
+            <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
+          </button>
+          <button className="layerChoice" type="button" onClick={() => toggleLayer('routes')}>
+            <span className="choiceText">
+              <strong>Shuttle simulation</strong>
+              <small>D1 corridor, stops, and animated marker</small>
+            </span>
+            <span className="layerState">{visibleLayers.routes ? 'On' : 'Off'}</span>
+          </button>
+        </div>
+      ) : null}
+      <div className="statusPanel" data-state={mapState} data-sheet={sheetState}>
+        <button
+          className="sheetHandle"
+          type="button"
+          aria-label="Toggle bottom sheet size"
+          onClick={() => setSheetState((current) => (current === 'collapsed' ? 'half' : current === 'half' ? 'expanded' : 'collapsed'))}
+        />
         {selectedPanel === 'building' ? (
           <>
-            <p className="eyebrow">Phase 0 Prototype B</p>
-            <h1>COM3</h1>
-            <p>Computing 3, 11 Research Link</p>
-            <dl className="buildingFacts">
+            <div className="sheetHeaderRow">
               <div>
-                <dt>Footprint</dt>
-                <dd>OSM relation 15780831</dd>
+                <p className="eyebrow">Selected building</p>
+                <h1>COM3</h1>
+                <p>Computing 3, 11 Research Link</p>
               </div>
-              <div>
-                <dt>Levels</dt>
-                <dd>6, from OSM</dd>
+              <div className="sheetActions">
+                <button className="sheetAction" type="button" aria-label="Collapse details" title="Collapse details" onClick={() => setSheetState('collapsed')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">keyboard_arrow_down</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Expand details" title="Expand details" onClick={() => setSheetState('expanded')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">open_in_full</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Close details" title="Close details" onClick={clearSelection}>
+                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
               </div>
-              <div>
-                <dt>Height</dt>
-                <dd>24 m prototype estimate</dd>
-              </div>
-              <div>
-                <dt>Detail</dt>
-                <dd>Prototype facade bands</dd>
-              </div>
-            </dl>
-            <p className="truthNote">
-              Real footprint and levels. Height and facade bands are visual placeholders.
-            </p>
+            </div>
+            <div className="sheetBody">
+              <dl className="buildingFacts">
+                <div>
+                  <dt>Footprint</dt>
+                  <dd>OSM relation 15780831</dd>
+                </div>
+                <div>
+                  <dt>Levels</dt>
+                  <dd>6, from OSM</dd>
+                </div>
+                <div>
+                  <dt>Height</dt>
+                  <dd>24 m prototype estimate</dd>
+                </div>
+                <div>
+                  <dt>Detail</dt>
+                  <dd>Prototype facade bands</dd>
+                </div>
+              </dl>
+              <p className="truthNote">
+                Real footprint and levels. Height and facade bands are visual placeholders.
+              </p>
+            </div>
           </>
         ) : selectedPanel === 'search' && selectedSearchEntity ? (
           <>
-            <p className="eyebrow">Phase 0 Prototype D</p>
-            <h1>{selectedSearchEntity.name}</h1>
-            <p>{selectedSearchEntity.subtitle}</p>
+            <div className="sheetHeaderRow">
+              <div>
+                <p className="eyebrow">Selected place</p>
+                <h1>{selectedSearchEntity.name}</h1>
+                <p>{selectedSearchEntity.subtitle}</p>
+              </div>
+              <div className="sheetActions">
+                <button className="sheetAction" type="button" aria-label="Close details" title="Close details" onClick={clearSelection}>
+                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
             <dl className="buildingFacts">
               <div>
                 <dt>Type</dt>
@@ -588,12 +940,59 @@ export function CampusMap() {
               {selectedSearchEntity.detail}
             </p>
           </>
+        ) : selectedPanel === 'busStop' && selectedBusStop ? (
+          <>
+            <div className="sheetHeaderRow">
+              <div>
+                <p className="eyebrow">Selected bus stop</p>
+                <h1>{selectedBusStop.name}</h1>
+                <p>{selectedBusStop.subtitle}</p>
+              </div>
+              <div className="sheetActions">
+                <button className="sheetAction" type="button" aria-label="Collapse details" title="Collapse details" onClick={() => setSheetState('collapsed')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">keyboard_arrow_down</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Expand details" title="Expand details" onClick={() => setSheetState('expanded')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">open_in_full</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Close details" title="Close details" onClick={clearSelection}>
+                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
+            <div className="sheetBody">
+              <div className="etaRows" aria-label="Prototype bus arrival rows">
+                <div className="etaRow">
+                  <span className="etaRoute">D1</span>
+                  <span className="etaStatus">Simulated marker only</span>
+                  <span className="etaTime">No ETA</span>
+                </div>
+                <div className="etaRow">
+                  <span className="etaRoute">D2</span>
+                  <span className="etaStatus">Not enabled</span>
+                  <span className="etaTime">--</span>
+                </div>
+              </div>
+              <p className="truthNote">
+                Prototype stop coordinate only. No live NUS shuttle timings, crowd level, or vehicle positions.
+              </p>
+            </div>
+          </>
         ) : selectedPanel === 'route' ? (
           <>
-            <p className="eyebrow">Phase 0 Prototype C</p>
-            <div className="routeTitleRow">
-              <span className="routeBadge">D1</span>
-              <h1>NUSpace</h1>
+            <div className="sheetHeaderRow">
+              <div>
+                <p className="eyebrow">Active route</p>
+                <div className="routeTitleRow">
+                  <span className="routeBadge">D1</span>
+                  <h1>Simulated corridor</h1>
+                </div>
+              </div>
+              <div className="sheetActions">
+                <button className="sheetAction" type="button" aria-label="Close route details" title="Close route details" onClick={clearSelection}>
+                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
             </div>
             <p>
               {mapState === 'error'
@@ -610,7 +1009,7 @@ export function CampusMap() {
                 <dd>Animated simulation</dd>
               </div>
             </dl>
-            <ol className="routeStops" aria-label="Prototype D1 stop sequence">
+            <ol className="routeStops" aria-label="D1 prototype stop sequence">
               <li>COM3</li>
               <li>Opp HSSML</li>
               <li>Opp NUSS</li>
@@ -618,25 +1017,27 @@ export function CampusMap() {
               <li>UTown</li>
               <li>CLB</li>
             </ol>
-            <p className="truthNote">
-              Prototype corridor only. No official route geometry, real-time arrivals, or live vehicle positions.
-            </p>
+            <div className="sheetBody">
+              <p className="truthNote">
+                Prototype corridor only. No official route geometry, real-time arrivals, or live vehicle positions.
+              </p>
+            </div>
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 0 Prototype E</p>
+            <p className="eyebrow">Phase 0 Prototype F</p>
             <h1>NUSpace</h1>
             <p>
-              Repeatable campus data pipeline checkpoint. Search or select map features to inspect earlier prototype layers.
+              Visual map UI checkpoint. Use search, location, route, and layer controls to inspect prototype states.
             </p>
             <dl className="buildingFacts">
               <div>
-                <dt>Data</dt>
-                <dd>Generated COM3 GeoJSON</dd>
+                <dt>Controls</dt>
+                <dd>Location, routes, layers</dd>
               </div>
               <div>
-                <dt>Source</dt>
-                <dd>OSM relation 15780831</dd>
+                <dt>Sheet</dt>
+                <dd>Collapsed, half, expanded</dd>
               </div>
               <div>
                 <dt>Routes</dt>
@@ -646,6 +1047,17 @@ export function CampusMap() {
             <p className="truthNote">
               No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>
+            {locationStatus !== 'idle' ? (
+              <p className="locationNote">
+                Location: {locationStatus === 'locating'
+                  ? 'requesting permission'
+                  : locationStatus === 'found'
+                    ? 'centered on browser position'
+                    : locationStatus === 'denied'
+                      ? 'permission denied'
+                      : 'unavailable'}
+              </p>
+            ) : null}
           </>
         )}
       </div>

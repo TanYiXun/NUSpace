@@ -47,6 +47,7 @@ Notes:
 - Height source: placeholder estimate of 24 meters, derived from 6 levels times 4 meters.
 - Styling: neutral low-opacity extrusion, subtle outline, white halo text label.
 - Visual issue found during QA: the building still reads like a flat slab over the basemap, not like a real 3D building.
+- Visual issue found during QA: basemap roads, paths, and labels can appear to run through or under the extrusion. This is not proof that the coordinate data is wrong. It is caused by the simple transparent outer-shell extrusion, existing basemap layers, and missing building-part modeling such as void decks, underpasses, courtyards, and cutouts.
 - Alignment status: the broad OSM relation appears plausible against the base map, but exact facade/roof/courtyard detail is not represented.
 - MapLibre extrusion is not sufficient for the final 3D visual ambition. It is only sufficient for validating the footprint source, layer ordering, click interaction, and provenance UI.
 - Follow-up needed: Prototype B2 should test a recognizable building model approach before broad Phase 4 3D work. Options include multi-part hand-authored geometry, procedural facade bands/windows, GLTF/custom mesh, or a Three.js custom layer.

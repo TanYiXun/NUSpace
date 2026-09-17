@@ -45,3 +45,4 @@ Visual realism finding:
 - The NTU Map reference uses more building-specific modeling: facade bands, windows, roof treatment, courtyards, shadows, and distinctive forms.
 - NUSpace should not treat a single footprint extrusion as a finished 3D direction.
 - Before broad 3D campus work, add a follow-up prototype that tests one recognizable building using multi-part geometry, procedural facade detail, or a custom 3D model layer.
+- If roads, paths, or labels appear through a custom extrusion, first check opacity and layer ordering, then check whether the source footprint represents an outer shell that includes real under-building circulation, podium areas, or voids. Do not assume a latitude/longitude mismatch without comparing against the source geometry and nearby basemap features.

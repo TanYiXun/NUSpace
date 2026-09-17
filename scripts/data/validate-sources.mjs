@@ -6,6 +6,7 @@ const contents = await readFile(sourceFile, 'utf8');
 const requiredFragments = [
   'id: openfreemap',
   'id: osm-overpass-com3',
+  'id: manual-osm-d1-prototype-route',
   'source_owner:',
   'source_url:',
   'documentation_url:',
@@ -14,6 +15,7 @@ const requiredFragments = [
   'allowed_use:',
   'attribution_text:',
   'source_status: verified',
+  'source_status: prototype-placeholder',
   'used_for:',
 ];
 

@@ -46,3 +46,28 @@ sources:
       - Footprint is community-maintained, not official NUS data
       - OSM supplies building:levels=6 but not exact building height
       - Extrusion height is a prototype placeholder estimate
+  - id: manual-osm-d1-prototype-route
+    name: Manually curated D1 prototype route
+    source_owner: NUS route naming from public references; geometry manually curated against OpenStreetMap road context
+    source_url: https://landtransportguru.net/nus-isb-d1/
+    documentation_url: https://www.openstreetmap.org/copyright
+    terms_or_license_url: https://www.openstreetmap.org/copyright
+    license: Prototype manual curation with OpenStreetMap context; not official NUS shuttle data
+    allowed_use: Phase 0 Prototype C route rendering and simulated vehicle animation only
+    disallowed_use: Do not present as official NUS route geometry, live vehicle data, real-time ETA data, accessibility routing, or production shuttle data
+    attribution_text: Prototype route manually curated with OpenStreetMap context; not official NUS shuttle data
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Keep derived route and stop coordinates labelled as prototype-placeholder until official NUS route geometry or approved data is available
+    date_checked: 2026-09-17
+    next_review_date: 2026-10-17
+    source_status: prototype-placeholder
+    used_for:
+      - Phase 0 Prototype C simulated D1 route line
+      - Phase 0 Prototype C simulated D1 stop markers
+      - Phase 0 Prototype C fake vehicle animation path
+    limitations:
+      - Stop sequence reference is public but not treated as an official data license
+      - Coordinates are manually curated for visual and animation testing
+      - No real-time arrivals or live vehicle positions are included

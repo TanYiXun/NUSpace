@@ -46,6 +46,7 @@ Notes:
 - Level source: OSM `building:levels=6`.
 - Height source: placeholder estimate of 24 meters, derived from 6 levels times 4 meters.
 - Styling: neutral opaque extrusion, subtle outline, white halo text label, procedural facade bands, and a roof cap.
+- Screenshot checkpoint: `docs/screenshots/prototype-b-com3-overlay.png`.
 - Visual issue found during QA: the initial building read like a flat slab over the basemap, not like a real 3D building.
 - Follow-up implementation: added procedural floor bands and a roof cap generated from the same sourced OSM footprint. These details are explicitly placeholder visual modeling, not verified architectural details.
 - Visual issue found during QA: basemap roads, paths, and labels can appear to run through or under the extrusion. This is not proof that the coordinate data is wrong. It is caused by the simple transparent outer-shell extrusion, existing basemap layers, and missing building-part modeling such as void decks, underpasses, courtyards, and cutouts.

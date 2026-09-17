@@ -1538,6 +1538,8 @@ Rules:
 
 Any UI-affecting task must produce screenshots before it is accepted.
 
+Accepted screenshots should be committed under `docs/screenshots/` or otherwise linked from `docs/design.md`. UI and map PRs should embed or link the relevant screenshots in the PR description so every prototype checkpoint can be visually compared later during review, rollback, or redesign work.
+
 Required screenshot set:
 
 - mobile portrait at a campus overview zoom

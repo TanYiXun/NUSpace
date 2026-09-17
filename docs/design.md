@@ -33,6 +33,7 @@ Visual QA notes must be added after running the map in desktop and mobile viewpo
 - The label uses collision handling and a white halo for readability.
 - Direct desktop and mobile visual QA is still required to confirm alignment, label placement, and click interaction in the browser.
 - A procedural visual-model layer adds floor bands and a roof cap from the same footprint. These make the overlay visibly separate from the basemap, but they are placeholder visual details.
+- Visual checkpoint: [Prototype B COM3 overlay](screenshots/prototype-b-com3-overlay.png).
 
 Visual QA follow-up:
 

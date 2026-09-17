@@ -256,6 +256,8 @@ Any UI-affecting task must produce screenshots or visual notes for relevant stat
 - desktop pitched 3D view if 3D changed
 - error/unavailable state if external data changed
 
+Store accepted visual checkpoints in `docs/screenshots/` when practical. UI or map PRs should link those screenshots in the PR body so each prototype has a visible rollback and comparison record. If screenshots cannot be captured, the PR must say why and include specific visual QA notes.
+
 Reject the UI if:
 
 - the map is not the primary object
@@ -410,6 +412,7 @@ Commit and PR text rules:
 - Do not use em dashes.
 - State what changed, how it was checked, and what remains pending.
 - PR descriptions should include the targeted `PLAN.md` section, files changed, checks run, and remaining acceptance criteria.
+- UI or map PR descriptions should include screenshot links or embedded images for the current visual state.
 
 ## 19. Task Completion Checklist
 

@@ -38,3 +38,10 @@ Visual QA follow-up:
 - Initial visual pass made COM3 look like a heavy blue slab over the basemap.
 - The extrusion should stay quiet during Prototype B because the goal is alignment validation, not final building art direction.
 - Custom buildings should render below basemap symbol labels where possible, use neutral low-opacity materials, and include a subtle outline for footprint readability.
+
+Visual realism finding:
+
+- Simple MapLibre extrusion does not create the kind of recognizable 3D building seen in NTU Map.
+- The NTU Map reference uses more building-specific modeling: facade bands, windows, roof treatment, courtyards, shadows, and distinctive forms.
+- NUSpace should not treat a single footprint extrusion as a finished 3D direction.
+- Before broad 3D campus work, add a follow-up prototype that tests one recognizable building using multi-part geometry, procedural facade detail, or a custom 3D model layer.

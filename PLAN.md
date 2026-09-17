@@ -664,7 +664,13 @@ Document:
 
 Goal:
 
-Render one NUS building footprint as an extruded 3D building.
+Render one NUS building footprint as a sourced 3D prototype, then decide whether simple MapLibre extrusion is visually sufficient for the product direction.
+
+Important distinction:
+
+- A plain `fill-extrusion` proves footprint alignment, source metadata, height handling, click interaction, and camera behavior.
+- A plain `fill-extrusion` does not prove the NTU Map-like 3D building ambition. It will usually look like a slab unless the building is very simple.
+- If the visual target is recognizable 3D campus modeling, this prototype must record whether the result is only an alignment/data-path success and whether a follow-up custom-model spike is needed.
 
 Recommended target:
 
@@ -679,6 +685,8 @@ Tasks:
 5. Add hover/click interaction.
 6. Add a label that does not overlap badly at target zoom.
 7. Test camera pitch and bearing.
+8. Compare the result against the NTU Map reference for visual recognizability.
+9. Decide whether MapLibre extrusion is sufficient, or whether the project needs procedural facade layers, multi-part geometry, custom mesh/GLTF, or a Three.js custom layer for real 3D building quality.
 
 Acceptance criteria:
 
@@ -688,6 +696,8 @@ Acceptance criteria:
 - Label is readable at useful zoom levels.
 - Height is marked as verified or placeholder.
 - The prototype clearly distinguishes real geometry from guessed height.
+- The review explicitly states whether the result is a data/alignment prototype only or a visually acceptable 3D building prototype.
+- If the extrusion looks like a plain slab, do not mark it as proof that the final 3D building approach is solved.
 
 Document:
 
@@ -696,6 +706,7 @@ Document:
 - styling choices
 - alignment issues
 - whether MapLibre extrusion is sufficient
+- whether a follow-up "Prototype B2: recognizable building model" is required before attempting broad 3D campus detail
 
 ### 9.3 Prototype C: Shuttle Route Overlay
 

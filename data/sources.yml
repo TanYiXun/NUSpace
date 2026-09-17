@@ -22,3 +22,27 @@ sources:
       - Public instance does not provide a project-specific SLA
       - Basemap labels and geometry are not authoritative NUS campus data
       - Production use should be reviewed against self-hosting or a contracted tile provider
+  - id: osm-overpass-com3
+    name: OpenStreetMap COM3 building footprint
+    source_owner: OpenStreetMap contributors
+    source_url: https://www.openstreetmap.org/relation/15780831
+    documentation_url: https://wiki.openstreetmap.org/wiki/Overpass_API
+    terms_or_license_url: https://www.openstreetmap.org/copyright
+    license: Open Database License
+    allowed_use: Prototype building footprint and building level metadata for Phase 0 Prototype B with attribution
+    disallowed_use: Do not treat OSM geometry as official NUS floor plan, indoor layout, exact height, or accessibility data
+    attribution_text: © OpenStreetMap contributors
+    attribution_required: true
+    commercial_use_allowed: true
+    redistribution_allowed: true under ODbL requirements
+    derived_data_rules: Derived geometry must preserve OSM attribution and note modifications or height estimates
+    date_checked: 2026-09-17
+    next_review_date: 2026-10-17
+    source_status: verified
+    used_for:
+      - Phase 0 Prototype B COM3 footprint
+      - Phase 0 Prototype B COM3 building level count
+    limitations:
+      - Footprint is community-maintained, not official NUS data
+      - OSM supplies building:levels=6 but not exact building height
+      - Extrusion height is a prototype placeholder estimate

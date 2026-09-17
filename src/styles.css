@@ -114,6 +114,37 @@ input {
   line-height: 1.42;
 }
 
+.buildingFacts {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 0;
+}
+
+.buildingFacts div {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+}
+
+.buildingFacts dt {
+  color: #61707f;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.buildingFacts dd {
+  margin: 0;
+  color: #1e2c38;
+  font-size: 14px;
+}
+
+.truthNote {
+  padding-top: 12px;
+  border-top: 1px solid #dce3e8;
+  font-weight: 600;
+}
+
 .statusPanel[data-state='error'] {
   border-color: #e2b0a9;
 }

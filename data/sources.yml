@@ -1,0 +1,24 @@
+sources:
+  - id: openfreemap
+    name: OpenFreeMap public MapLibre style
+    source_owner: OpenFreeMap contributors
+    source_url: https://tiles.openfreemap.org/styles/liberty
+    documentation_url: https://openfreemap.org/quick_start/
+    terms_or_license_url: https://openfreemap.org/
+    license: MIT for OpenFreeMap project; map data from OpenStreetMap; included projects have their own listed licenses
+    allowed_use: Prototype basemap rendering with MapLibre GL JS; public instance currently requires no API key
+    disallowed_use: Do not remove attribution; do not treat public-hosted tiles as an SLA-backed production dependency without an ADR
+    attribution_text: OpenFreeMap © OpenMapTiles Data from OpenStreetMap
+    attribution_required: true
+    commercial_use_allowed: true
+    redistribution_allowed: unknown
+    derived_data_rules: Do not derive NUS building, route, room, or indoor data from this basemap without separate provenance review
+    date_checked: 2026-09-17
+    next_review_date: 2026-10-17
+    source_status: verified
+    used_for:
+      - Phase 0 Prototype A base map rendering
+    limitations:
+      - Public instance does not provide a project-specific SLA
+      - Basemap labels and geometry are not authoritative NUS campus data
+      - Production use should be reviewed against self-hosting or a contracted tile provider

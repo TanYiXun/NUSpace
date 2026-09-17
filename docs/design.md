@@ -22,7 +22,7 @@ Visual QA notes must be added after running the map in desktop and mobile viewpo
 ## 2026-09-17 Visual QA Notes
 
 - Local HTTP smoke check passed at `http://127.0.0.1:5173/`.
-- Browser screenshot inspection was not completed in this run because a browser-control tool was not available for localhost.
+- Browser screenshot captured from the running local app at `http://127.0.0.1:5173/`.
 - Mobile visual performance, pan/zoom feel, and attribution placement still require manual or Playwright verification.
 
 ## Phase 0 Prototype B
@@ -33,7 +33,10 @@ Visual QA notes must be added after running the map in desktop and mobile viewpo
 - The label uses collision handling and a white halo for readability.
 - Direct desktop and mobile visual QA is still required to confirm alignment, label placement, and click interaction in the browser.
 - A procedural visual-model layer adds floor bands and a roof cap from the same footprint. These make the overlay visibly separate from the basemap, but they are placeholder visual details.
-- Visual checkpoint: [Prototype B COM3 overlay](screenshots/prototype-b-com3-overlay.png).
+- Accepted visual checkpoint: [Prototype B COM3 overlay](screenshots/prototype-b-com3-overlay.jpg).
+- Capture source: running local app at `http://127.0.0.1:5173/`.
+- Viewport: desktop browser viewport.
+- Feature state: Prototype B COM3 rendered with label, search control, attribution, and overview panel visible.
 
 Visual QA follow-up:
 

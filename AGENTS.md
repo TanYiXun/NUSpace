@@ -256,7 +256,7 @@ Any UI-affecting task must produce screenshots or visual notes for relevant stat
 - desktop pitched 3D view if 3D changed
 - error/unavailable state if external data changed
 
-Store accepted visual checkpoints in `docs/screenshots/` when practical. UI or map PRs should link those screenshots in the PR body so each prototype has a visible rollback and comparison record. If screenshots cannot be captured, the PR must say why and include specific visual QA notes.
+Store accepted visual checkpoints in `docs/screenshots/` when practical. These checkpoints must be screenshots captured from the running app or deployed preview by the implementer, using browser tooling or equivalent. Do not use screenshots supplied by the user in chat, reference screenshots, mockups, competitor screenshots, or screenshots of GitHub as PR visual checkpoints. UI or map PRs should link those screenshots in the PR body so each prototype has a visible rollback and comparison record. If screenshots cannot be captured, the PR must say why and include specific visual QA notes.
 
 Reject the UI if:
 

@@ -1538,7 +1538,14 @@ Rules:
 
 Any UI-affecting task must produce screenshots before it is accepted.
 
-Accepted screenshots should be committed under `docs/screenshots/` or otherwise linked from `docs/design.md`. UI and map PRs should embed or link the relevant screenshots in the PR description so every prototype checkpoint can be visually compared later during review, rollback, or redesign work.
+Accepted screenshots should be committed under `docs/screenshots/` or otherwise linked from `docs/design.md`. These screenshots must be captured from the running local app, staging deployment, production deployment, or another real rendered app surface by the implementer. Do not use user-provided chat images, reference screenshots, competitor screenshots, mockups, or screenshots of GitHub as accepted app-state screenshots. UI and map PRs should embed or link the relevant screenshots in the PR description so every prototype checkpoint can be visually compared later during review, rollback, or redesign work.
+
+For each committed screenshot, record:
+
+- the app URL or preview URL captured
+- the viewport or device class
+- the feature state shown
+- whether it is an accepted checkpoint or rejected visual QA example
 
 Required screenshot set:
 

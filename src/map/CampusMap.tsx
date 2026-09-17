@@ -4,6 +4,7 @@ import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
 import d1StopsRaw from '../../data/prototype/d1-stops.geojson?raw';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
+import { searchEntities, type SearchEntity } from './searchIndex';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -161,7 +162,34 @@ export function CampusMap() {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'error'>('loading');
-  const [selectedPanel, setSelectedPanel] = useState<'route' | 'building'>('route');
+  const [selectedPanel, setSelectedPanel] = useState<'route' | 'building' | 'search'>('route');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchEntity[]>([]);
+  const [selectedSearchEntity, setSelectedSearchEntity] = useState<SearchEntity | null>(null);
+
+  const openSearchEntity = (entity: SearchEntity) => {
+    const map = mapRef.current;
+
+    setSelectedSearchEntity(entity);
+    setSelectedPanel(entity.id === 'com3' ? 'building' : 'search');
+    setSearchQuery(entity.name);
+    setSearchResults([]);
+
+    if (map) {
+      map.easeTo({
+        center: entity.coordinates,
+        zoom: entity.zoom,
+        pitch: entity.pitch,
+        bearing: entity.bearing,
+        duration: 900,
+      });
+
+      map.setFeatureState(
+        { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
+        { selected: entity.id === 'com3' },
+      );
+    }
+  };
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
@@ -432,6 +460,7 @@ export function CampusMap() {
           map.getCanvas().style.cursor = '';
         });
         map.on('click', layerId, () => {
+          setSelectedSearchEntity(null);
           setSelectedPanel('route');
           map.setFeatureState(
             { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
@@ -473,8 +502,40 @@ export function CampusMap() {
   return (
     <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge">
       <div ref={mapContainerRef} className="mapCanvas" />
-      <div className="topSearchShell" aria-hidden="true">
-        <div className="searchPill">Search NUS</div>
+      <div className="topSearchShell">
+        <label className="searchLabel" htmlFor="campus-search">Search NUS</label>
+        <input
+          id="campus-search"
+          className="searchPill"
+          type="search"
+          autoComplete="off"
+          value={searchQuery}
+          placeholder="Search NUS"
+          onChange={(event) => {
+            const value = event.target.value;
+            setSearchQuery(value);
+            setSearchResults(searchEntities(value));
+          }}
+          onFocus={() => setSearchResults(searchEntities(searchQuery))}
+        />
+        {searchResults.length > 0 ? (
+          <div className="searchResults" role="listbox" aria-label="Search results">
+            {searchResults.map((entity) => (
+              <button
+                key={entity.id}
+                className="searchResult"
+                type="button"
+                onClick={() => openSearchEntity(entity)}
+              >
+                <span>
+                  <strong>{entity.name}</strong>
+                  <small>{entity.subtitle}</small>
+                </span>
+                <em>{entity.type.replace('_', ' ')}</em>
+              </button>
+            ))}
+          </div>
+        ) : null}
       </div>
       <div className="statusPanel" data-state={mapState}>
         {selectedPanel === 'building' ? (
@@ -502,6 +563,29 @@ export function CampusMap() {
             </dl>
             <p className="truthNote">
               Real footprint and levels. Height and facade bands are visual placeholders.
+            </p>
+          </>
+        ) : selectedPanel === 'search' && selectedSearchEntity ? (
+          <>
+            <p className="eyebrow">Phase 0 Prototype D</p>
+            <h1>{selectedSearchEntity.name}</h1>
+            <p>{selectedSearchEntity.subtitle}</p>
+            <dl className="buildingFacts">
+              <div>
+                <dt>Type</dt>
+                <dd>{selectedSearchEntity.type.replace('_', ' ')}</dd>
+              </div>
+              <div>
+                <dt>Source</dt>
+                <dd>{selectedSearchEntity.sourceLabel}</dd>
+              </div>
+              <div>
+                <dt>Status</dt>
+                <dd>{selectedSearchEntity.sourceStatus}</dd>
+              </div>
+            </dl>
+            <p className="truthNote">
+              {selectedSearchEntity.detail}
             </p>
           </>
         ) : (

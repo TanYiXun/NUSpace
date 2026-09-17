@@ -27,3 +27,11 @@
 - Decision: keep the Prototype C route and stop coordinates as `prototype-placeholder` data under `data/prototype/`, with source metadata in `data/sources.yml`.
 - Animation treatment: one MapLibre GeoJSON point is moved along the route with `requestAnimationFrame`.
 - Confidence: medium for testing map interaction and animation behavior, low for production route geometry.
+
+## 2026-09-17 - Phase 0 Prototype D Search And Detail
+
+- Task: validate local search, result ranking, camera movement, and detail panels.
+- Source checked: existing prototype data from COM3, D1 corridor, and local manually referenced The Deck entry.
+- Finding: a local typed index is sufficient for Phase 0 interaction testing, but mixed food/facility entries need verified production sources later.
+- Ranking treatment: exact name or alias matches rank first, followed by prefix, substring, and all-query-token matches.
+- Confidence: high for interaction pattern, low for unverified non-building place coordinates.

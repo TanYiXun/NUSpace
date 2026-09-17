@@ -71,3 +71,21 @@ Visual QA follow-up:
 - Later map UI work should add collapsed and expanded bottom-sheet states before transit overlays become dense.
 - Route labels and stop markers are acceptable for one route, but broader transit work will need collision, filtering, and selected-route emphasis.
 - The corridor must not be treated as a complete official D1 route. It is an animation and rendering prototype until approved NUS route geometry is available.
+
+## Phase 0 Prototype D
+
+- Search is implemented as a top map control, not a separate page or dashboard.
+- Result rows show the place name, short subtitle, and entity type.
+- Selecting a result pans the map and opens the relevant detail panel.
+- The detail panel exposes source status for non-building results so prototype or manually referenced data is not mistaken for verified data.
+- Accepted desktop visual checkpoint: [Prototype D search detail desktop](screenshots/prototype-d-search-detail-desktop.jpg).
+- Accepted mobile visual checkpoint: [Prototype D search detail mobile](screenshots/prototype-d-search-detail-mobile.jpg).
+- Capture source: running local app at `http://127.0.0.1:5173/`.
+- Viewports: desktop browser viewport and 390 x 844 mobile viewport.
+- Feature state: search input, selected result detail panel, source status, route overlay, attribution, and map controls visible.
+
+Visual QA follow-up:
+
+- The top search dropdown is readable and does not overlap browser/status chrome.
+- On mobile, search plus the current always-open panel leaves limited map context. Later sheet work should introduce collapsed and expanded panel states.
+- Result styling should remain compact and avoid turning search into a full-screen command palette until there is enough data to justify it.

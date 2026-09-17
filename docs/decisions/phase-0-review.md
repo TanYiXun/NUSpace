@@ -86,7 +86,7 @@ Notes:
 
 ## Prototype D: Search And Detail Sheet
 
-Status: implemented on branch `prototype-d-search-detail`, pending PR review
+Status: implemented and merged as the search/detail checkpoint
 
 Classification: keep as local search interaction prototype
 
@@ -108,3 +108,26 @@ Notes:
 - Mobile UI issue: search results and the bottom detail panel are usable, but the combined vertical density reinforces the need for proper collapsed and expanded sheet states.
 - Automated checks passed: `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e`, `npm run validate:data`, `npm run build`.
 - Build warning remains: bundled JavaScript chunk is larger than 500 kB after minification.
+
+## Prototype E: Data Pipeline
+
+Status: implemented on branch `prototype-e-data-pipeline`, pending PR review
+
+Classification: keep as the first repeatable generated-data path
+
+Acceptance criteria:
+
+- [x] Pipeline can be rerun from a clean checkout. Evidence: `npm run build:data` regenerates `data/generated/campus-buildings.geojson` and `data/generated/manifest.json` from committed input data.
+- [x] Output schema is stable. Evidence: generated buildings use a stable FeatureCollection shape with feature id, entity type, source id, source status, height status, date checked, and render metadata.
+- [x] Invalid geometries are detected. Evidence: the transform script and data validator check Polygon geometry, closed rings, WGS84 longitude-latitude coordinate order, and NUS-area bounds.
+- [x] Source attribution is preserved. Evidence: generated building output preserves `source_id=osm-overpass-com3`, source status, and source date, while `data/sources.yml` documents OSM attribution.
+- [x] Generated data is intentionally committed. Evidence: generated outputs live under `data/generated/` and are documented in `docs/data-pipeline.md`.
+
+Notes:
+
+- Input source: `data/prototype/com3-building.geojson`.
+- Transform script: `scripts/data/build-campus-data.mjs`.
+- Output files: `data/generated/campus-buildings.geojson` and `data/generated/manifest.json`.
+- Known data quality issues: only COM3 is included, exact height is still a placeholder estimate, and no building-part or indoor data exists.
+- UI note: Prototype E does not add a new map layer. The default panel now identifies the Prototype E data-pipeline checkpoint, while earlier Prototype B, C, and D panels appear only after selecting their corresponding feature states.
+- Screenshot checkpoint: `docs/screenshots/prototype-e-data-pipeline-overview.png`, captured from the running local app at `http://127.0.0.1:5173/`.

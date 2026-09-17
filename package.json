@@ -9,6 +9,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:e2e": "echo \"test:e2e not implemented for Phase 0 prototypes\"",
+    "build:data": "node scripts/data/build-campus-data.mjs",
     "validate:data": "node scripts/data/validate-sources.mjs",
     "build": "tsc -b && vite build"
   },

@@ -4,7 +4,14 @@ NUSpace is an independent NUS-first campus map prototype. Phase 0 is validating 
 
 ## Current Phase
 
-Phase 0 Prototype A: base map rendering without Google Maps.
+Phase 0 Prototypes A through D are complete and merged:
+
+- Prototype A: MapLibre base map centered on NUS without Google Maps.
+- Prototype B: one sourced COM3 building footprint with prototype extrusion styling.
+- Prototype C: manually curated simulated D1-style shuttle corridor and animated vehicle marker.
+- Prototype D: local search and detail sheet interaction for prototype entities.
+
+Current work: Phase 0 Prototype E, repeatable data pipeline for app-ready GeoJSON. The default app panel should identify Prototype E. Earlier prototype panels may appear only after selecting their corresponding building, search result, or route state.
 
 ## Commands
 
@@ -14,6 +21,7 @@ npm run dev
 npm run lint
 npm run typecheck
 npm run test
+npm run build:data
 npm run validate:data
 npm run build
 ```
@@ -24,4 +32,14 @@ npm run build
 
 Do not add campus buildings, routes, rooms, shuttle arrivals, or indoor geometry unless the source is documented in `data/sources.yml` and allowed by `PLAN.md`.
 
-The current prototype uses OpenFreeMap only as a basemap source. It does not add NUS-specific data.
+The current prototype includes only phase-scoped NUS data:
+
+- COM3 footprint from OpenStreetMap relation `15780831`, with placeholder height.
+- Manually curated D1-style route and stops for animation testing only.
+- Local search entries for interaction testing, with unverified entries clearly treated as prototype or manual-reference data.
+
+No live NUS shuttle API, uNivUS/ConnectX integration, LTA DataMall integration, NUSMods import, or indoor routing data has been added.
+
+## Local Server Notes
+
+After switching branches, merging a prototype, or changing map data, restart or refresh the Vite dev server and browser before judging the UI. If the app still shows an older prototype state, confirm the active Git branch and current commit before assuming the implementation is wrong.

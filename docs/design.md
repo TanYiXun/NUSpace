@@ -89,3 +89,17 @@ Visual QA follow-up:
 - The top search dropdown is readable and does not overlap browser/status chrome.
 - On mobile, search plus the current always-open panel leaves limited map context. Later sheet work should introduce collapsed and expanded panel states.
 - Result styling should remain compact and avoid turning search into a full-screen command palette until there is enough data to justify it.
+
+## Phase 0 Prototype E
+
+- Prototype E is primarily a data-pipeline checkpoint, so it does not add a new visible map layer.
+- The default panel identifies Prototype E instead of leaving the app looking like it is still on the Prototype C route state.
+- Earlier prototype detail panels remain available only after selecting their matching feature state.
+- Accepted desktop visual checkpoint: [Prototype E data pipeline overview](screenshots/prototype-e-data-pipeline-overview.png).
+- Capture source: running local app at `http://127.0.0.1:5173/`.
+- Feature state: default app load, search control, route overlay, generated-data overview panel, map attribution, and MapLibre controls visible.
+
+Visual QA follow-up:
+
+- The default panel is intentionally plain because the data pipeline itself is not a user-facing feature.
+- Prototype F should replace this temporary always-open overview with proper current-location, layer, route, and bottom-sheet controls.

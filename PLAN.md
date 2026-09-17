@@ -19,7 +19,8 @@ Every task must follow this loop:
 3. **Small implementation:** make the smallest coherent change that satisfies the targeted criterion.
 4. **Verification:** run the relevant automated checks and one manual smoke check if UI is affected.
 5. **Plan reconciliation:** update this `PLAN.md` if the implementation revealed that the plan is wrong, incomplete, or too vague.
-6. **Completion note:** summarize what passed, what did not, and what remains blocked.
+6. **Documentation reconciliation:** update `README.md` when current phase status, setup commands, generated-data workflow, local server behavior, or user-facing data policy changed.
+7. **Completion note:** summarize what passed, what did not, and what remains blocked.
 
 If step 1 or step 2 cannot be completed, stop and clarify the plan before coding.
 
@@ -1539,6 +1540,10 @@ Rules:
 Any UI-affecting task must produce screenshots before it is accepted.
 
 Accepted screenshots should be committed under `docs/screenshots/` or otherwise linked from `docs/design.md`. These screenshots must be captured from the running local app, staging deployment, production deployment, or another real rendered app surface by the implementer. Do not use user-provided chat images, reference screenshots, competitor screenshots, mockups, or screenshots of GitHub as accepted app-state screenshots. UI and map PRs should embed or link the relevant screenshots in the PR description so every prototype checkpoint can be visually compared later during review, rollback, or redesign work.
+
+Before capturing or judging screenshots, refresh or restart the local preview after branch changes, merges, generated-data updates, or dev-server uncertainty. Record the URL and viewport. If the browser still appears to show an older prototype state, verify the active branch and commit before accepting the screenshot.
+
+Visible prototype labels must match the current checkpoint or the selected feature state. Do not leave an old prototype label as the default panel after completing a later prototype. If a prototype has no visible map change, use a neutral current-phase overview panel or remove the prototype-specific default panel.
 
 For each committed screenshot, record:
 

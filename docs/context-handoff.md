@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `mvp1-layout-polish`.
-- Latest `main` commit: `28efc21 Update handoff after transit truth layer`.
+- Current branch: `main`.
+- Latest `main` commit: `909d466 Merge pull request #10 from TanYiXun/mvp1-layout-polish`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 1 layout polish branch.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: mobile sheet, floating menu, and control safe-area polish before Phase 1 review.
+- Current slice: ready for Phase 1 review against `PLAN.md` section 10 acceptance criteria.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -52,7 +52,7 @@ Completed and merged in PR #9:
 - Selecting the D1 corridor keeps prototype-only, no-live-data, and not-MVP-route-geometry wording visible.
 - Added Playwright e2e viewport smoke tests for desktop route/layer truth state and mobile overview readability.
 
-In progress on branch `mvp1-layout-polish`:
+Completed and merged in PR #10:
 
 - Mobile map controls use sheet-state-aware clearance instead of fixed pixel offsets.
 - Layer and route floating menus include explicit close icon buttons.
@@ -173,11 +173,12 @@ Known build warning:
 - Phase 1 data foundation PR #7 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 building footprints PR #8 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 transit truth PR #9 was pushed, opened with screenshots, and merged to `main`.
+- Phase 1 layout polish PR #10 was pushed, opened with screenshots, and merged to `main`.
 
 ## Next Recommended Action
 
 Start the next MVP 1 slice. Recommended next options:
 
-1. Complete, push, and merge the `mvp1-layout-polish` checkpoint if checks remain green.
-2. Begin a Phase 1 review pass against section 10 acceptance criteria.
-3. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.
+1. Begin a Phase 1 review pass against section 10 acceptance criteria.
+2. Decide whether the route-overlay criterion passes as an explicit prototype/disabled route state or remains blocked pending source-confirmed route geometry.
+3. Start Phase 2 only after the Phase 1 review is recorded and merged.

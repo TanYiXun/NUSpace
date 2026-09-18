@@ -5,6 +5,7 @@ const contents = await readFile(sourceFile, 'utf8');
 const generatedBuildingsFile = new URL('../../data/generated/campus-buildings.geojson', import.meta.url);
 const generatedManifestFile = new URL('../../data/generated/manifest.json', import.meta.url);
 const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', import.meta.url);
+const curatedBuildingFootprintsFile = new URL('../../data/curated/mvp1-building-footprints.geojson', import.meta.url);
 
 const NUS_BOUNDS = {
   minLng: 103.76,
@@ -88,6 +89,7 @@ function validateGeneratedBuilding(feature, index) {
 
 const allowedPlaceTypes = new Set(['building', 'bus_stop', 'food', 'facility']);
 const allowedSourceStatuses = new Set(['verified', 'manual-reference', 'prototype-placeholder']);
+const allowedHeightSourceStatuses = new Set(['estimated-from-levels', 'prototype-placeholder']);
 
 function validateCuratedPlace(place, index, seenIds) {
   const context = `curated place ${place.id ?? index}`;
@@ -110,9 +112,33 @@ function validateCuratedPlace(place, index, seenIds) {
   }
 }
 
+function validateCuratedBuildingFootprint(feature, index) {
+  const context = `curated building footprint ${feature.id ?? index}`;
+
+  assert(feature.type === 'Feature', `${context} must be a GeoJSON Feature`);
+  assert(typeof feature.id === 'string' && feature.id.length > 0, `${context} must have a stable id`);
+  assert(feature.properties?.entity_type === 'building', `${context} must have entity_type=building`);
+  assert(typeof feature.properties?.name === 'string' && feature.properties.name.length > 0, `${context} must have a name`);
+  assert(typeof feature.properties?.source_id === 'string' && contents.includes(`id: ${feature.properties.source_id}`), `${context} source_id must exist in data/sources.yml`);
+  assert(allowedSourceStatuses.has(feature.properties?.source_status), `${context} has unsupported source_status`);
+  assert(typeof feature.properties?.source_label === 'string' && feature.properties.source_label.length > 0, `${context} must have source_label`);
+  assert(feature.properties?.osm_type && feature.properties?.osm_id, `${context} must preserve OSM type and id`);
+  assert(typeof feature.properties?.height_m === 'number' && feature.properties.height_m > 0, `${context} must have positive height_m`);
+  assert(allowedHeightSourceStatuses.has(feature.properties?.height_source_status), `${context} has unsupported height_source_status`);
+  assert(typeof feature.properties?.detail === 'string' && feature.properties.detail.length > 0, `${context} must have a detail note`);
+  assert(feature.geometry?.type === 'Polygon', `${context} geometry must be Polygon`);
+  assert(Array.isArray(feature.geometry.coordinates), `${context} coordinates must be an array`);
+  assert(feature.geometry.coordinates.length > 0, `${context} must have at least one ring`);
+
+  feature.geometry.coordinates.forEach((ring, ringIndex) => {
+    assertClosedRing(ring, `${context} ring ${ringIndex}`);
+  });
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
+const curatedBuildingFootprints = JSON.parse(await readFile(curatedBuildingFootprintsFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
 assert(Array.isArray(generatedBuildings.features), 'generated buildings features must be an array');
@@ -128,6 +154,9 @@ generatedBuildings.features.forEach(validateGeneratedBuilding);
 
 assert(curatedPlaces.schema === 'mvp1-campus-places-v1', 'curated places must use the MVP 1 schema');
 assert(Array.isArray(curatedPlaces.places), 'curated places must include a places array');
+assert(curatedBuildingFootprints.type === 'FeatureCollection', 'curated building footprints must be a FeatureCollection');
+assert(curatedBuildingFootprints.properties?.schema === 'mvp1-building-footprints-v1', 'curated building footprints must use the MVP 1 footprint schema');
+assert(Array.isArray(curatedBuildingFootprints.features), 'curated building footprints features must be an array');
 
 const seenPlaceIds = new Set();
 curatedPlaces.places.forEach((place, index) => validateCuratedPlace(place, index, seenPlaceIds));
@@ -141,6 +170,9 @@ assert(curatedPlaces.places.length >= 20, 'curated places must seed at least 20 
 assert((placeTypeCounts.building ?? 0) >= 10, 'curated places must seed at least 10 buildings for MVP 1');
 assert((placeTypeCounts.bus_stop ?? 0) >= 8, 'curated places must seed at least 8 bus stops for MVP 1');
 
+curatedBuildingFootprints.features.forEach(validateCuratedBuildingFootprint);
+assert(curatedBuildingFootprints.features.length >= 10, 'curated building footprints must include at least 10 visible buildings for MVP 1');
+
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
 assert(
@@ -148,4 +180,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, and curated MVP 1 places contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, and MVP 1 building footprints contain required metadata.');

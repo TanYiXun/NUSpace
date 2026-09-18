@@ -55,3 +55,12 @@
 - Raw-data treatment: the full raw XML extract is not committed because it is large and this branch only needs the curated seed. Future broad imports should add a formal raw-data stage or fetch script with licensing review.
 - Bus stop treatment: OSM bus stop coordinates are usable for map/search prototyping with attribution, but they are not official NUS ISB data and do not include live arrivals, crowd level, route membership, or vehicle positions.
 - Confidence: medium for MVP search and marker seeding, low for official campus operations accuracy until NUS-owned sources or approved datasets are available.
+
+## 2026-09-18 - Phase 1 MVP Building Footprints
+
+- Task: render at least 10 visible building footprints for the selected MVP 1 campus area without inventing geometry.
+- Source checked: OpenStreetMap API bounded map extract plus OSM API `way/{id}/full` responses for selected building ways.
+- Finding: the bounded extract identified enough OSM building objects for the selected Kent Ridge/UTown seed, but some way rings were clipped by the bounding box and needed complete `way/full` responses before conversion to GeoJSON.
+- Decision: commit a curated building footprint GeoJSON at `data/curated/mvp1-building-footprints.geojson`, preserving source ids, OSM object type/id, date checked, height source status, and user-facing limitation text.
+- Height treatment: `building:levels` values are converted to rough visual heights where available. Missing heights remain prototype placeholders. None are official architectural heights.
+- Confidence: medium for outdoor footprint visualization, low for official building inventory, exact height, indoor geometry, accessibility, or floor-level navigation.

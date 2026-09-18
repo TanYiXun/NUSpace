@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 1 Outdoor Campus MVP, first slice. The active branch seeds an OSM-sourced Kent Ridge place dataset for searchable buildings, food places, facilities, and bus stop markers while keeping live NUS shuttle data disabled.
+Current work: Phase 1 Outdoor Campus MVP. The latest merged slice seeds OSM-sourced Kent Ridge places and bus stop markers. The active branch adds visible OSM-sourced building footprints for the selected campus area while keeping live NUS shuttle data disabled.
 
 ## Commands
 
@@ -38,6 +38,7 @@ The current prototype includes only source-labelled NUS-area data:
 
 - COM3 footprint from OpenStreetMap relation `15780831`, with placeholder height.
 - MVP 1 Kent Ridge place seed from a bounded OpenStreetMap API extract, curated into `data/curated/mvp1-campus-places.json`.
+- MVP 1 Kent Ridge building footprints from OpenStreetMap way/full responses and the COM3 relation, curated into `data/curated/mvp1-building-footprints.geojson`.
 - Manually curated D1-style route and stops for animation testing only.
 - OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
 

@@ -79,13 +79,13 @@ sources:
     documentation_url: https://wiki.openstreetmap.org/wiki/API_v0.6
     terms_or_license_url: https://www.openstreetmap.org/copyright
     license: Open Database License
-    allowed_use: MVP 1 seed dataset for searchable NUS-area buildings, bus stops, and places with OpenStreetMap attribution
+    allowed_use: MVP 1 seed dataset for searchable NUS-area buildings, bus stops, building footprints, and places with OpenStreetMap attribution
     disallowed_use: Do not treat as official NUS building inventory, official NUS shuttle stop list, live shuttle data, indoor map data, accessibility routing data, or exact campus operations data
     attribution_text: © OpenStreetMap contributors
     attribution_required: true
     commercial_use_allowed: true
     redistribution_allowed: true under ODbL requirements
-    derived_data_rules: Derived place data must preserve OSM object type, OSM id, attribution, date checked, and any limitation notes
+    derived_data_rules: Derived place and footprint data must preserve OSM object type, OSM id, attribution, date checked, and any limitation notes
     date_checked: 2026-09-18
     next_review_date: 2026-10-18
     source_status: verified
@@ -93,8 +93,9 @@ sources:
       - MVP 1 searchable campus place seed
       - MVP 1 OSM-sourced bus stop marker seed
       - MVP 1 OSM-sourced building search seed
+      - MVP 1 OSM-sourced visible building footprint seed
     limitations:
       - Community-maintained OSM data is not official NUS data
       - OSM bus stop coordinates do not provide live NUS ISB arrivals, crowd levels, or official shuttle route membership
-      - Bounded extract was curated into `data/curated/mvp1-campus-places.json`; the full raw OSM XML dump is not committed
+      - Bounded extract was curated into `data/curated/mvp1-campus-places.json`; selected OSM way/full responses were curated into `data/curated/mvp1-building-footprints.geojson`; the full raw OSM XML dumps are not committed
       - Some OSM objects inside the query bounds may be outside NUS-controlled campus areas and must be curated before display

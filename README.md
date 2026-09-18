@@ -1,6 +1,6 @@
 # NUSpace
 
-NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 is building the first outdoor campus MVP.
+NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 completed the first outdoor campus MVP checkpoint with constraints.
 
 ## Current Phase
 
@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 1 Outdoor Campus MVP review. The latest merged slices seed OSM-sourced Kent Ridge places, bus stop markers, visible building footprints, an honest transit layer that keeps the prototype D1 route hidden by default, and polished mobile sheet controls.
+Current work: Phase 2 transit planning can begin. Phase 1 passed review with constraints in `docs/decisions/phase-1-review.md`; the prototype D1 route remains hidden by default and must not be treated as official route geometry.
 
 ## Commands
 

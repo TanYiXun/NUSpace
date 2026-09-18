@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `mvp1-review`.
-- Latest `main` commit: `37c4e4f Update handoff after layout polish`.
+- Current branch: `main`.
+- Latest `main` commit: `57018d8 Merge pull request #11 from TanYiXun/mvp1-review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 1 review branch.
+- Active uncommitted work: none.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: Phase 1 review against `PLAN.md` section 10 acceptance criteria.
+- Active plan section: `PLAN.md` section 11, Phase 2 Transit Layer.
+- Current slice: ready to start Phase 2 transit planning after Phase 1 passed review with constraints.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -59,7 +59,7 @@ Completed and merged in PR #10:
 - Mobile layer menu, expanded sheet, and collapsed sheet have fresh rendered screenshots.
 - E2E smoke tests now check that the layer menu can be closed on desktop and mobile.
 
-In progress on branch `mvp1-review`:
+Completed and merged in PR #11:
 
 - Added `docs/decisions/phase-1-review.md`.
 - Review decision is Phase 1 passes with constraints.
@@ -180,11 +180,12 @@ Known build warning:
 - Phase 1 building footprints PR #8 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 transit truth PR #9 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 layout polish PR #10 was pushed, opened with screenshots, and merged to `main`.
+- Phase 1 review PR #11 was pushed, opened, and merged to `main`.
 
 ## Next Recommended Action
 
-Start the next MVP 1 slice. Recommended next options:
+Start Phase 2 transit planning. Recommended next options:
 
-1. Complete, push, and merge the `mvp1-review` checkpoint if checks remain green.
-2. Start Phase 2 transit planning only after the review is merged.
+1. Read `PLAN.md` section 11 before implementing transit changes.
+2. Start with public bus and transit adapter planning before any live NUS ISB work.
 3. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.

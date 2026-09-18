@@ -99,3 +99,28 @@ sources:
       - OSM bus stop coordinates do not provide live NUS ISB arrivals, crowd levels, or official shuttle route membership
       - Bounded extract was curated into `data/curated/mvp1-campus-places.json`; selected OSM way/full responses were curated into `data/curated/mvp1-building-footprints.geojson`; the full raw OSM XML dumps are not committed
       - Some OSM objects inside the query bounds may be outside NUS-controlled campus areas and must be curated before display
+  - id: lta-datamall-dynamic-apis
+    name: LTA DataMall Dynamic APIs
+    source_owner: Land Transport Authority Singapore
+    source_url: https://datamall.lta.gov.sg/
+    documentation_url: https://datamall.lta.gov.sg/content/datamall/en/dynamic-data.html
+    terms_or_license_url: https://datamall.lta.gov.sg/
+    license: LTA DataMall terms apply; AccountKey required for Dynamic APIs
+    allowed_use: Phase 2 planning for public Singapore bus arrivals and public transport context near NUS, subject to AccountKey access and server-side key handling
+    disallowed_use: Do not expose AccountKey in frontend code; do not assume NUS ISB routes are present; do not use deprecated Bus Arrival v2; do not present LTA public bus data as NUS internal shuttle data
+    attribution_text: Public bus arrival data from LTA DataMall
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Cache and normalize public bus responses server-side only; preserve timestamps and distinguish public bus data from NUS shuttle data
+    date_checked: 2026-09-18
+    next_review_date: 2026-10-18
+    source_status: requires-permission
+    used_for:
+      - Phase 2 public bus adapter planning
+      - Future public bus arrival server adapter
+    limitations:
+      - Dynamic APIs require an AccountKey issued to registered DataMall subscribers
+      - Bus Arrival v2 is decommissioned; future implementation must use the current documented Bus Arrival API version
+      - LTA public bus services are not NUS internal shuttle services
+      - This repository does not currently include an AccountKey, backend endpoint, or live public bus adapter

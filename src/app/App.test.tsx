@@ -10,7 +10,7 @@ describe('App', () => {
   it('renders the map-first application shell', () => {
     render(<App />);
 
-    expect(screen.getByLabelText('NUSpace Phase 0 base map')).toBeInTheDocument();
+    expect(screen.getByLabelText('NUSpace campus map')).toBeInTheDocument();
     expect(screen.getByText('Mock campus map')).toBeInTheDocument();
   });
 });

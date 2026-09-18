@@ -44,3 +44,14 @@
 - Validation treatment: generated building geometry is checked for WGS84 longitude-latitude coordinate order, closed polygon rings, and NUS-area bounds.
 - Decision: commit generated Phase 0 output under `data/generated/` and keep the script deterministic so reruns do not create timestamp-only diffs.
 - Confidence: high for pipeline mechanics, medium for OSM footprint suitability, low for exact 3D building realism.
+
+## 2026-09-18 - Phase 1 MVP Campus Place Seed
+
+- Task: seed the first MVP 1 searchable campus place dataset without inventing building, food, facility, or bus stop coordinates.
+- Source checked: OpenStreetMap API bounded map extract.
+- Query target: `https://api.openstreetmap.org/api/0.6/map?bbox=103.770,1.290,103.785,1.306`.
+- Finding: the bounded extract contains enough named NUS-area buildings, food places, facilities, and bus stops to seed MVP 1 search and map marker behavior.
+- Decision: commit a curated JSON seed at `data/curated/mvp1-campus-places.json`, preserving OSM object type, OSM id, source id, and user-facing limitation text.
+- Raw-data treatment: the full raw XML extract is not committed because it is large and this branch only needs the curated seed. Future broad imports should add a formal raw-data stage or fetch script with licensing review.
+- Bus stop treatment: OSM bus stop coordinates are usable for map/search prototyping with attribution, but they are not official NUS ISB data and do not include live arrivals, crowd level, route membership, or vehicle positions.
+- Confidence: medium for MVP search and marker seeding, low for official campus operations accuracy until NUS-owned sources or approved datasets are available.

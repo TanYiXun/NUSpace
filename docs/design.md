@@ -215,3 +215,33 @@ Known visual issues:
 - The route overlay remains prototype geometry and should not be judged as final NUS shuttle routing.
 - Current D1 stop locations and path alignment are still wrong or approximate in places. They are for UI and animation testing only until replaced with verified or carefully re-curated route geometry.
 - The current panel design is acceptable for Phase 0 but needs a real sheet gesture model for production mobile use.
+
+## Phase 1 MVP Campus Data Foundation
+
+This checkpoint keeps the Phase 0 map UI direction but replaces the hard-coded search-only place list with a curated OSM-sourced Kent Ridge place seed. The visual goal is still map-first: sourced place markers and searchable details should be useful without making the map look like a dashboard.
+
+Accepted visual checkpoints:
+
+- [MVP 1 data foundation desktop overview](screenshots/mvp1-data-foundation-desktop-overview.png).
+- [MVP 1 data foundation selected bus stop](screenshots/mvp1-data-foundation-selected-bus-stop.png).
+- [MVP 1 data foundation mobile overview](screenshots/mvp1-data-foundation-mobile-overview.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Desktop viewport: default in-app browser viewport, captured at 1280 x 720.
+- Mobile viewport: 390 x 844.
+
+Accepted behavior:
+
+- The default sheet identifies the current checkpoint as Phase 1 data foundation.
+- Searchable place counts are visible and source-scoped.
+- OSM bus stop markers are selectable from the map layer and from search.
+- Selected OSM bus stops show source, status, and arrivals as `Not enabled`.
+- The UI does not imply official NUS shuttle timings, official NUS ISB route geometry, live vehicle positions, crowd level, indoor maps, or official NUS bus stop data.
+
+Known visual issues:
+
+- The mobile overview remains dense because the prototype D1 overlay is still visible while OSM bus stop markers are introduced. Later transit work should separate official, OSM, and prototype transit layers more clearly.
+- The lower map-layer control can sit close to or partly behind the bottom sheet on small mobile viewports. A later production sheet layout should reserve a clearer control safe area.
+- Screenshot resolution reflects the active browser viewport. Future PRs may include additional higher-resolution browser captures if the viewport is naturally larger, but screenshots must still come from the rendered app.

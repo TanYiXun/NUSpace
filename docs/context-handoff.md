@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `909d466 Merge pull request #10 from TanYiXun/mvp1-layout-polish`.
+- Current branch: `mvp1-review`.
+- Latest `main` commit: `37c4e4f Update handoff after layout polish`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 1 review branch.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: ready for Phase 1 review against `PLAN.md` section 10 acceptance criteria.
+- Current slice: Phase 1 review against `PLAN.md` section 10 acceptance criteria.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -58,6 +58,12 @@ Completed and merged in PR #10:
 - Layer and route floating menus include explicit close icon buttons.
 - Mobile layer menu, expanded sheet, and collapsed sheet have fresh rendered screenshots.
 - E2E smoke tests now check that the layer menu can be closed on desktop and mobile.
+
+In progress on branch `mvp1-review`:
+
+- Added `docs/decisions/phase-1-review.md`.
+- Review decision is Phase 1 passes with constraints.
+- The D1 route criterion passes only as a prototype/disclosed route state, not as official route geometry.
 
 ## Prototype F Implemented Scope
 
@@ -179,6 +185,6 @@ Known build warning:
 
 Start the next MVP 1 slice. Recommended next options:
 
-1. Begin a Phase 1 review pass against section 10 acceptance criteria.
-2. Decide whether the route-overlay criterion passes as an explicit prototype/disabled route state or remains blocked pending source-confirmed route geometry.
-3. Start Phase 2 only after the Phase 1 review is recorded and merged.
+1. Complete, push, and merge the `mvp1-review` checkpoint if checks remain green.
+2. Start Phase 2 transit planning only after the review is merged.
+3. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.

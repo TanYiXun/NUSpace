@@ -1040,7 +1040,7 @@ export function CampusMap() {
         <div className="floatingMenu" data-menu="layers">
           <div className="floatingMenuHeader">
             <h2>Layers</h2>
-            <p>Phase 1</p>
+            <p>Phase 2 boundary</p>
             <button className="floatingMenuClose" type="button" aria-label="Close map layers" title="Close map layers" onClick={() => setLayerMenuOpen(false)}>
               <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
@@ -1253,10 +1253,10 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 1 data foundation</p>
+            <p className="eyebrow">Phase 2 transit boundary</p>
             <h1>NUSpace</h1>
             <p>
-              Search now uses an OSM-sourced Kent Ridge place seed with visible building footprints and selectable bus stop markers.
+              Public bus arrivals now have a server-side LTA DataMall adapter boundary. No key or live transit data is enabled in the browser.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1271,9 +1271,13 @@ export function CampusMap() {
                 <dt>Bus stops</dt>
                 <dd>{campusBusStopCount} OSM markers</dd>
               </div>
+              <div>
+                <dt>Public bus</dt>
+                <dd>Requires server key</dd>
+              </div>
             </dl>
             <p className="truthNote">
-              OSM places are community map data, not official NUS data. The prototype D1 route is hidden by default. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
+              LTA public bus support is backend-only until an AccountKey is configured. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>
             {locationStatus !== 'idle' ? (
               <p className="locationNote">

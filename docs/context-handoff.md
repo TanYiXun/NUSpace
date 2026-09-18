@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `57018d8 Merge pull request #11 from TanYiXun/mvp1-review`.
+- Current branch: `phase2-transit-planning`.
+- Latest `main` commit: `cc9cb85 Update handoff after Phase 1 review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 2 transit planning branch.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 11, Phase 2 Transit Layer.
-- Current slice: ready to start Phase 2 transit planning after Phase 1 passed review with constraints.
+- Current slice: Phase 2 transit source and adapter boundary planning.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice

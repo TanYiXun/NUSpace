@@ -72,3 +72,12 @@
 - Finding: the current D1 route has `source_status=prototype-placeholder`, `can_ship=false`, and `review_status=prototype-only`.
 - Decision: keep OSM bus stop markers as the default visible transit seed and hide the simulated D1 corridor by default. The D1 corridor remains available only through explicit prototype route controls.
 - Confidence: high for truthful UI state, low for actual NUS route geometry until source-confirmed route data is added.
+
+## 2026-09-18 - Phase 2 Transit Planning
+
+- Task: establish the public bus and NUS shuttle source boundary before implementing live transit UI.
+- Sources checked: LTA DataMall portal and Dynamic Datasets page.
+- Finding: LTA DataMall Dynamic APIs require an AccountKey for registered subscribers. The Bus Arrival dataset is for public bus arrivals and includes ETA, estimated location, and load information. DataMall notices state that Bus Arrival v2 is decommissioned.
+- Decision: document LTA DataMall as a `requires-permission` source for future public bus arrivals. Do not call LTA from frontend code, and do not treat LTA public bus data as NUS ISB data.
+- NUS ISB decision: keep live NUS shuttle arrivals, live vehicle positions, and crowd level unavailable until official access is documented.
+- Confidence: high for LTA public bus source boundary, low for NUS ISB live access until official permission exists.

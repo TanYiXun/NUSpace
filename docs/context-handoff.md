@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase2-public-bus-adapter`.
-- Latest `main` commit: `3282ab1 Merge pull request #12 from TanYiXun/phase2-transit-planning`.
+- Current branch: `main`.
+- Latest `main` commit: `720a793 Merge pull request #13 from TanYiXun/phase2-public-bus-adapter`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 2 public bus adapter boundary branch.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration.
-- Current slice: server-side LTA DataMall public bus arrivals adapter boundary.
+- Current slice: ready to connect one verified LTA public bus stop UI state to the server-side endpoint.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -182,13 +182,14 @@ Known build warning:
 - Phase 1 layout polish PR #10 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 review PR #11 was pushed, opened, and merged to `main`.
 - Phase 2 transit planning PR #12 was pushed, opened, and merged to `main`.
-- Current Phase 2 branch adds `/api/transit/public-bus-arrivals`, server-only `LTA_DATAMALL_ACCOUNT_KEY` handling, in-memory caching, normalized LTA-shaped responses, explicit missing-key/upstream-error states, and visible Phase 2 truth copy.
+- Phase 2 public bus adapter PR #13 was pushed, opened with a screenshot, and merged to `main`.
+- `/api/transit/public-bus-arrivals` now exists in the Vite development server with server-only `LTA_DATAMALL_ACCOUNT_KEY` handling, in-memory caching, normalized LTA-shaped responses, explicit missing-key/upstream-error states, and visible Phase 2 truth copy.
 
 ## Next Recommended Action
 
 Continue Phase 2 public bus integration. Recommended next options:
 
 1. Read `PLAN.md` section 11 before implementing transit changes.
-2. Finish and merge the server-side public bus adapter boundary branch.
-3. Then connect one verified LTA public bus stop UI state to the endpoint, keeping missing-key and upstream-failure states visible.
+2. Create a new branch for the public-bus UI connection slice.
+3. Connect one verified LTA public bus stop UI state to the endpoint, keeping missing-key and upstream-failure states visible.
 4. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.

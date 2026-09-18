@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `ab57db6 Merge pull request #9 from TanYiXun/mvp1-transit-truth-layer`.
+- Current branch: `mvp1-layout-polish`.
+- Latest `main` commit: `28efc21 Update handoff after transit truth layer`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 1 layout polish branch.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: ready to choose the next MVP 1 slice from `PLAN.md` section 10.
+- Current slice: mobile sheet, floating menu, and control safe-area polish before Phase 1 review.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -51,6 +51,13 @@ Completed and merged in PR #9:
 - The shuttle route menu labels the D1 corridor as source pending and animation testing only.
 - Selecting the D1 corridor keeps prototype-only, no-live-data, and not-MVP-route-geometry wording visible.
 - Added Playwright e2e viewport smoke tests for desktop route/layer truth state and mobile overview readability.
+
+In progress on branch `mvp1-layout-polish`:
+
+- Mobile map controls use sheet-state-aware clearance instead of fixed pixel offsets.
+- Layer and route floating menus include explicit close icon buttons.
+- Mobile layer menu, expanded sheet, and collapsed sheet have fresh rendered screenshots.
+- E2E smoke tests now check that the layer menu can be closed on desktop and mobile.
 
 ## Prototype F Implemented Scope
 
@@ -114,6 +121,15 @@ Phase 1 transit truth screenshots are in `docs/screenshots/`:
 - `mvp1-transit-truth-prototype-route.png`
 - `mvp1-transit-truth-mobile-overview.png`
 
+Phase 1 layout polish screenshots are in `docs/screenshots/`:
+
+- `mvp1-layout-polish-desktop-overview.png`
+- `mvp1-layout-polish-desktop-layers-menu.png`
+- `mvp1-layout-polish-mobile-overview.png`
+- `mvp1-layout-polish-mobile-layers-menu.png`
+- `mvp1-layout-polish-mobile-expanded-sheet.png`
+- `mvp1-layout-polish-mobile-collapsed-sheet.png`
+
 ## Checks Last Run
 
 Latest checks passed unless noted:
@@ -162,6 +178,6 @@ Known build warning:
 
 Start the next MVP 1 slice. Recommended next options:
 
-1. Continue mobile sheet/control layout polish as route and layer density increases.
-2. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.
-3. Begin a Phase 1 review pass against section 10 acceptance criteria after the layout polish slice is complete.
+1. Complete, push, and merge the `mvp1-layout-polish` checkpoint if checks remain green.
+2. Begin a Phase 1 review pass against section 10 acceptance criteria.
+3. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.

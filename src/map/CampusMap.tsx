@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
@@ -267,6 +267,9 @@ export function CampusMap() {
     prototypeRoute: false,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
+  const stageStyle = {
+    '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
+  } as CSSProperties;
 
   const updateSheet = useCallback((panel: SelectedPanel, nextSheetState: SheetState = 'half') => {
     setSelectedPanel(panel);
@@ -940,7 +943,7 @@ export function CampusMap() {
   }, [clearSelection, openSearchEntity, selectBusStop, updateSheet]);
 
   return (
-    <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge">
+    <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge" style={stageStyle}>
       <div ref={mapContainerRef} className="mapCanvas" />
       <div className="topSearchShell">
         <label className="searchLabel" htmlFor="campus-search">Search NUS</label>
@@ -1019,6 +1022,9 @@ export function CampusMap() {
           <div className="floatingMenuHeader">
             <h2>Shuttle routes</h2>
             <p>Source pending</p>
+            <button className="floatingMenuClose" type="button" aria-label="Close shuttle routes" title="Close shuttle routes" onClick={() => setRouteMenuOpen(false)}>
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
           </div>
           <button className="routeChoice" type="button" onClick={focusRoute}>
             <span className="routeSwatch" aria-hidden="true" />
@@ -1035,6 +1041,9 @@ export function CampusMap() {
           <div className="floatingMenuHeader">
             <h2>Layers</h2>
             <p>Phase 1</p>
+            <button className="floatingMenuClose" type="button" aria-label="Close map layers" title="Close map layers" onClick={() => setLayerMenuOpen(false)}>
+              <span className="material-symbols-outlined" aria-hidden="true">close</span>
+            </button>
           </div>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
             <span className="choiceText">

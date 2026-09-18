@@ -13,7 +13,10 @@ test('desktop separates MVP bus stop seed from prototype route overlay', async (
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /Bus stop seed/ })).toContainText('On');
   await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('Off');
+  await page.getByRole('button', { name: 'Close map layers' }).click();
+  await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
 
+  await page.getByRole('button', { name: 'Change map layers' }).click();
   await page.getByRole('button', { name: /Prototype route/ }).click();
   await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('On');
 
@@ -35,4 +38,9 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('26 searchable')).toBeVisible();
   await expect(page.getByText('The prototype D1 route is hidden by default.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'Change map layers' }).click();
+  await expect(page.getByRole('button', { name: 'Close map layers' })).toBeVisible();
+  await page.getByRole('button', { name: 'Close map layers' }).click();
+  await expect(page.getByRole('button', { name: 'Close map layers' })).toBeHidden();
 });

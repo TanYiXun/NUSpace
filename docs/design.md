@@ -304,3 +304,35 @@ Known visual issues:
 
 - The route UI still exists before verified NUS shuttle route geometry is available, so all D1 entry points must keep prototype wording.
 - The route sequence and coordinates remain Phase 0 prototype data, not an MVP route dataset.
+
+## Phase 1 MVP Layout Polish
+
+This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.
+
+Accepted visual checkpoints:
+
+- [MVP 1 layout polish desktop overview](screenshots/mvp1-layout-polish-desktop-overview.png).
+- [MVP 1 layout polish desktop layers menu](screenshots/mvp1-layout-polish-desktop-layers-menu.png).
+- [MVP 1 layout polish mobile overview](screenshots/mvp1-layout-polish-mobile-overview.png).
+- [MVP 1 layout polish mobile layers menu](screenshots/mvp1-layout-polish-mobile-layers-menu.png).
+- [MVP 1 layout polish mobile expanded sheet](screenshots/mvp1-layout-polish-mobile-expanded-sheet.png).
+- [MVP 1 layout polish mobile collapsed sheet](screenshots/mvp1-layout-polish-mobile-collapsed-sheet.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Desktop viewport: default in-app browser viewport.
+- Mobile viewport: 390 x 844.
+
+Accepted behavior:
+
+- Mobile map controls remain reachable above the active sheet clearance.
+- Layer and route menus have explicit close icon buttons using the same Material Symbols vocabulary as the rest of the map UI.
+- The layer menu no longer traps the user behind a panel that covers the button that opened it.
+- The collapsed sheet restores map context while keeping the current checkpoint title visible.
+- The expanded sheet intentionally prioritizes detail content and keeps the map visible above the sheet.
+
+Known visual issues:
+
+- The sheet is still controlled by tap states rather than a production drag gesture model.
+- Floating menus still overlay map content by design. Later dense route work may need a larger route tray or filtered list pattern.

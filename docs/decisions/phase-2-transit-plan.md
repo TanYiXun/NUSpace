@@ -1,10 +1,10 @@
 # Phase 2 Transit Plan
 
-Status: planning checkpoint.
+Status: adapter boundary checkpoint.
 
 Plan section targeted: `PLAN.md` section 11, Phase 2 Transit Layer.
 
-Phase 2 should make transport information useful without weakening the project's data-access rules. The first Phase 2 checkpoint is therefore a source and adapter plan, not a live-data implementation.
+Phase 2 should make transport information useful without weakening the project's data-access rules. The first Phase 2 checkpoint established source and adapter rules. The second checkpoint adds a server-side public bus arrivals boundary without enabling live data in the browser by default.
 
 ## Source Findings
 
@@ -43,9 +43,9 @@ NUS ISB:
 
 ## Next Implementation Slice
 
-Recommended next slice: add a server-side public bus adapter boundary with a development mock and no committed secrets.
+Current slice: add a server-side public bus adapter boundary with no committed secrets.
 
-Minimum requirements for that slice:
+Implemented in this checkpoint:
 
 - Define `LTA_DATAMALL_ACCOUNT_KEY` as a server-only environment variable.
 - Add a backend endpoint for public bus arrivals.
@@ -55,3 +55,5 @@ Minimum requirements for that slice:
 - Add UI copy that says public bus data comes from LTA DataMall.
 
 Do not add live NUS ISB calls in the same slice.
+
+Next recommended slice: connect one verified LTA public bus stop UI state to the endpoint, still showing `missing_key`, `upstream_error`, and stale states when appropriate.

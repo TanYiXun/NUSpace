@@ -13,14 +13,22 @@ These files are OSM-sourced curated data, not runtime API adapters. The D1 proto
 
 ## Phase 2 Transit Adapter Boundary
 
-No live transit adapter exists yet.
+The development server exposes a server-side public bus arrivals endpoint:
 
-Planned adapter boundary:
+```text
+GET /api/transit/public-bus-arrivals?busStopCode=17099
+```
+
+Adapter boundary:
 
 - Public bus arrivals may use LTA DataMall after a server-side `LTA_DATAMALL_ACCOUNT_KEY` exists.
 - Frontend code must never contain the LTA AccountKey.
-- A project backend endpoint should normalize public bus arrival responses before UI rendering.
-- Missing keys, upstream failures, and stale data must return explicit unavailable or stale states.
+- The project endpoint normalizes public bus arrival responses before UI rendering.
+- Missing keys return `missing_key` with HTTP 503.
+- Invalid bus stop codes return `bad_request` with HTTP 400.
+- Upstream failures return `upstream_error` with HTTP 502.
+- Successful responses are cached in memory for 20 seconds per bus stop code.
+- Arrival estimates older than five minutes are marked stale in the normalized response.
 - NUS ISB live arrivals, live vehicle positions, and crowd levels remain unavailable until official NUS, uNivUS, or ConnectX access is documented.
 
 See `docs/decisions/phase-2-transit-plan.md` for the Phase 2 source and adapter plan.

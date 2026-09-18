@@ -57,3 +57,14 @@ Implemented in this checkpoint:
 Do not add live NUS ISB calls in the same slice.
 
 Next recommended slice: connect one verified LTA public bus stop UI state to the endpoint, still showing `missing_key`, `upstream_error`, and stale states when appropriate.
+
+## Public Bus UI State Checkpoint
+
+The next slice connects the overview sheet to the project endpoint for `Heng Mui Keng Terrace` (`16069`), a manually referenced public bus stop from NUS public transport access pages.
+
+Rules for this checkpoint:
+
+- The UI must call the project endpoint, not LTA DataMall directly.
+- The default state without `LTA_DATAMALL_ACCOUNT_KEY` must show `Missing server key` or equivalent unavailable copy.
+- The UI must not attach the LTA public bus stop code to OSM-sourced NUS shuttle-like campus bus-stop markers.
+- The UI must continue to say that NUS shuttle live arrivals, live vehicles, crowd level, and official route geometry are not enabled.

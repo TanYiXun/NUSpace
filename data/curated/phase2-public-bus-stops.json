@@ -1,0 +1,21 @@
+{
+  "schema": "phase2-public-bus-stops-v1",
+  "name": "Phase 2 public bus stop reference seed",
+  "date_checked": "2026-09-18",
+  "source_ids": [
+    "nus-public-bus-access-pages",
+    "lta-datamall-dynamic-apis"
+  ],
+  "stops": [
+    {
+      "id": "public-bus-heng-mui-keng-terrace",
+      "name": "Heng Mui Keng Terrace",
+      "busStopCode": "16069",
+      "roadName": "Pasir Panjang Road",
+      "sourceStatus": "manual-reference",
+      "sourceId": "nus-public-bus-access-pages",
+      "sourceLabel": "NUS public transport directions",
+      "detail": "NUS public pages list Heng Mui Keng Terrace as public bus stop 16069 near Kent Ridge. Arrival data must come from the server-side LTA DataMall adapter."
+    }
+  ]
+}

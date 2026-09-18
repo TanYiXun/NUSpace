@@ -81,3 +81,11 @@
 - Decision: document LTA DataMall as a `requires-permission` source for future public bus arrivals. Do not call LTA from frontend code, and do not treat LTA public bus data as NUS ISB data.
 - NUS ISB decision: keep live NUS shuttle arrivals, live vehicle positions, and crowd level unavailable until official access is documented.
 - Confidence: high for LTA public bus source boundary, low for NUS ISB live access until official permission exists.
+
+## 2026-09-18 - Phase 2 Public Bus UI State
+
+- Task: connect one source-labelled public bus stop UI state to the server-side LTA adapter endpoint without enabling fake live arrivals.
+- Sources checked: NUS public transport access pages and LTA DataMall Dynamic APIs source metadata.
+- Finding: NUS public pages can support a manual-reference stop-code seed for `Heng Mui Keng Terrace` (`16069`), but they are not a live feed and do not provide arrivals, route geometry, or NUS ISB data.
+- Decision: commit `data/curated/phase2-public-bus-stops.json` for the stop-code seed, keep it separate from OSM campus bus-stop markers, and show the endpoint `missing_key` state in the overview sheet until `LTA_DATAMALL_ACCOUNT_KEY` is configured server-side.
+- Confidence: medium for stop-code reference, high that the UI does not expose credentials or claim live data.

@@ -312,7 +312,7 @@ input {
 
 .statusPanel {
   position: absolute;
-  right: 20px;
+  right: 88px;
   bottom: 24px;
   z-index: var(--z-sheet);
   width: min(360px, calc(100% - 40px));
@@ -457,6 +457,31 @@ input {
   padding-top: 12px;
   border-top: 1px solid #dce3e8;
   font-weight: 600;
+}
+
+.transitStatusCard {
+  display: grid;
+  gap: 8px;
+  margin: 14px 0 0;
+  padding: 12px;
+  border: 1px solid #dce5eb;
+  border-radius: var(--radius-control);
+  background: rgb(255 255 255 / 74%);
+}
+
+.transitStatusCard strong {
+  display: block;
+  color: #1c2b36;
+  font-size: 14px;
+}
+
+.transitStatusCard span,
+.transitStatusCard p {
+  display: block;
+  margin: 3px 0 0;
+  color: #5a6977;
+  font-size: 12px;
+  line-height: 1.36;
 }
 
 .etaRows {

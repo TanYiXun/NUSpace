@@ -31,4 +31,6 @@ Adapter boundary:
 - Arrival estimates older than five minutes are marked stale in the normalized response.
 - NUS ISB live arrivals, live vehicle positions, and crowd levels remain unavailable until official NUS, uNivUS, or ConnectX access is documented.
 
+The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`) and shows the missing-key state when no server key is configured. The stop-code reference comes from NUS public transport access pages and is tracked separately from OSM campus markers in `data/curated/phase2-public-bus-stops.json`.
+
 See `docs/decisions/phase-2-transit-plan.md` for the Phase 2 source and adapter plan.

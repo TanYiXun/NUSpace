@@ -8,7 +8,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:e2e": "echo \"test:e2e not implemented yet\"",
+    "test:e2e": "playwright test",
     "build:data": "node scripts/data/build-campus-data.mjs",
     "validate:data": "node scripts/data/validate-sources.mjs",
     "build": "tsc -b && vite build"
@@ -23,6 +23,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@playwright/test": "^1.63.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@types/node": "^24.3.1",

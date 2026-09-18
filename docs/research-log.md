@@ -64,3 +64,11 @@
 - Decision: commit a curated building footprint GeoJSON at `data/curated/mvp1-building-footprints.geojson`, preserving source ids, OSM object type/id, date checked, height source status, and user-facing limitation text.
 - Height treatment: `building:levels` values are converted to rough visual heights where available. Missing heights remain prototype placeholders. None are official architectural heights.
 - Confidence: medium for outdoor footprint visualization, low for official building inventory, exact height, indoor geometry, accessibility, or floor-level navigation.
+
+## 2026-09-18 - Phase 1 MVP Transit Truth Layer
+
+- Task: keep the MVP 1 transit layer honest while official NUS shuttle route geometry and live data remain unavailable.
+- Source checked: existing `manual-osm-d1-prototype-route` metadata and Phase 0 route data.
+- Finding: the current D1 route has `source_status=prototype-placeholder`, `can_ship=false`, and `review_status=prototype-only`.
+- Decision: keep OSM bus stop markers as the default visible transit seed and hide the simulated D1 corridor by default. The D1 corridor remains available only through explicit prototype route controls.
+- Confidence: high for truthful UI state, low for actual NUS route geometry until source-confirmed route data is added.

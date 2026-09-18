@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 1 Outdoor Campus MVP. The latest merged slice seeds OSM-sourced Kent Ridge places and bus stop markers. The active branch adds visible OSM-sourced building footprints for the selected campus area while keeping live NUS shuttle data disabled.
+Current work: Phase 1 Outdoor Campus MVP. The latest merged slices seed OSM-sourced Kent Ridge places, bus stop markers, and visible building footprints. The active branch separates the prototype D1 route from the default MVP transit layer while keeping live NUS shuttle data disabled.
 
 ## Commands
 
@@ -25,10 +25,11 @@ npm run typecheck
 npm run test
 npm run build:data
 npm run validate:data
+npm run test:e2e
 npm run build
 ```
 
-`npm run test:e2e` is intentionally a placeholder until browser smoke tests are added.
+`npm run test:e2e` runs Playwright desktop and mobile viewport smoke tests against the local Vite app. If the browser runtime is missing on a fresh machine, run `npx playwright install chromium` once.
 
 ## Data Policy
 
@@ -39,7 +40,7 @@ The current prototype includes only source-labelled NUS-area data:
 - COM3 footprint from OpenStreetMap relation `15780831`, with placeholder height.
 - MVP 1 Kent Ridge place seed from a bounded OpenStreetMap API extract, curated into `data/curated/mvp1-campus-places.json`.
 - MVP 1 Kent Ridge building footprints from OpenStreetMap way/full responses and the COM3 relation, curated into `data/curated/mvp1-building-footprints.geojson`.
-- Manually curated D1-style route and stops for animation testing only.
+- Manually curated D1-style route and stops for animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
 - OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
 
 No live NUS shuttle API, uNivUS/ConnectX integration, LTA DataMall integration, NUSMods import, or indoor routing data has been added.

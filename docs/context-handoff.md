@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest merged `main` commit: `3e51236 Merge pull request #8 from TanYiXun/mvp1-building-footprints`.
+- Current branch: `mvp1-transit-truth-layer`.
+- Latest `main` commit: `fd66e4f Update handoff after building footprints`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 1 transit truth layer and Playwright viewport smoke tests.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: ready to choose the next MVP 1 slice from `PLAN.md` section 10.
+- Current slice: separate MVP bus stop seed data from the Phase 0 D1 prototype route.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -33,7 +33,7 @@ Completed and merged in PR #7:
 - `npm run validate:data` now validates curated place schema, source ids, coordinate bounds, unique ids, OSM provenance, and MVP 1 seed minimum counts.
 - README, data pipeline docs, and research log were updated for the OSM place seed.
 - App shell stale Phase 0 accessibility wording was replaced with neutral `NUSpace campus map`.
-- `npm run test:e2e` now reports `test:e2e not implemented yet` instead of stale Phase 0 wording.
+- `npm run test:e2e` was later replaced with Playwright viewport smoke tests in the transit truth slice.
 
 Completed and merged in PR #8:
 
@@ -42,6 +42,15 @@ Completed and merged in PR #8:
 - Made non-COM3 building footprints directly selectable on the map, opening the sourced selected-place sheet.
 - Updated validation for building footprint schema, OSM provenance, bounds, polygon ring closure, and height source status.
 - Updated README, data source metadata, data pipeline docs, research log, and design screenshots.
+
+In progress on branch `mvp1-transit-truth-layer`:
+
+- OSM bus stop markers remain visible by default as the sourced MVP transit seed.
+- The Phase 0 D1 corridor, stop sequence, and animated marker are hidden by default.
+- The layer menu separates `Bus stop seed` from `Prototype route`.
+- The shuttle route menu labels the D1 corridor as source pending and animation testing only.
+- Selecting the D1 corridor keeps prototype-only, no-live-data, and not-MVP-route-geometry wording visible.
+- Added Playwright e2e viewport smoke tests for desktop route/layer truth state and mobile overview readability.
 
 ## Prototype F Implemented Scope
 
@@ -98,6 +107,13 @@ Phase 1 building footprint screenshots are in `docs/screenshots/`:
 - `mvp1-building-footprints-selected-building.png`
 - `mvp1-building-footprints-mobile-overview.png`
 
+Phase 1 transit truth screenshots are in `docs/screenshots/`:
+
+- `mvp1-transit-truth-default-overview.png`
+- `mvp1-transit-truth-layers-menu.png`
+- `mvp1-transit-truth-prototype-route.png`
+- `mvp1-transit-truth-mobile-overview.png`
+
 ## Checks Last Run
 
 Latest checks passed unless noted:
@@ -109,9 +125,7 @@ Latest checks passed unless noted:
 - `npm run test:e2e`
 - `npm run build`
 
-Known check limitation:
-
-- `npm run test:e2e` currently prints `test:e2e not implemented yet`.
+`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests. It may require `npx playwright install chromium` once on a fresh machine.
 
 Known build warning:
 
@@ -147,6 +161,6 @@ Known build warning:
 
 Start the next MVP 1 slice. Recommended next options:
 
-1. Replace or disable the prototype D1 route as an MVP-quality transit layer unless source-confirmed geometry is added.
-2. Add real viewport smoke tests for desktop and mobile map states.
-3. Continue mobile sheet/control layout polish as route and layer density increases.
+1. Complete, push, and merge the `mvp1-transit-truth-layer` checkpoint if checks remain green.
+2. Continue mobile sheet/control layout polish as route and layer density increases.
+3. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.

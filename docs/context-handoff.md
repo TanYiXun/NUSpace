@@ -8,16 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `mvp1-building-footprints`.
-- Latest merged `main` commit: `159934f Merge pull request #7 from TanYiXun/mvp1-campus-data-foundation`.
+- Current branch: `main`.
+- Latest merged `main` commit: `3e51236 Merge pull request #8 from TanYiXun/mvp1-building-footprints`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
-- Active uncommitted work: Phase 1 MVP building footprints slice, ready for commit and PR after final `git status` review.
+- Phase 1 MVP building footprints was merged to `main` in PR #8.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: visible OSM-sourced building footprints for the selected MVP 1 campus area.
+- Current slice: ready to choose the next MVP 1 slice from `PLAN.md` section 10.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -34,7 +35,7 @@ Completed and merged in PR #7:
 - App shell stale Phase 0 accessibility wording was replaced with neutral `NUSpace campus map`.
 - `npm run test:e2e` now reports `test:e2e not implemented yet` instead of stale Phase 0 wording.
 
-Current uncommitted footprint slice:
+Completed and merged in PR #8:
 
 - Added `data/curated/mvp1-building-footprints.geojson` with 13 OSM-sourced building footprints.
 - Rendered the footprint layer as quiet MapLibre fill-extrusions beneath COM3's detailed prototype layer.
@@ -140,13 +141,12 @@ Known build warning:
 - Prototype F PR #5 was pushed, opened with screenshots, and merged to `main`.
 - Phase 0 review PR #6 was pushed and merged to `main`.
 - Phase 1 data foundation PR #7 was pushed, opened with screenshots, and merged to `main`.
+- Phase 1 building footprints PR #8 was pushed, opened with screenshots, and merged to `main`.
 
 ## Next Recommended Action
 
-Finish the Phase 1 building footprint slice. Next:
+Start the next MVP 1 slice. Recommended next options:
 
-1. Review `git status`.
-2. Commit the MVP 1 building footprint updates.
-3. Push and open a PR with the required plain engineering description and embedded screenshot links.
-4. Merge to `main` if checks and review are satisfied.
-5. Continue the next MVP 1 slice after the branch is merged.
+1. Replace or disable the prototype D1 route as an MVP-quality transit layer unless source-confirmed geometry is added.
+2. Add real viewport smoke tests for desktop and mobile map states.
+3. Continue mobile sheet/control layout polish as route and layer density increases.

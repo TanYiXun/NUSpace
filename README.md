@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 1 Outdoor Campus MVP. The latest merged slices seed OSM-sourced Kent Ridge places, bus stop markers, and visible building footprints. The active branch separates the prototype D1 route from the default MVP transit layer while keeping live NUS shuttle data disabled.
+Current work: Phase 1 Outdoor Campus MVP. The latest merged slices seed OSM-sourced Kent Ridge places, bus stop markers, visible building footprints, and an honest transit layer that keeps the prototype D1 route hidden by default. The active branch polishes mobile sheet and floating menu layout before the Phase 1 review pass.
 
 ## Commands
 

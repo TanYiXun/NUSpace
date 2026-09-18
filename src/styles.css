@@ -49,6 +49,7 @@ input {
   height: 100%;
   overflow: hidden;
   background: #dbe3e6;
+  --sheet-clearance: 360px;
 }
 
 .mapCanvas {
@@ -215,9 +216,9 @@ input {
 }
 
 .floatingMenuHeader {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
   gap: var(--space-3);
   padding: var(--space-1) var(--space-1) var(--space-3);
 }
@@ -232,6 +233,29 @@ input {
   margin: 0;
   color: var(--color-muted);
   font-size: 12px;
+}
+
+.floatingMenuClose {
+  display: inline-grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #d8e1e7;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.floatingMenuClose:hover,
+.floatingMenuClose:focus {
+  border-color: #aebbc7;
+  outline: none;
+}
+
+.floatingMenuClose .material-symbols-outlined {
+  font-size: 20px;
 }
 
 .routeChoice,
@@ -505,16 +529,20 @@ input {
   }
 
   .statusPanel {
-    right: 12px;
-    bottom: 18px;
-    width: calc(100% - 24px);
-    padding: 16px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 16px 18px calc(18px + env(safe-area-inset-bottom));
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
   }
 
   .mapControlStack {
     right: 12px;
     top: auto;
-    bottom: calc(332px + env(safe-area-inset-bottom));
+    bottom: calc(min(var(--sheet-clearance), 44vh) + 16px + env(safe-area-inset-bottom));
     transform: none;
   }
 
@@ -532,7 +560,7 @@ input {
 
   .floatingMenu[data-menu='routes'],
   .floatingMenu[data-menu='layers'] {
-    bottom: calc(328px + env(safe-area-inset-bottom));
+    bottom: calc(min(var(--sheet-clearance), 44vh) + 16px + env(safe-area-inset-bottom));
   }
 
   .statusPanel {
@@ -555,12 +583,14 @@ input {
   }
 
   .statusPanel[data-sheet='half'] {
-    max-height: 44vh;
+    height: 44vh;
+    max-height: calc(100vh - 88px - env(safe-area-inset-top));
     overflow: auto;
   }
 
   .statusPanel[data-sheet='expanded'] {
-    max-height: 78vh;
+    height: 78vh;
+    max-height: calc(100vh - 88px - env(safe-area-inset-top));
     overflow: auto;
   }
 

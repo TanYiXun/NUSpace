@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `mvp1-transit-truth-layer`.
-- Latest `main` commit: `fd66e4f Update handoff after building footprints`.
+- Current branch: `main`.
+- Latest `main` commit: `ab57db6 Merge pull request #9 from TanYiXun/mvp1-transit-truth-layer`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 1 transit truth layer and Playwright viewport smoke tests.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: separate MVP bus stop seed data from the Phase 0 D1 prototype route.
+- Current slice: ready to choose the next MVP 1 slice from `PLAN.md` section 10.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -43,7 +43,7 @@ Completed and merged in PR #8:
 - Updated validation for building footprint schema, OSM provenance, bounds, polygon ring closure, and height source status.
 - Updated README, data source metadata, data pipeline docs, research log, and design screenshots.
 
-In progress on branch `mvp1-transit-truth-layer`:
+Completed and merged in PR #9:
 
 - OSM bus stop markers remain visible by default as the sourced MVP transit seed.
 - The Phase 0 D1 corridor, stop sequence, and animated marker are hidden by default.
@@ -156,11 +156,12 @@ Known build warning:
 - Phase 0 review PR #6 was pushed and merged to `main`.
 - Phase 1 data foundation PR #7 was pushed, opened with screenshots, and merged to `main`.
 - Phase 1 building footprints PR #8 was pushed, opened with screenshots, and merged to `main`.
+- Phase 1 transit truth PR #9 was pushed, opened with screenshots, and merged to `main`.
 
 ## Next Recommended Action
 
 Start the next MVP 1 slice. Recommended next options:
 
-1. Complete, push, and merge the `mvp1-transit-truth-layer` checkpoint if checks remain green.
-2. Continue mobile sheet/control layout polish as route and layer density increases.
-3. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.
+1. Continue mobile sheet/control layout polish as route and layer density increases.
+2. Start a source-confirmed route geometry import only if a legally usable route source is identified and documented.
+3. Begin a Phase 1 review pass against section 10 acceptance criteria after the layout polish slice is complete.

@@ -245,3 +245,32 @@ Known visual issues:
 - The mobile overview remains dense because the prototype D1 overlay is still visible while OSM bus stop markers are introduced. Later transit work should separate official, OSM, and prototype transit layers more clearly.
 - The lower map-layer control can sit close to or partly behind the bottom sheet on small mobile viewports. A later production sheet layout should reserve a clearer control safe area.
 - Screenshot resolution reflects the active browser viewport. Future PRs may include additional higher-resolution browser captures if the viewport is naturally larger, but screenshots must still come from the rendered app.
+
+## Phase 1 MVP Building Footprints
+
+This checkpoint adds visible OSM-sourced building footprints for the selected MVP 1 campus area. The layer is intentionally restrained: it should make the selected campus context more legible without pretending to be final Apple Maps-quality 3D architecture.
+
+Accepted visual checkpoints:
+
+- [MVP 1 building footprints desktop overview](screenshots/mvp1-building-footprints-desktop-overview.png).
+- [MVP 1 building footprints selected building](screenshots/mvp1-building-footprints-selected-building.png).
+- [MVP 1 building footprints mobile overview](screenshots/mvp1-building-footprints-mobile-overview.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Desktop viewport: default in-app browser viewport, captured at 1280 x 720.
+- Mobile viewport: 390 x 844.
+
+Accepted behavior:
+
+- The overview sheet reports `13 visible footprints`.
+- Search and direct footprint clicks can select sourced building entities.
+- Selected non-COM3 buildings show type, OSM source label, source status, and limitation text.
+- COM3 remains the more detailed prototype building and still discloses placeholder height and facade details.
+
+Known visual issues:
+
+- The new building footprint layer is still simple extrusion, not final detailed campus 3D.
+- OSM-derived visual heights are rough and must not be treated as official building heights.
+- The prototype D1 route still crosses areas based on old placeholder geometry and should be replaced or separated before transit is treated as MVP-quality.

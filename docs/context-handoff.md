@@ -8,18 +8,21 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `mvp1-campus-data-foundation`.
-- Latest merged `main` commit: `fed408e Merge pull request #6 from TanYiXun/phase-0-review`.
+- Current branch: `mvp1-building-footprints`.
+- Latest merged `main` commit: `159934f Merge pull request #7 from TanYiXun/mvp1-campus-data-foundation`.
 - Prototype A through F were completed and merged to `main`.
-- Active uncommitted work: Phase 1 MVP campus data foundation, ready for commit and PR after final `git status` review.
+- Phase 1 MVP campus data foundation was merged to `main` in PR #7.
+- Active uncommitted work: Phase 1 MVP building footprints slice, ready for commit and PR after final `git status` review.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 10, Phase 1 Outdoor Campus MVP.
-- Current slice: campus data foundation for searchable places and selectable OSM-sourced bus stop markers.
+- Current slice: visible OSM-sourced building footprints for the selected MVP 1 campus area.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
+
+Completed and merged in PR #7:
 
 - Added `data/curated/mvp1-campus-places.json` with OSM-sourced Kent Ridge seed places.
 - Added `osm-api-nus-kent-ridge-map` to `data/sources.yml`.
@@ -30,6 +33,14 @@ This file is a concise working-memory handoff for long conversations, compaction
 - README, data pipeline docs, and research log were updated for the OSM place seed.
 - App shell stale Phase 0 accessibility wording was replaced with neutral `NUSpace campus map`.
 - `npm run test:e2e` now reports `test:e2e not implemented yet` instead of stale Phase 0 wording.
+
+Current uncommitted footprint slice:
+
+- Added `data/curated/mvp1-building-footprints.geojson` with 13 OSM-sourced building footprints.
+- Rendered the footprint layer as quiet MapLibre fill-extrusions beneath COM3's detailed prototype layer.
+- Made non-COM3 building footprints directly selectable on the map, opening the sourced selected-place sheet.
+- Updated validation for building footprint schema, OSM provenance, bounds, polygon ring closure, and height source status.
+- Updated README, data source metadata, data pipeline docs, research log, and design screenshots.
 
 ## Prototype F Implemented Scope
 
@@ -80,6 +91,12 @@ Phase 1 data foundation screenshots are in `docs/screenshots/`:
 - `mvp1-data-foundation-selected-bus-stop.png`
 - `mvp1-data-foundation-mobile-overview.png`
 
+Phase 1 building footprint screenshots are in `docs/screenshots/`:
+
+- `mvp1-building-footprints-desktop-overview.png`
+- `mvp1-building-footprints-selected-building.png`
+- `mvp1-building-footprints-mobile-overview.png`
+
 ## Checks Last Run
 
 Latest checks passed unless noted:
@@ -103,6 +120,7 @@ Known build warning:
 
 - Current D1 route path is a prototype placeholder for animation and UI testing.
 - Current D1 stop coordinates are still wrong or approximate in places.
+- Building footprint visual heights are OSM-level-derived estimates or prototype placeholders, not official architectural heights.
 - Do not treat the current route path as official NUS shuttle geometry.
 - Do not treat current stop points as verified bus stop locations.
 - No live NUS shuttle API, real-time arrivals, crowd level, or live vehicle positions are enabled.
@@ -121,13 +139,14 @@ Known build warning:
 - Automatic Codex compaction cannot reliably be announced before it happens. If compaction happens, continue from the provided summary and refresh this file at the next safe checkpoint.
 - Prototype F PR #5 was pushed, opened with screenshots, and merged to `main`.
 - Phase 0 review PR #6 was pushed and merged to `main`.
+- Phase 1 data foundation PR #7 was pushed, opened with screenshots, and merged to `main`.
 
 ## Next Recommended Action
 
-Finish the Phase 1 campus data foundation slice. Next:
+Finish the Phase 1 building footprint slice. Next:
 
 1. Review `git status`.
-2. Commit the MVP 1 data foundation updates.
-3. Push and open a PR with the required plain engineering description and screenshot links.
+2. Commit the MVP 1 building footprint updates.
+3. Push and open a PR with the required plain engineering description and embedded screenshot links.
 4. Merge to `main` if checks and review are satisfied.
 5. Continue the next MVP 1 slice after the branch is merged.

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import maplibregl from 'maplibre-gl';
+import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
 import d1StopsRaw from '../../data/prototype/d1-stops.geojson?raw';
@@ -8,6 +9,10 @@ import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
+const CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID = 'mvp1-building-footprints';
+const CAMPUS_BUILDING_EXTRUSION_LAYER_ID = 'mvp1-building-extrusions';
+const CAMPUS_BUILDING_OUTLINE_LAYER_ID = 'mvp1-building-outlines';
+const CAMPUS_BUILDING_LABEL_LAYER_ID = 'mvp1-building-labels';
 const COM3_EXTRUSION_LAYER_ID = 'prototype-com3-extrusion';
 const COM3_FLOOR_BANDS_LAYER_ID = 'prototype-com3-floor-bands';
 const COM3_ROOF_CAP_LAYER_ID = 'prototype-com3-roof-cap';
@@ -34,7 +39,15 @@ const d1Route = JSON.parse(d1RouteRaw) as GeoJSON.FeatureCollection;
 const d1Stops = JSON.parse(d1StopsRaw) as GeoJSON.FeatureCollection;
 const COM3_FEATURE_ID = 'prototype_com3_osm_relation_15780831';
 const D1_ANIMATION_DURATION_MS = 26000;
+const mvp1BuildingFootprints = JSON.parse(mvp1BuildingFootprintsRaw) as GeoJSON.FeatureCollection;
+const campusBuildingFootprints = {
+  ...mvp1BuildingFootprints,
+  features: mvp1BuildingFootprints.features.filter((feature) => feature.id !== 'com3'),
+} as GeoJSON.FeatureCollection;
 const BUILDING_LAYER_IDS = [
+  CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
+  CAMPUS_BUILDING_OUTLINE_LAYER_ID,
+  CAMPUS_BUILDING_LABEL_LAYER_ID,
   COM3_EXTRUSION_LAYER_ID,
   COM3_FLOOR_BANDS_LAYER_ID,
   COM3_ROOF_CAP_LAYER_ID,
@@ -230,8 +243,8 @@ function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
 
 const campusBusStops = createCampusBusStopsFeatureCollection();
 const campusPlaceCount = searchIndex.filter((entity) => entity.type !== 'route').length;
-const campusBuildingCount = searchIndex.filter((entity) => entity.type === 'building').length;
 const campusBusStopCount = searchIndex.filter((entity) => entity.type === 'bus_stop').length;
+const campusBuildingFootprintCount = mvp1BuildingFootprints.features.length;
 
 export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -364,7 +377,7 @@ export function CampusMap() {
     updateSheet('busStop', 'half');
   }, [updateSheet]);
 
-  const openSearchEntity = (entity: SearchEntity) => {
+  const openSearchEntity = useCallback((entity: SearchEntity) => {
     const map = mapRef.current;
 
     setSelectedSearchEntity(entity);
@@ -389,7 +402,7 @@ export function CampusMap() {
         { selected: entity.id === 'com3' },
       );
     }
-  };
+  }, [updateSheet]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
@@ -427,6 +440,11 @@ export function CampusMap() {
         data: com3VisualDetails,
       });
 
+      map.addSource(CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID, {
+        type: 'geojson',
+        data: campusBuildingFootprints,
+      });
+
       const d1RouteCoordinates = getD1RouteCoordinates();
 
       map.addSource(D1_ROUTE_SOURCE_ID, {
@@ -458,6 +476,59 @@ export function CampusMap() {
       });
 
       const firstSymbolLayerId = getFirstSymbolLayerId(map);
+
+      map.addLayer({
+        id: CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
+        type: 'fill-extrusion',
+        source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID,
+        minzoom: 14.6,
+        paint: {
+          'fill-extrusion-color': '#9ca2a1',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': 0,
+          'fill-extrusion-opacity': [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            14.6,
+            0.38,
+            17,
+            0.62,
+          ],
+          'fill-extrusion-vertical-gradient': true,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: CAMPUS_BUILDING_OUTLINE_LAYER_ID,
+        type: 'line',
+        source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID,
+        minzoom: 15,
+        paint: {
+          'line-color': '#667178',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 15, 0.8, 18, 1.5],
+          'line-opacity': 0.72,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: CAMPUS_BUILDING_LABEL_LAYER_ID,
+        type: 'symbol',
+        source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID,
+        minzoom: 16.2,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': ['interpolate', ['linear'], ['zoom'], 16, 10, 18, 13],
+          'text-font': ['Open Sans Semibold'],
+          'text-anchor': 'center',
+          'text-allow-overlap': false,
+        },
+        paint: {
+          'text-color': '#2f3941',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.3,
+        },
+      });
 
       map.addLayer({
         id: COM3_EXTRUSION_LAYER_ID,
@@ -736,6 +807,21 @@ export function CampusMap() {
         );
       });
 
+      map.on('mouseenter', CAMPUS_BUILDING_EXTRUSION_LAYER_ID, () => {
+        map.getCanvas().style.cursor = 'pointer';
+      });
+      map.on('mouseleave', CAMPUS_BUILDING_EXTRUSION_LAYER_ID, () => {
+        map.getCanvas().style.cursor = '';
+      });
+      map.on('click', CAMPUS_BUILDING_EXTRUSION_LAYER_ID, (event) => {
+        const buildingId = event.features?.[0]?.id as string | undefined;
+        const buildingEntity = searchIndex.find((entity) => entity.id === buildingId && entity.type === 'building');
+
+        if (buildingEntity) {
+          openSearchEntity(buildingEntity);
+        }
+      });
+
       [D1_ROUTE_LAYER_ID, D1_BUS_CIRCLE_LAYER_ID].forEach((layerId) => {
         map.on('mouseenter', layerId, () => {
           map.getCanvas().style.cursor = 'pointer';
@@ -790,6 +876,7 @@ export function CampusMap() {
         const selectedFeatures = map.queryRenderedFeatures(event.point, {
           layers: [
             COM3_EXTRUSION_LAYER_ID,
+            CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
             D1_ROUTE_LAYER_ID,
             D1_STOP_CIRCLES_LAYER_ID,
             CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
@@ -830,7 +917,7 @@ export function CampusMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, [clearSelection, selectBusStop, updateSheet]);
+  }, [clearSelection, openSearchEntity, selectBusStop, updateSheet]);
 
   return (
     <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge">
@@ -932,7 +1019,7 @@ export function CampusMap() {
           <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
             <span className="choiceText">
               <strong>Building detail</strong>
-              <small>COM3 extrusion plus OSM-sourced search points</small>
+              <small>OSM footprints plus COM3 prototype detail</small>
             </span>
             <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
           </button>
@@ -1133,7 +1220,7 @@ export function CampusMap() {
             <p className="eyebrow">Phase 1 data foundation</p>
             <h1>NUSpace</h1>
             <p>
-              Search now uses an OSM-sourced Kent Ridge place seed with selectable bus stop markers.
+              Search now uses an OSM-sourced Kent Ridge place seed with visible building footprints and selectable bus stop markers.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1142,7 +1229,7 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Buildings</dt>
-                <dd>{campusBuildingCount} sourced points</dd>
+                <dd>{campusBuildingFootprintCount} visible footprints</dd>
               </div>
               <div>
                 <dt>Bus stops</dt>

@@ -6,6 +6,11 @@ import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
 import d1StopsRaw from '../../data/prototype/d1-stops.geojson?raw';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
+import {
+  fetchPublicBusArrivalUiState,
+  type PublicBusArrivalUiState,
+} from '../transit/publicBusArrivals';
+import { defaultPublicBusStop } from '../transit/publicBusStops';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -73,6 +78,13 @@ type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop';
 type SheetState = 'collapsed' | 'half' | 'expanded';
 type LayerKey = 'buildings' | 'busStops' | 'prototypeRoute';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
+const initialPublicBusArrivalState: PublicBusArrivalUiState = {
+  status: 'loading',
+  sourceLabel: 'LTA DataMall public bus data',
+  busStopCode: defaultPublicBusStop.busStopCode,
+  arrivalCount: 0,
+  message: 'Checking the NUSpace public bus endpoint.',
+};
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   const baseFeature = source.features[0];
@@ -267,6 +279,9 @@ export function CampusMap() {
     prototypeRoute: false,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
+  const [publicBusArrivalState, setPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
+    initialPublicBusArrivalState,
+  );
   const stageStyle = {
     '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
   } as CSSProperties;
@@ -420,6 +435,20 @@ export function CampusMap() {
       }
     }
   }, [setMapLayerVisibility, updateSheet]);
+
+  useEffect(() => {
+    let isCurrent = true;
+
+    fetchPublicBusArrivalUiState(defaultPublicBusStop.busStopCode).then((result) => {
+      if (isCurrent) {
+        setPublicBusArrivalState(result);
+      }
+    });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
@@ -1273,9 +1302,28 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Public bus</dt>
-                <dd>Requires server key</dd>
+                <dd>
+                  {publicBusArrivalState.status === 'loading'
+                    ? 'Checking endpoint'
+                    : publicBusArrivalState.status === 'ok'
+                      ? `${publicBusArrivalState.arrivalCount} services`
+                      : publicBusArrivalState.status === 'missing_key'
+                        ? 'Missing server key'
+                        : 'Unavailable'}
+                </dd>
               </div>
             </dl>
+            <div className="transitStatusCard" aria-label="Public bus arrival endpoint state">
+              <div>
+                <strong>{defaultPublicBusStop.name}</strong>
+                <span>{defaultPublicBusStop.roadName} · Stop {defaultPublicBusStop.busStopCode}</span>
+              </div>
+              <p>
+                {publicBusArrivalState.status === 'ok'
+                  ? `${publicBusArrivalState.arrivalCount} public bus service rows returned from ${publicBusArrivalState.sourceLabel}.`
+                  : publicBusArrivalState.message}
+              </p>
+            </div>
             <p className="truthNote">
               LTA public bus support is backend-only until an AccountKey is configured. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>

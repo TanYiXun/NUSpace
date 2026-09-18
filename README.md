@@ -43,17 +43,19 @@ The current prototype includes only source-labelled NUS-area data:
 - Manually curated D1-style route and stops for animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
 - OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
 
-No live NUS shuttle API, uNivUS/ConnectX integration, NUSMods import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary, but no AccountKey or live public bus UI is enabled by default.
+No live NUS shuttle API, uNivUS/ConnectX integration, NUSMods import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state, but no AccountKey or live public bus arrivals are enabled by default.
 
 ## Transit Adapter Notes
 
 The development server exposes:
 
 ```text
-GET /api/transit/public-bus-arrivals?busStopCode=17099
+GET /api/transit/public-bus-arrivals?busStopCode=16069
 ```
 
 The endpoint is server-side only. It returns a `missing_key` unavailable response until `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. Do not put the AccountKey in frontend code, committed files, screenshots, logs, or pull request text.
+
+The overview sheet queries the endpoint for the manually referenced public bus stop `Heng Mui Keng Terrace` (`16069`) and shows the missing-key state by default. This public bus stop reference is separate from the OSM-sourced NUS campus bus-stop markers and from NUS ISB shuttle data.
 
 ## Local Server Notes
 

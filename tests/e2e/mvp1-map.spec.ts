@@ -8,7 +8,9 @@ test('desktop separates MVP bus stop seed from prototype route overlay', async (
   await expect(page.getByText('Phase 2 transit boundary', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
   await expect(page.getByText('10 OSM markers')).toBeVisible();
-  await expect(page.getByText('Requires server key')).toBeVisible();
+  await expect(page.getByText('Missing server key')).toBeVisible();
+  await expect(page.getByText('Heng Mui Keng Terrace')).toBeVisible();
+  await expect(page.getByText('Stop 16069')).toBeVisible();
   await expect(page.getByText('No live NUS shuttle API')).toBeVisible();
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
@@ -39,7 +41,8 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('26 searchable')).toBeVisible();
   await expect(page.getByText('Phase 2 transit boundary')).toBeVisible();
-  await expect(page.getByText('Requires server key')).toBeVisible();
+  await expect(page.getByText('Missing server key')).toBeVisible();
+  await expect(page.getByText('Stop 16069')).toBeVisible();
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: 'Close map layers' })).toBeVisible();

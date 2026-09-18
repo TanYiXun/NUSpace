@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase2-public-bus-ui`.
-- Latest `main` commit: `c048905 Update handoff after public bus adapter`.
+- Current branch: `main`.
+- Latest `main` commit: `0e90460 Merge pull request #14 from TanYiXun/phase2-public-bus-ui`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 2 public bus UI connection branch.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration.
-- Current slice: connect one manually referenced LTA public bus stop UI state to the server-side endpoint.
+- Current slice: ready for the next Phase 2 transit slice.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -184,13 +184,13 @@ Known build warning:
 - Phase 2 transit planning PR #12 was pushed, opened, and merged to `main`.
 - Phase 2 public bus adapter PR #13 was pushed, opened with a screenshot, and merged to `main`.
 - `/api/transit/public-bus-arrivals` now exists in the Vite development server with server-only `LTA_DATAMALL_ACCOUNT_KEY` handling, in-memory caching, normalized LTA-shaped responses, explicit missing-key/upstream-error states, and visible Phase 2 truth copy.
-- Current branch adds `data/curated/phase2-public-bus-stops.json` for `Heng Mui Keng Terrace` (`16069`) and shows the endpoint missing-key state in the overview sheet.
+- Phase 2 public bus UI PR #14 was pushed, opened with a screenshot, and merged to `main`.
+- `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 
 ## Next Recommended Action
 
 Continue Phase 2 public bus integration. Recommended next options:
 
 1. Read `PLAN.md` section 11 before implementing transit changes.
-2. Finish and merge the public-bus UI connection slice.
-3. After that, consider adding a user-selected public bus stop detail state only if source-labelled LTA stop codes are available.
-4. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.
+2. Choose the next Phase 2 slice. Recommended: add a selected public-bus stop detail state only for source-labelled LTA stop codes, or stop Phase 2 until an LTA AccountKey is available.
+3. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.

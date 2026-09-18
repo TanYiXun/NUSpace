@@ -242,7 +242,7 @@ Accepted behavior:
 
 Known visual issues:
 
-- The mobile overview remains dense because the prototype D1 overlay is still visible while OSM bus stop markers are introduced. Later transit work should separate official, OSM, and prototype transit layers more clearly.
+- The mobile overview remains dense as OSM bus stop markers and building footprints grow. Later transit work should keep official, OSM, and prototype transit layers visually distinct.
 - The lower map-layer control can sit close to or partly behind the bottom sheet on small mobile viewports. A later production sheet layout should reserve a clearer control safe area.
 - Screenshot resolution reflects the active browser viewport. Future PRs may include additional higher-resolution browser captures if the viewport is naturally larger, but screenshots must still come from the rendered app.
 
@@ -273,4 +273,34 @@ Known visual issues:
 
 - The new building footprint layer is still simple extrusion, not final detailed campus 3D.
 - OSM-derived visual heights are rough and must not be treated as official building heights.
-- The prototype D1 route still crosses areas based on old placeholder geometry and should be replaced or separated before transit is treated as MVP-quality.
+- The prototype D1 route still crosses areas based on old placeholder geometry and should remain hidden or clearly separated until replaced with source-confirmed route geometry.
+
+## Phase 1 MVP Transit Truth Layer
+
+This checkpoint separates MVP transit data from prototype transit animation. OSM bus stop markers remain available by default as sourced map data. The D1 corridor is retained only as an opt-in prototype overlay for animation and route UI testing.
+
+Accepted visual checkpoints:
+
+- [MVP 1 transit truth default overview](screenshots/mvp1-transit-truth-default-overview.png).
+- [MVP 1 transit truth layers menu](screenshots/mvp1-transit-truth-layers-menu.png).
+- [MVP 1 transit truth prototype route](screenshots/mvp1-transit-truth-prototype-route.png).
+- [MVP 1 transit truth mobile overview](screenshots/mvp1-transit-truth-mobile-overview.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Desktop viewport: default in-app browser viewport, captured at 1280 x 720.
+- Mobile viewport: 390 x 844.
+
+Accepted behavior:
+
+- The default map does not show the D1 prototype route.
+- The layer menu separates `Bus stop seed` from `Prototype route`.
+- The shuttle route menu labels route geometry as source pending.
+- Opening the D1 corridor explicitly describes it as prototype-only, simulated, not official route geometry, and not live.
+- OSM bus stop selected states continue to show source/status and `Arrivals: Not enabled`.
+
+Known visual issues:
+
+- The route UI still exists before verified NUS shuttle route geometry is available, so all D1 entry points must keep prototype wording.
+- The route sequence and coordinates remain Phase 0 prototype data, not an MVP route dataset.

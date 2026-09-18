@@ -197,7 +197,7 @@ input {
 .floatingMenu {
   position: absolute;
   right: 88px;
-  z-index: var(--z-sheet);
+  z-index: calc(var(--z-sheet) + 1);
   width: 284px;
   padding: var(--space-3);
   border: 1px solid var(--color-panel-border);

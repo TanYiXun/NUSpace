@@ -54,22 +54,24 @@ const BUILDING_LAYER_IDS = [
   COM3_OUTLINE_LAYER_ID,
   COM3_LABEL_LAYER_ID,
 ];
-const ROUTE_LAYER_IDS = [
+const PROTOTYPE_ROUTE_LAYER_IDS = [
   D1_ROUTE_CASING_LAYER_ID,
   D1_ROUTE_LAYER_ID,
   D1_ROUTE_ARROWS_LAYER_ID,
   D1_STOP_CIRCLES_LAYER_ID,
   D1_STOP_LABELS_LAYER_ID,
-  CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
-  CAMPUS_BUS_STOP_LABELS_LAYER_ID,
   D1_BUS_CIRCLE_LAYER_ID,
   D1_BUS_LABEL_LAYER_ID,
+];
+const BUS_STOP_LAYER_IDS = [
+  CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
+  CAMPUS_BUS_STOP_LABELS_LAYER_ID,
 ];
 
 type LngLatPosition = [number, number];
 type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop';
 type SheetState = 'collapsed' | 'half' | 'expanded';
-type LayerKey = 'buildings' | 'routes';
+type LayerKey = 'buildings' | 'busStops' | 'prototypeRoute';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
@@ -261,7 +263,8 @@ export function CampusMap() {
   const [routeMenuOpen, setRouteMenuOpen] = useState(false);
   const [visibleLayers, setVisibleLayers] = useState<Record<LayerKey, boolean>>({
     buildings: true,
-    routes: true,
+    busStops: true,
+    prototypeRoute: false,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
 
@@ -288,7 +291,7 @@ export function CampusMap() {
     }
   }, [updateSheet]);
 
-  const setMapLayerVisibility = (layerIds: string[], visible: boolean) => {
+  const setMapLayerVisibility = useCallback((layerIds: string[], visible: boolean) => {
     const map = mapRef.current;
 
     if (!map) {
@@ -300,11 +303,15 @@ export function CampusMap() {
         map.setLayoutProperty(layerId, 'visibility', visible ? 'visible' : 'none');
       }
     });
-  };
+  }, []);
 
   const toggleLayer = (layer: LayerKey) => {
     const nextValue = !visibleLayers[layer];
-    const layerIds = layer === 'buildings' ? BUILDING_LAYER_IDS : ROUTE_LAYER_IDS;
+    const layerIds = layer === 'buildings'
+      ? BUILDING_LAYER_IDS
+      : layer === 'busStops'
+        ? BUS_STOP_LAYER_IDS
+        : PROTOTYPE_ROUTE_LAYER_IDS;
 
     setVisibleLayers((current) => ({ ...current, [layer]: nextValue }));
     setMapLayerVisibility(layerIds, nextValue);
@@ -315,6 +322,8 @@ export function CampusMap() {
 
     setSelectedSearchEntity(null);
     setSelectedBusStop(null);
+    setVisibleLayers((current) => ({ ...current, prototypeRoute: true }));
+    setMapLayerVisibility(PROTOTYPE_ROUTE_LAYER_IDS, true);
     updateSheet('route', 'half');
     setRouteMenuOpen(false);
     setLayerMenuOpen(false);
@@ -401,8 +410,13 @@ export function CampusMap() {
         { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
         { selected: entity.id === 'com3' },
       );
+
+      if (entity.type === 'route') {
+        setVisibleLayers((current) => ({ ...current, prototypeRoute: true }));
+        setMapLayerVisibility(PROTOTYPE_ROUTE_LAYER_IDS, true);
+      }
     }
-  }, [updateSheet]);
+  }, [setMapLayerVisibility, updateSheet]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
@@ -754,6 +768,12 @@ export function CampusMap() {
         },
       });
 
+      PROTOTYPE_ROUTE_LAYER_IDS.forEach((layerId) => {
+        if (map.getLayer(layerId)) {
+          map.setLayoutProperty(layerId, 'visibility', 'none');
+        }
+      });
+
       map.addLayer({
         id: USER_LOCATION_ACCURACY_LAYER_ID,
         type: 'circle',
@@ -998,15 +1018,15 @@ export function CampusMap() {
         <div className="floatingMenu" data-menu="routes">
           <div className="floatingMenuHeader">
             <h2>Shuttle routes</h2>
-            <p>Prototype</p>
+            <p>Source pending</p>
           </div>
           <button className="routeChoice" type="button" onClick={focusRoute}>
             <span className="routeSwatch" aria-hidden="true" />
             <span className="choiceText">
-              <strong>D1 simulated corridor</strong>
-              <small>COM3 toward UTown, not official geometry</small>
+              <strong>Show D1 prototype corridor</strong>
+              <small>Animation test only, not MVP route geometry</small>
             </span>
-            <span className="choiceMeta">1 running</span>
+            <span className="choiceMeta">{visibleLayers.prototypeRoute ? 'Shown' : 'Hidden'}</span>
           </button>
         </div>
       ) : null}
@@ -1023,12 +1043,19 @@ export function CampusMap() {
             </span>
             <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
           </button>
-          <button className="layerChoice" type="button" onClick={() => toggleLayer('routes')}>
+          <button className="layerChoice" type="button" onClick={() => toggleLayer('busStops')}>
             <span className="choiceText">
-              <strong>Transit seed</strong>
-              <small>OSM bus stops plus prototype D1 simulation</small>
+              <strong>Bus stop seed</strong>
+              <small>OSM bus stop markers, no arrivals</small>
             </span>
-            <span className="layerState">{visibleLayers.routes ? 'On' : 'Off'}</span>
+            <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
+          </button>
+          <button className="layerChoice" type="button" onClick={() => toggleLayer('prototypeRoute')}>
+            <span className="choiceText">
+              <strong>Prototype route</strong>
+              <small>D1 animation test, hidden by default</small>
+            </span>
+            <span className="layerState">{visibleLayers.prototypeRoute ? 'On' : 'Off'}</span>
           </button>
         </div>
       ) : null}
@@ -1174,7 +1201,7 @@ export function CampusMap() {
           <>
             <div className="sheetHeaderRow">
               <div>
-                <p className="eyebrow">Active route</p>
+                <p className="eyebrow">Prototype route</p>
                 <div className="routeTitleRow">
                   <span className="routeBadge">D1</span>
                   <h1>Simulated corridor</h1>
@@ -1189,16 +1216,16 @@ export function CampusMap() {
             <p>
               {mapState === 'error'
                 ? 'Basemap failed to load.'
-                : 'Simulated shuttle corridor from COM3 toward UTown. Not live NUS bus data.'}
+                : 'Simulated shuttle corridor from COM3 toward UTown. Hidden by default because it is not MVP-quality official route geometry.'}
             </p>
             <dl className="routeFacts">
               <div>
-                <dt>Route</dt>
-                <dd>Manually curated prototype</dd>
+                <dt>Status</dt>
+                <dd>Prototype only</dd>
               </div>
               <div>
                 <dt>Vehicle</dt>
-                <dd>Animated simulation</dd>
+                <dd>Simulated, not live</dd>
               </div>
             </dl>
             <ol className="routeStops" aria-label="D1 prototype stop sequence">
@@ -1211,7 +1238,7 @@ export function CampusMap() {
             </ol>
             <div className="sheetBody">
               <p className="truthNote">
-                Prototype corridor only. No official route geometry, real-time arrivals, or live vehicle positions.
+                This line is retained only for animation and route UI testing. It is not an official NUS shuttle route, not source-confirmed MVP geometry, and has no real-time arrivals or live vehicle positions.
               </p>
             </div>
           </>
@@ -1237,7 +1264,7 @@ export function CampusMap() {
               </div>
             </dl>
             <p className="truthNote">
-              OSM places are community map data, not official NUS data. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
+              OSM places are community map data, not official NUS data. The prototype D1 route is hidden by default. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
             </p>
             {locationStatus !== 'idle' ? (
               <p className="locationNote">

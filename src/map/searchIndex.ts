@@ -38,18 +38,18 @@ type RawCampusPlace = {
 
 const routePrototypeEntity: SearchEntity = {
   id: 'd1-route',
-  name: 'D1 simulated corridor',
-  aliases: ['d1', 'd1 route', 'shuttle to utown', 'bus to utown'],
+  name: 'D1 static route',
+  aliases: ['d1', 'd1 route', 'shuttle to utown', 'bus to utown', 'static route'],
   type: 'route',
   coordinates: [103.7736, 1.2987],
   zoom: 16.15,
   pitch: 58,
   bearing: -24,
-  subtitle: 'Simulated shuttle corridor',
+  subtitle: 'Static source-pending route',
   sourceStatus: 'prototype-placeholder',
   sourceId: 'manual-osm-d1-prototype-route',
-  sourceLabel: 'Manual Prototype C corridor',
-  detail: 'Animation and overlay prototype only. No live arrivals or official route geometry.',
+  sourceLabel: 'Manual D1 display corridor',
+  detail: 'Static route mode. No live arrivals, live vehicle positions, or official source-confirmed route geometry.',
 };
 
 export const searchIndex: SearchEntity[] = [

@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase2-live-public-bus-arrivals`.
-- Latest `main` commit: `9d2f887 Update handoff after public bus UI`.
+- Current branch: `phase2-isb-static-mode`.
+- Latest `main` commit: `67a70f9 Merge pull request #15 from TanYiXun/phase2-live-public-bus-arrivals`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 2 live public bus row rendering, review docs, screenshots, and context-discipline rules.
+- Active uncommitted work: Phase 2 NUS ISB static route mode branch.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration.
-- Current slice: Phase 2 public bus arrival display is implemented and checks pass; ready for user review, PR creation, and merge if approved.
+- Active plan section: `PLAN.md` section 11.2, Phase 2 NUS ISB static mode.
+- Current slice: D1 static route mode is implemented with source-pending labels, route color, stop sequence, and live-unavailable copy.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -141,6 +141,12 @@ Phase 2 live public bus screenshots are in `docs/screenshots/`:
 - `phase2-live-public-bus-missing-key-desktop.png`
 - `phase2-live-public-bus-live-desktop.png`
 
+Phase 2 NUS ISB static mode screenshots are in `docs/screenshots/`:
+
+- `phase2-isb-static-route-menu-desktop.png`
+- `phase2-isb-static-route-detail-desktop.png`
+- `phase2-isb-static-route-detail-mobile.png`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
@@ -190,16 +196,18 @@ Known build warning:
 - Phase 2 public bus adapter PR #13 was pushed, opened with a screenshot, and merged to `main`.
 - `/api/transit/public-bus-arrivals` now exists in the Vite development server with server-only `LTA_DATAMALL_ACCOUNT_KEY` handling, in-memory caching, normalized LTA-shaped responses, explicit missing-key/upstream-error states, and visible Phase 2 truth copy.
 - Phase 2 public bus UI PR #14 was pushed, opened with a screenshot, and merged to `main`.
+- Phase 2 live public bus arrivals PR #15 was pushed, opened with screenshots, and merged to `main`.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
-- Current branch renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
+- Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
+- Current branch renames the opt-in D1 route surface to static route mode, adds `src/transit/nusIsbStaticRoutes.ts`, documents NUS UCI and NUS Campus Map route-list sources, and keeps D1 geometry source-pending with no live arrivals.
 
 ## Next Recommended Action
 
-Continue Phase 2 public bus integration. Recommended next options:
+Continue Phase 2 transit integration. Recommended next options:
 
-1. Review the Phase 2 live public bus branch diff and screenshots.
+1. Review the Phase 2 NUS ISB static mode branch diff and screenshots.
 2. If approved, create a PR and merge this branch.
-3. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.
-4. After merge, start a fresh task with: `Read AGENTS.md, PLAN.md section 11.2, and docs/context-handoff.md, then continue.`
+3. Do not start `PLAN.md` section 11.3 unless official NUS/uNivUS/ConnectX/NextBus access is documented.
+4. If 11.3 remains blocked, proceed to Phase 3 with a fresh task: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`

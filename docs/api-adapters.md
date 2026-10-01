@@ -9,14 +9,14 @@ Phase 1 currently reads curated local datasets from the repository:
 - `data/curated/mvp1-campus-places.json`
 - `data/curated/mvp1-building-footprints.geojson`
 
-These files are OSM-sourced curated data, not runtime API adapters. The D1 prototype route remains local prototype data and is hidden by default because it is not source-confirmed MVP route geometry.
+These files are OSM-sourced curated data, not runtime API adapters. The D1 static route display remains local source-pending data and is hidden by default because it is not source-confirmed MVP route geometry.
 
 ## Phase 2 Transit Adapter Boundary
 
 The development server exposes a server-side public bus arrivals endpoint:
 
 ```text
-GET /api/transit/public-bus-arrivals?busStopCode=17099
+GET /api/transit/public-bus-arrivals?busStopCode=16069
 ```
 
 Adapter boundary:
@@ -30,6 +30,7 @@ Adapter boundary:
 - Successful responses are cached in memory for 20 seconds per bus stop code.
 - Arrival estimates older than five minutes are marked stale in the normalized response.
 - NUS ISB live arrivals, live vehicle positions, and crowd levels remain unavailable until official NUS, uNivUS, or ConnectX access is documented.
+- NUS ISB static mode is local UI data only; it uses NUS route-list references and keeps the D1 display corridor labelled source-pending.
 
 The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`). It shows the missing-key state when no server key is configured and renders service rows, upcoming minutes, load, accessibility feature, fetched time, and cache status when the endpoint returns `ok`. The stop-code reference comes from NUS public transport access pages and is tracked separately from OSM campus markers in `data/curated/phase2-public-bus-stops.json`.
 

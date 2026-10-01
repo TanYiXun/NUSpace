@@ -72,6 +72,53 @@ sources:
       - Stop sequence reference is public but not treated as an official data license
       - Coordinates are manually curated for visual and animation testing and are not a complete official D1 loop
       - No real-time arrivals or live vehicle positions are included
+  - id: nus-uci-internal-shuttle-bus
+    name: NUS UCI Internal Shuttle Bus pages
+    source_owner: National University of Singapore University Campus Infrastructure
+    source_url: https://uci.nus.edu.sg/campus-life/campus-services/transportation/internal-shuttle-bus/
+    documentation_url: https://uci.nus.edu.sg/resources/faqs/campus-services-transport/
+    terms_or_license_url: https://nus.edu.sg/legal-information-notices
+    license: Public website reference; rights remain with NUS
+    allowed_use: Manual reference for NUS ISB route names, route availability notes, and static-route source-disclosure copy
+    disallowed_use: Do not treat page images as machine-readable route geometry, live arrival data, live vehicle data, crowd level data, or production-ready stop coordinates
+    attribution_text: NUS Internal Shuttle Bus information from NUS University Campus Infrastructure
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Keep manually curated route displays labelled static, source-pending, or prototype-placeholder until official route geometry or a permitted feed is documented
+    date_checked: 2026-10-01
+    next_review_date: 2026-11-01
+    source_status: manual-reference
+    used_for:
+      - Phase 2 NUS ISB route-list reference
+      - Phase 2 static route disclosure copy
+    limitations:
+      - Public page confirms route families and points users to uNivUS for up-to-the-minute schedules and live locations
+      - Route maps are image-based and are not ingested as production geometry
+      - No public API access, machine-readable stop sequence, or live shuttle feed is granted by this source
+  - id: nus-campus-map-shuttle-routes
+    name: NUS Campus Map shuttle routes page
+    source_owner: National University of Singapore
+    source_url: https://map.nus.edu.sg/index.php/main/mobile/shuttle_routes
+    documentation_url: https://map.nus.edu.sg/index.php/main/mobile/shuttle_routes
+    terms_or_license_url: https://nus.edu.sg/legal-information-notices
+    license: Public website reference; rights remain with NUS
+    allowed_use: Manual reference for the existence of listed NUS shuttle route controls in static route UI
+    disallowed_use: Do not scrape or infer route geometry, live arrivals, live vehicle positions, or stop coordinates from the page without permission
+    attribution_text: Shuttle route list from NUS Campus Map
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Use only for source-labelled static route UI until official route data is available
+    date_checked: 2026-10-01
+    next_review_date: 2026-11-01
+    source_status: manual-reference
+    used_for:
+      - Phase 2 NUS ISB static route source boundary
+      - Phase 2 D1 static route control label
+    limitations:
+      - Page lists route controls but does not expose a documented public route geometry API
+      - Does not provide live NUS ISB arrivals, crowd level, or live vehicle positions
   - id: osm-api-nus-kent-ridge-map
     name: OpenStreetMap bounded NUS Kent Ridge extract
     source_owner: OpenStreetMap contributors

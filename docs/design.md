@@ -305,6 +305,29 @@ Known visual issues:
 - The route UI still exists before verified NUS shuttle route geometry is available, so all D1 entry points must keep prototype wording.
 - The route sequence and coordinates remain Phase 0 prototype data, not an MVP route dataset.
 
+## Phase 2 NUS ISB Static Mode
+
+This checkpoint renames the opt-in D1 route surface from a prototype route control to a static, source-pending shuttle route mode. The route remains hidden by default and remains unsuitable as official geometry.
+
+Accepted visual checkpoints:
+
+- [Phase 2 ISB static route menu desktop](screenshots/phase2-isb-static-route-menu-desktop.png).
+- [Phase 2 ISB static route detail desktop](screenshots/phase2-isb-static-route-detail-desktop.png).
+- [Phase 2 ISB static route detail mobile](screenshots/phase2-isb-static-route-detail-mobile.png).
+
+Accepted behavior:
+
+- The layer menu separates `Bus stop seed` from `Static route`.
+- The shuttle route menu offers `Show D1 static route`.
+- Opening D1 shows `Static route`, `Live arrivals unavailable`, and `Source pending` labels.
+- The displayed line is still manually curated placeholder geometry and is not live vehicle data.
+- No static route estimate is presented as an official live ETA.
+
+Known visual issues:
+
+- The D1 line and stop positions still need source-confirmed geometry before they can be treated as production route data.
+- Static mode currently exposes only the existing D1 display corridor; A1, A2, D2, K, P, R1, and R2 remain source-referenced but not displayable as route geometry.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

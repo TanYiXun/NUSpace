@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('desktop separates MVP bus stop seed from prototype route overlay', async ({ page }, testInfo) => {
+test('desktop separates MVP bus stop seed from static route overlay', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
 
   await page.goto('/');
@@ -15,19 +15,19 @@ test('desktop separates MVP bus stop seed from prototype route overlay', async (
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /Bus stop seed/ })).toContainText('On');
-  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('Off');
+  await expect(page.getByRole('button', { name: /Static route/ })).toContainText('Off');
   await page.getByRole('button', { name: 'Close map layers' }).click();
-  await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
+  await expect(page.getByRole('button', { name: /Static route/ })).toBeHidden();
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
-  await page.getByRole('button', { name: /Prototype route/ }).click();
-  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('On');
+  await page.getByRole('button', { name: /Static route/ }).click();
+  await expect(page.getByRole('button', { name: /Static route/ })).toContainText('On');
 
   await page.getByRole('button', { name: 'View shuttle routes' }).click();
-  await page.getByRole('button', { name: /Show D1 prototype corridor/ }).click();
-  await expect(page.getByText('Prototype route')).toBeVisible();
-  await expect(page.getByText('not MVP-quality official route geometry')).toBeVisible();
-  await expect(page.getByText('not source-confirmed MVP geometry')).toBeVisible();
+  await page.getByRole('button', { name: /Show D1 static route/ }).click();
+  await expect(page.getByRole('heading', { name: 'D1 static route' })).toBeVisible();
+  await expect(page.getByText('Live arrivals unavailable')).toBeVisible();
+  await expect(page.getByText('not official NUS shuttle route geometry')).toBeVisible();
 });
 
 test('desktop renders public bus arrivals when the project endpoint returns live rows', async ({ page }, testInfo) => {

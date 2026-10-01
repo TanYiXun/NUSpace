@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 2 public bus arrivals are implemented for the first source-labelled LTA public stop. Phase 1 passed review with constraints in `docs/decisions/phase-1-review.md`; the prototype D1 route remains hidden by default and must not be treated as official route geometry.
+Current work: Phase 2 NUS ISB static mode is in progress after the public bus arrival checkpoint. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
 
 ## Commands
 
@@ -40,10 +40,10 @@ The current prototype includes only source-labelled NUS-area data:
 - COM3 footprint from OpenStreetMap relation `15780831`, with placeholder height.
 - MVP 1 Kent Ridge place seed from a bounded OpenStreetMap API extract, curated into `data/curated/mvp1-campus-places.json`.
 - MVP 1 Kent Ridge building footprints from OpenStreetMap way/full responses and the COM3 relation, curated into `data/curated/mvp1-building-footprints.geojson`.
-- Manually curated D1-style route and stops for animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
+- Manually curated D1-style route and stops for static route UI and animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
 - OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
 
-No live NUS shuttle API, uNivUS/ConnectX integration, NUSMods import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment.
+No live NUS shuttle API, uNivUS/ConnectX integration, NUSMods import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
 
 ## Transit Adapter Notes
 

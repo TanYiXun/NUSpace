@@ -11,6 +11,7 @@ import {
   type PublicBusArrivalUiState,
 } from '../transit/publicBusArrivals';
 import { defaultPublicBusStop } from '../transit/publicBusStops';
+import { d1StaticRoute } from '../transit/nusIsbStaticRoutes';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -1103,8 +1104,8 @@ export function CampusMap() {
           <button className="routeChoice" type="button" onClick={focusRoute}>
             <span className="routeSwatch" aria-hidden="true" />
             <span className="choiceText">
-              <strong>Show D1 prototype corridor</strong>
-              <small>Animation test only, not MVP route geometry</small>
+              <strong>Show D1 static route</strong>
+              <small>Source pending geometry, live unavailable</small>
             </span>
             <span className="choiceMeta">{visibleLayers.prototypeRoute ? 'Shown' : 'Hidden'}</span>
           </button>
@@ -1135,8 +1136,8 @@ export function CampusMap() {
           </button>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('prototypeRoute')}>
             <span className="choiceText">
-              <strong>Prototype route</strong>
-              <small>D1 animation test, hidden by default</small>
+              <strong>Static route</strong>
+              <small>D1 source-pending geometry</small>
             </span>
             <span className="layerState">{visibleLayers.prototypeRoute ? 'On' : 'Off'}</span>
           </button>
@@ -1284,10 +1285,10 @@ export function CampusMap() {
           <>
             <div className="sheetHeaderRow">
               <div>
-                <p className="eyebrow">Prototype route</p>
+                <p className="eyebrow">Static route</p>
                 <div className="routeTitleRow">
-                  <span className="routeBadge">D1</span>
-                  <h1>Simulated corridor</h1>
+                  <span className="routeBadge">{d1StaticRoute.code}</span>
+                  <h1>{d1StaticRoute.name}</h1>
                 </div>
               </div>
               <div className="sheetActions">
@@ -1299,29 +1300,30 @@ export function CampusMap() {
             <p>
               {mapState === 'error'
                 ? 'Basemap failed to load.'
-                : 'Simulated shuttle corridor from COM3 toward UTown. Hidden by default because it is not MVP-quality official route geometry.'}
+                : d1StaticRoute.detail}
             </p>
             <dl className="routeFacts">
               <div>
                 <dt>Status</dt>
-                <dd>Prototype only</dd>
+                <dd>Static route</dd>
               </div>
               <div>
-                <dt>Vehicle</dt>
-                <dd>Simulated, not live</dd>
+                <dt>Arrivals</dt>
+                <dd>{d1StaticRoute.frequencyNote}</dd>
+              </div>
+              <div>
+                <dt>Geometry</dt>
+                <dd>Source pending</dd>
               </div>
             </dl>
-            <ol className="routeStops" aria-label="D1 prototype stop sequence">
-              <li>COM3</li>
-              <li>Opp HSSML</li>
-              <li>Opp NUSS</li>
-              <li>Ventus</li>
-              <li>UTown</li>
-              <li>CLB</li>
+            <ol className="routeStops" aria-label="D1 static stop sequence">
+              {d1StaticRoute.stopSequence.map((stop) => (
+                <li key={stop}>{stop}</li>
+              ))}
             </ol>
             <div className="sheetBody">
               <p className="truthNote">
-                This line is retained only for animation and route UI testing. It is not an official NUS shuttle route, not source-confirmed MVP geometry, and has no real-time arrivals or live vehicle positions.
+                This route is selectable as a static planning layer only. The displayed line is not official NUS shuttle route geometry, has no real-time arrivals, and has no live vehicle positions.
               </p>
             </div>
           </>

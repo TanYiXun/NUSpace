@@ -106,3 +106,11 @@
 - Finding: NUS public pages and uNivUS materials continue to point to NUS/uNivUS/NextBus for real-time ISB schedules and locations. uNivUS terms say bus arrival timings may be drawn from LTA or the NUS NextBus database, which supports the distinction between LTA public buses and NUS-operated shuttle data.
 - Decision: keep the existing policy. LTA DataMall can support public buses near NUS, but NUS ISB live routes/timings still require official NUS/uNivUS/NextBus access or another documented permissioned feed before production use.
 - Confidence: high for DataMall not exposing exact NUS ISB service numbers through `BusServices`, `BusRoutes`, or the tested `BusArrival` path as of 2026-10-01.
+
+## 2026-10-01 - Phase 2 NUS ISB Static Mode
+
+- Task: implement the next Phase 2 slice for static NUS shuttle route selection without claiming official route geometry or live timings.
+- Sources checked: NUS UCI Internal Shuttle Bus page and NUS Campus Map shuttle routes page.
+- Finding: NUS public pages confirm current ISB route families and point users to uNivUS for up-to-the-minute schedules and live locations, but the public pages do not provide a documented machine-readable route geometry or live-arrival API.
+- Decision: keep the existing D1 display corridor as a hidden source-pending static route layer. Rename the current route UI to `Static route`, show the D1 stop sequence, route color, and `Live arrivals unavailable`, and keep live NUS shuttle arrivals blocked.
+- Confidence: medium for the static route UI boundary, low for route geometry accuracy until official or permissioned source-confirmed geometry is available.

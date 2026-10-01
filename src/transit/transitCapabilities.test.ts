@@ -18,7 +18,7 @@ describe('transitCapabilities', () => {
   it('keeps the static NUS shuttle route layer source pending', () => {
     expect(getTransitCapability('nusIsbStaticRoutes')).toMatchObject({
       status: 'source_pending',
-      sourceId: 'manual-osm-d1-prototype-route',
+      sourceId: 'nus-campus-map-shuttle-routes',
     });
   });
 

@@ -117,12 +117,24 @@ function getPublicBusStatusLabel(state: PublicBusArrivalUiState) {
   return 'Unavailable';
 }
 
-function formatArrivalMinutes(minutes: number | null) {
+function formatArrivalDisplay(minutes: number | null) {
   if (minutes === null) {
     return '--';
   }
 
-  return minutes === 0 ? 'Arr' : `${minutes} min`;
+  return minutes === 0 ? 'Arr' : `${minutes}`;
+}
+
+function formatArrivalAccessibleLabel(minutes: number | null) {
+  if (minutes === null) {
+    return 'no arrival estimate';
+  }
+
+  if (minutes === 0) {
+    return 'arriving';
+  }
+
+  return `${minutes} minute${minutes === 1 ? '' : 's'}`;
 }
 
 function formatFetchedAt(value?: string) {
@@ -144,7 +156,7 @@ function formatFetchedAt(value?: string) {
 }
 
 function getPublicBusEstimateLabel(bus: PublicBusArrivalUiState['arrivals'][number]['nextBuses'][number]) {
-  const timeLabel = formatArrivalMinutes(bus.estimatedArrivalMinutes);
+  const timeLabel = formatArrivalAccessibleLabel(bus.estimatedArrivalMinutes);
   const vehicleTypeLabel = getPublicBusVehicleTypeLabel(bus.type);
   const accessibilityLabel = isPublicBusWheelchairAccessible(bus.feature) ? 'wheelchair-accessible bus' : null;
 
@@ -1499,7 +1511,7 @@ export function CampusMap() {
                                   <span className="material-symbols-outlined publicBusWheelchairIcon" aria-hidden="true">accessible</span>
                                 ) : null}
                                 <span className="publicBusTime" data-stale={bus.isStale}>
-                                  {formatArrivalMinutes(bus.estimatedArrivalMinutes)}
+                                  {formatArrivalDisplay(bus.estimatedArrivalMinutes)}
                                 </span>
                               </span>
                               {getPublicBusVehicleTypeLabel(bus.type) ? (

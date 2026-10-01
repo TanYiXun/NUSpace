@@ -95,8 +95,8 @@ test('desktop renders public bus arrivals when the project endpoint returns live
 
   await expect(page.getByRole('definition').filter({ hasText: '1 services' })).toBeVisible();
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('96');
-  await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('4 min');
-  await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('11 min');
+  await expect(page.getByLabel('4 minutes, wheelchair-accessible bus, Double')).toBeVisible();
+  await expect(page.getByLabel('11 minutes, wheelchair-accessible bus, Single')).toBeVisible();
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('Double');
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('Single');
   await expect(page.getByText('Live public bus arrivals from LTA DataMall public bus data')).toBeVisible();

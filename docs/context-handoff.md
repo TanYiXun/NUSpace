@@ -1,6 +1,6 @@
 # Context Handoff
 
-Last updated: 2026-09-18
+Last updated: 2026-10-01
 
 This file is a concise working-memory handoff for long conversations, compaction, or fresh tasks. `PLAN.md` remains the source of truth for product scope and implementation requirements.
 
@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `0e90460 Merge pull request #14 from TanYiXun/phase2-public-bus-ui`.
+- Current branch: `phase2-live-public-bus-arrivals`.
+- Latest `main` commit: `9d2f887 Update handoff after public bus UI`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 2 live public bus row rendering, review docs, screenshots, and context-discipline rules.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration.
-- Current slice: ready for the next Phase 2 transit slice.
+- Current slice: Phase 2 public bus arrival display is implemented and checks pass; ready for user review, PR creation, and merge if approved.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -136,18 +136,23 @@ Phase 1 layout polish screenshots are in `docs/screenshots/`:
 - `mvp1-layout-polish-mobile-expanded-sheet.png`
 - `mvp1-layout-polish-mobile-collapsed-sheet.png`
 
+Phase 2 live public bus screenshots are in `docs/screenshots/`:
+
+- `phase2-live-public-bus-missing-key-desktop.png`
+- `phase2-live-public-bus-live-desktop.png`
+
 ## Checks Last Run
 
-Latest checks passed unless noted:
+Latest checks passed on 2026-10-01:
 
 - `npm run lint`
 - `npm run typecheck`
 - `npm run test`
 - `npm run validate:data`
-- `npm run test:e2e`
 - `npm run build`
+- `npm run test:e2e`
 
-`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests. It may require `npx playwright install chromium` once on a fresh machine.
+`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval passed with 3 passed and 3 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
 
 Known build warning:
 
@@ -186,11 +191,15 @@ Known build warning:
 - `/api/transit/public-bus-arrivals` now exists in the Vite development server with server-only `LTA_DATAMALL_ACCOUNT_KEY` handling, in-memory caching, normalized LTA-shaped responses, explicit missing-key/upstream-error states, and visible Phase 2 truth copy.
 - Phase 2 public bus UI PR #14 was pushed, opened with a screenshot, and merged to `main`.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
+- Current branch renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
+- Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
+- `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
 
 ## Next Recommended Action
 
 Continue Phase 2 public bus integration. Recommended next options:
 
-1. Read `PLAN.md` section 11 before implementing transit changes.
-2. Choose the next Phase 2 slice. Recommended: add a selected public-bus stop detail state only for source-labelled LTA stop codes, or stop Phase 2 until an LTA AccountKey is available.
+1. Review the Phase 2 live public bus branch diff and screenshots.
+2. If approved, create a PR and merge this branch.
 3. Keep NUS shuttle route/live data disabled or prototype-labelled until official access or source-confirmed route geometry exists.
+4. After merge, start a fresh task with: `Read AGENTS.md, PLAN.md section 11.2, and docs/context-handoff.md, then continue.`

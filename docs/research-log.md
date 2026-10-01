@@ -89,3 +89,20 @@
 - Finding: NUS public pages can support a manual-reference stop-code seed for `Heng Mui Keng Terrace` (`16069`), but they are not a live feed and do not provide arrivals, route geometry, or NUS ISB data.
 - Decision: commit `data/curated/phase2-public-bus-stops.json` for the stop-code seed, keep it separate from OSM campus bus-stop markers, and show the endpoint `missing_key` state in the overview sheet until `LTA_DATAMALL_ACCOUNT_KEY` is configured server-side.
 - Confidence: medium for stop-code reference, high that the UI does not expose credentials or claim live data.
+
+## 2026-09-18 - Phase 2 Live Public Bus Rows
+
+- Task: finish the LTA public bus arrival UI path for the first source-labelled public stop without committing secrets.
+- Finding: the server adapter already normalizes LTA-shaped rows into service number, next bus estimates, load, vehicle type, feature, stale flag, fetched time, and cache state.
+- Decision: render live public bus service rows in the overview sheet when the project endpoint returns `ok`; keep missing-key and upstream-failure states visible otherwise.
+- Test approach: use Playwright route mocking for the live `96` display path, keep missing-key e2e coverage, and run one local live verification with the AccountKey stored only in ignored `.env.local`.
+- Live verification: on 2026-09-18, the local endpoint returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 public bus services. The key was not committed, printed, or exposed to frontend code.
+- Confidence: high for frontend/server boundary behavior and the first live LTA public bus retrieval path.
+
+## 2026-10-01 - LTA DataMall NUS ISB Recheck
+
+- Task: recheck whether LTA DataMall exposes NUS internal shuttle services such as A1, A2, D1, D2, K, P, R1, and R2 after the user observed Citymapper showing NUS ISB routes/timings.
+- Finding: official LTA DataMall docs still describe public bus arrival, services, and routes feeds; the current DataMall GTFS entries are train-focused. A live server-key scan of DataMall `BusServices` and `BusRoutes` using real pagination returned 801 service rows and 26,829 route rows with zero exact matches for A1, A2, D1, D2, K, P, R1, or R2. Direct `BusArrival` queries for stop `16069` with `ServiceNo=A1` and `ServiceNo=D2` returned empty `Services` arrays.
+- Finding: NUS public pages and uNivUS materials continue to point to NUS/uNivUS/NextBus for real-time ISB schedules and locations. uNivUS terms say bus arrival timings may be drawn from LTA or the NUS NextBus database, which supports the distinction between LTA public buses and NUS-operated shuttle data.
+- Decision: keep the existing policy. LTA DataMall can support public buses near NUS, but NUS ISB live routes/timings still require official NUS/uNivUS/NextBus access or another documented permissioned feed before production use.
+- Confidence: high for DataMall not exposing exact NUS ISB service numbers through `BusServices`, `BusRoutes`, or the tested `BusArrival` path as of 2026-10-01.

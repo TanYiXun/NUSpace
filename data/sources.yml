@@ -123,7 +123,7 @@ sources:
       - Dynamic APIs require an AccountKey issued to registered DataMall subscribers
       - Bus Arrival v2 is decommissioned; future implementation must use the current documented Bus Arrival API version
       - LTA public bus services are not NUS internal shuttle services
-      - This repository does not currently include an AccountKey or live public bus arrivals
+      - This repository does not include an AccountKey; live public bus arrivals appear only when a server-side key is configured outside git
   - id: nus-public-bus-access-pages
     name: NUS public transport access pages
     source_owner: National University of Singapore

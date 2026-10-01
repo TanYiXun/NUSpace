@@ -83,8 +83,53 @@ const initialPublicBusArrivalState: PublicBusArrivalUiState = {
   sourceLabel: 'LTA DataMall public bus data',
   busStopCode: defaultPublicBusStop.busStopCode,
   arrivalCount: 0,
+  cacheHit: false,
+  cacheTtlSeconds: 0,
+  arrivals: [],
   message: 'Checking the NUSpace public bus endpoint.',
 };
+
+function getPublicBusStatusLabel(state: PublicBusArrivalUiState) {
+  if (state.status === 'loading') {
+    return 'Checking endpoint';
+  }
+
+  if (state.status === 'ok') {
+    return `${state.arrivalCount} services`;
+  }
+
+  if (state.status === 'missing_key') {
+    return 'Missing server key';
+  }
+
+  return 'Unavailable';
+}
+
+function formatArrivalMinutes(minutes: number | null) {
+  if (minutes === null) {
+    return '--';
+  }
+
+  return minutes === 0 ? 'Arr' : `${minutes} min`;
+}
+
+function formatFetchedAt(value?: string) {
+  if (!value) {
+    return '';
+  }
+
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return '';
+  }
+
+  return new Intl.DateTimeFormat('en-SG', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  }).format(parsed);
+}
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   const baseFeature = source.features[0];
@@ -1285,7 +1330,7 @@ export function CampusMap() {
             <p className="eyebrow">Phase 2 transit boundary</p>
             <h1>NUSpace</h1>
             <p>
-              Public bus arrivals now have a server-side LTA DataMall adapter boundary. No key or live transit data is enabled in the browser.
+              Public bus arrivals now load through the server-side LTA DataMall adapter. The AccountKey is never exposed in browser code.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1302,30 +1347,52 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Public bus</dt>
-                <dd>
-                  {publicBusArrivalState.status === 'loading'
-                    ? 'Checking endpoint'
-                    : publicBusArrivalState.status === 'ok'
-                      ? `${publicBusArrivalState.arrivalCount} services`
-                      : publicBusArrivalState.status === 'missing_key'
-                        ? 'Missing server key'
-                        : 'Unavailable'}
-                </dd>
+                <dd>{getPublicBusStatusLabel(publicBusArrivalState)}</dd>
               </div>
             </dl>
             <div className="transitStatusCard" aria-label="Public bus arrival endpoint state">
-              <div>
-                <strong>{defaultPublicBusStop.name}</strong>
-                <span>{defaultPublicBusStop.roadName} · Stop {defaultPublicBusStop.busStopCode}</span>
+              <div className="transitStatusHeader">
+                <div>
+                  <strong>{defaultPublicBusStop.name}</strong>
+                  <span>{defaultPublicBusStop.roadName} · Stop {defaultPublicBusStop.busStopCode}</span>
+                </div>
+                <span className="transitStatusPill">{getPublicBusStatusLabel(publicBusArrivalState)}</span>
               </div>
-              <p>
-                {publicBusArrivalState.status === 'ok'
-                  ? `${publicBusArrivalState.arrivalCount} public bus service rows returned from ${publicBusArrivalState.sourceLabel}.`
-                  : publicBusArrivalState.message}
-              </p>
+              {publicBusArrivalState.status === 'ok' ? (
+                <>
+                  <div className="publicBusRows" aria-label="Live public bus arrivals from LTA DataMall">
+                    {publicBusArrivalState.arrivals.slice(0, 4).map((service) => (
+                      <div className="publicBusRow" key={service.serviceNo}>
+                        <span className="publicBusService">{service.serviceNo}</span>
+                        <span className="publicBusTimes">
+                          {service.nextBuses.map((bus) => (
+                            <span
+                              className="publicBusTime"
+                              data-stale={bus.isStale}
+                              key={`${service.serviceNo}-${bus.sequence}`}
+                            >
+                              {formatArrivalMinutes(bus.estimatedArrivalMinutes)}
+                            </span>
+                          ))}
+                        </span>
+                        <span className="publicBusMeta">
+                          {service.nextBuses[0]?.load ?? 'Load --'}
+                          {service.nextBuses[0]?.feature ? ` · ${service.nextBuses[0].feature}` : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <p>
+                    Live public bus arrivals from {publicBusArrivalState.sourceLabel}. Updated {formatFetchedAt(publicBusArrivalState.fetchedAt)}
+                    {publicBusArrivalState.cacheHit ? `, cached for ${publicBusArrivalState.cacheTtlSeconds}s` : ''}.
+                  </p>
+                </>
+              ) : (
+                <p>{publicBusArrivalState.message}</p>
+              )}
             </div>
             <p className="truthNote">
-              LTA public bus support is backend-only until an AccountKey is configured. No live NUS shuttle API, official route geometry, indoor maps, or real-time arrivals are enabled.
+              LTA public bus arrivals use the server-side adapter only. No live NUS shuttle API, official route geometry, indoor maps, or NUS shuttle real-time arrivals are enabled.
             </p>
             {locationStatus !== 'idle' ? (
               <p className="locationNote">

@@ -403,6 +403,37 @@ Accepted behavior:
 - Venue rows show lesson count, mapped place or unmapped state, nearest known bus stop when available, and confidence label.
 - The sheet preserves the warning that confidence labels do not imply room-level geometry, indoor routing, live occupancy, or official timetable routing.
 
+## Phase 4 3D Campus Detail Slice
+
+This checkpoint starts Phase 4 with restrained building-detail improvements on existing sourced OSM footprints. It does not add terrain, new geometry, custom meshes, room detail, or indoor maps.
+
+Accepted visual checkpoints:
+
+- [Phase 4 3D detail desktop overview](screenshots/phase4-3d-detail-desktop-overview.png).
+- [Phase 4 3D detail desktop selected building](screenshots/phase4-3d-detail-desktop-selected-building.png).
+- [Phase 4 3D detail mobile overview](screenshots/phase4-3d-detail-mobile-overview.png).
+- [Phase 4 3D detail mobile selected building](screenshots/phase4-3d-detail-mobile-selected-building.png).
+
+Capture source:
+
+- Running local app at `http://127.0.0.1:5173/`.
+- Desktop viewport: 1440 x 1200.
+- Mobile viewport: 390 x 844.
+
+Accepted behavior:
+
+- The default overview label reflects Phase 4 3D campus detail.
+- Non-COM3 building extrusions have a selected state when opened from search or direct map selection.
+- A small set of existing curated landmark names receives a quiet material tint so major buildings are easier to distinguish in pitched view.
+- Selected building sheets show levels, visual height, height-source status, and the current 3D detail mode.
+- Long source/status values wrap inside the sheet fact grid instead of overflowing their UI.
+
+Visual constraints:
+
+- Landmark tinting is a navigation cue, not decorative coloring.
+- Height values remain source-labelled and must not be treated as official architectural height.
+- Terrain remains out of scope until source, license, alignment, and performance are documented.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

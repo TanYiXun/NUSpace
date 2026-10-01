@@ -57,6 +57,12 @@ const campusBuildingFootprints = {
   ...mvp1BuildingFootprints,
   features: mvp1BuildingFootprints.features.filter((feature) => feature.id !== 'com3'),
 } as GeoJSON.FeatureCollection;
+const landmarkBuildingNames = [
+  'Central Library',
+  'University Cultural Centre',
+  'Create Tower',
+  'Education Resource Centre',
+];
 const BUILDING_LAYER_IDS = [
   CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
   CAMPUS_BUILDING_OUTLINE_LAYER_ID,
@@ -86,6 +92,44 @@ type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop' | 
 type SheetState = 'collapsed' | 'half' | 'expanded';
 type LayerKey = 'buildings' | 'busStops' | 'prototypeRoute';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
+type BuildingVisualMetadata = {
+  id: string;
+  name: string;
+  sourceLabel: string;
+  sourceStatus: string;
+  heightMeters: number | null;
+  heightSourceStatus: string;
+  levels: string | number | null;
+  detail: string;
+};
+
+const buildingVisualMetadata = new Map(
+  mvp1BuildingFootprints.features
+    .map((feature) => {
+      const properties = feature.properties ?? {};
+
+      if (typeof feature.id !== 'string') {
+        return null;
+      }
+
+      return [
+        feature.id,
+        {
+          id: feature.id,
+          name: typeof properties.name === 'string' ? properties.name : feature.id,
+          sourceLabel: typeof properties.source_label === 'string' ? properties.source_label : 'Unknown source',
+          sourceStatus: typeof properties.source_status === 'string' ? properties.source_status : 'unknown',
+          heightMeters: typeof properties.height_m === 'number' ? properties.height_m : null,
+          heightSourceStatus: typeof properties.height_source_status === 'string' ? properties.height_source_status : 'unknown',
+          levels: typeof properties.building_levels === 'string' || typeof properties.building_levels === 'number'
+            ? properties.building_levels
+            : null,
+          detail: typeof properties.detail === 'string' ? properties.detail : 'No additional building-detail note is available.',
+        },
+      ] as const;
+    })
+    .filter((entry): entry is readonly [string, BuildingVisualMetadata] => entry !== null),
+);
 const initialPublicBusArrivalState: PublicBusArrivalUiState = {
   status: 'loading',
   sourceLabel: 'LTA DataMall public bus data',
@@ -341,6 +385,7 @@ export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const animationFrameRef = useRef<number | null>(null);
+  const selectedCampusBuildingRef = useRef<string | null>(null);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [selectedPanel, setSelectedPanel] = useState<SelectedPanel>('overview');
   const [sheetState, setSheetState] = useState<SheetState>('half');
@@ -372,23 +417,48 @@ export function CampusMap() {
     setSheetState(nextSheetState);
   }, []);
 
-  const clearSelection = useCallback(() => {
+  const setSelectedBuildingState = useCallback((buildingId: string | null) => {
     const map = mapRef.current;
+    const nextCampusBuildingId = buildingId && buildingId !== 'com3' ? buildingId : null;
+    const previousCampusBuildingId = selectedCampusBuildingRef.current;
 
+    selectedCampusBuildingRef.current = nextCampusBuildingId;
+
+    if (!map) {
+      return;
+    }
+
+    if (previousCampusBuildingId && map.getSource(CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID)) {
+      map.setFeatureState(
+        { source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID, id: previousCampusBuildingId },
+        { selected: false },
+      );
+    }
+
+    if (map.getSource(COM3_SOURCE_ID)) {
+      map.setFeatureState(
+        { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
+        { selected: buildingId === 'com3' },
+      );
+    }
+
+    if (nextCampusBuildingId && map.getSource(CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID)) {
+      map.setFeatureState(
+        { source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID, id: nextCampusBuildingId },
+        { selected: true },
+      );
+    }
+  }, []);
+
+  const clearSelection = useCallback(() => {
     setSelectedSearchEntity(null);
     setSelectedBusStop(null);
     setSearchResults([]);
     setRouteMenuOpen(false);
     setLayerMenuOpen(false);
     updateSheet('overview', 'half');
-
-    if (map?.getSource(COM3_SOURCE_ID)) {
-      map.setFeatureState(
-        { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
-        { selected: false },
-      );
-    }
-  }, [updateSheet]);
+    setSelectedBuildingState(null);
+  }, [setSelectedBuildingState, updateSheet]);
 
   const setMapLayerVisibility = useCallback((layerIds: string[], visible: boolean) => {
     const map = mapRef.current;
@@ -426,6 +496,7 @@ export function CampusMap() {
     updateSheet('route', 'half');
     setRouteMenuOpen(false);
     setLayerMenuOpen(false);
+    setSelectedBuildingState(null);
 
     if (map) {
       map.easeTo({
@@ -500,6 +571,7 @@ export function CampusMap() {
     setSearchResults([]);
     setLayerMenuOpen(false);
     setRouteMenuOpen(false);
+    setSelectedBuildingState(primaryMappedPlace?.type === 'building' ? primaryMappedPlace.id : null);
     updateSheet('module', 'expanded');
 
     if (primaryMappedPlace && mapRef.current) {
@@ -516,8 +588,9 @@ export function CampusMap() {
   const selectBusStop = useCallback((entity: SearchEntity) => {
     setSelectedBusStop(entity);
     setSelectedSearchEntity(entity);
+    setSelectedBuildingState(null);
     updateSheet('busStop', 'half');
-  }, [updateSheet]);
+  }, [setSelectedBuildingState, updateSheet]);
 
   const openSearchEntity = useCallback((entity: SearchEntity) => {
     const map = mapRef.current;
@@ -539,17 +612,14 @@ export function CampusMap() {
         duration: 900,
       });
 
-      map.setFeatureState(
-        { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
-        { selected: entity.id === 'com3' },
-      );
+      setSelectedBuildingState(entity.type === 'building' ? entity.id : null);
 
       if (entity.type === 'route') {
         setVisibleLayers((current) => ({ ...current, prototypeRoute: true }));
         setMapLayerVisibility(PROTOTYPE_ROUTE_LAYER_IDS, true);
       }
     }
-  }, [setMapLayerVisibility, updateSheet]);
+  }, [setMapLayerVisibility, setSelectedBuildingState, updateSheet]);
 
   useEffect(() => {
     let isCurrent = true;
@@ -650,17 +720,19 @@ export function CampusMap() {
         source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID,
         minzoom: 14.6,
         paint: {
-          'fill-extrusion-color': '#9ca2a1',
+          'fill-extrusion-color': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            '#486e7d',
+            ['match', ['get', 'name'], landmarkBuildingNames, '#b5afa5', '#9ca2a1'],
+          ],
           'fill-extrusion-height': ['get', 'height_m'],
           'fill-extrusion-base': 0,
           'fill-extrusion-opacity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            14.6,
-            0.38,
-            17,
-            0.62,
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            0.78,
+            ['interpolate', ['linear'], ['zoom'], 14.6, 0.38, 17, 0.62],
           ],
           'fill-extrusion-vertical-gradient': true,
         },
@@ -672,9 +744,24 @@ export function CampusMap() {
         source: CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID,
         minzoom: 15,
         paint: {
-          'line-color': '#667178',
-          'line-width': ['interpolate', ['linear'], ['zoom'], 15, 0.8, 18, 1.5],
-          'line-opacity': 0.72,
+          'line-color': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            '#1f4e63',
+            '#667178',
+          ],
+          'line-width': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            ['interpolate', ['linear'], ['zoom'], 15, 1.6, 18, 3],
+            ['interpolate', ['linear'], ['zoom'], 15, 0.8, 18, 1.5],
+          ],
+          'line-opacity': [
+            'case',
+            ['boolean', ['feature-state', 'selected'], false],
+            0.94,
+            0.72,
+          ],
         },
       }, firstSymbolLayerId);
 
@@ -974,10 +1061,7 @@ export function CampusMap() {
         updateSheet('building');
         setSelectedSearchEntity(null);
         setSelectedBusStop(null);
-        map.setFeatureState(
-          { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
-          { selected: true },
-        );
+        setSelectedBuildingState('com3');
       });
 
       map.on('mouseenter', CAMPUS_BUILDING_EXTRUSION_LAYER_ID, () => {
@@ -1006,10 +1090,7 @@ export function CampusMap() {
           setSelectedSearchEntity(null);
           setSelectedBusStop(null);
           updateSheet('route');
-          map.setFeatureState(
-            { source: COM3_SOURCE_ID, id: COM3_FEATURE_ID },
-            { selected: false },
-          );
+          setSelectedBuildingState(null);
         });
       });
 
@@ -1090,7 +1171,11 @@ export function CampusMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, [clearSelection, openSearchEntity, selectBusStop, updateSheet]);
+  }, [clearSelection, openSearchEntity, selectBusStop, setSelectedBuildingState, updateSheet]);
+
+  const selectedBuildingVisual = selectedSearchEntity?.type === 'building'
+    ? buildingVisualMetadata.get(selectedSearchEntity.id) ?? null
+    : null;
 
   return (
     <section className="mapStage" aria-label="Interactive map centered on NUS Kent Ridge" style={stageStyle}>
@@ -1190,7 +1275,7 @@ export function CampusMap() {
         <div className="floatingMenu" data-menu="layers">
           <div className="floatingMenuHeader">
             <h2>Layers</h2>
-            <p>Phase 2 boundary</p>
+            <p>Phase 4 detail</p>
             <button className="floatingMenuClose" type="button" aria-label="Close map layers" title="Close map layers" onClick={() => setLayerMenuOpen(false)}>
               <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
@@ -1198,7 +1283,7 @@ export function CampusMap() {
           <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
             <span className="choiceText">
               <strong>Building detail</strong>
-              <small>OSM footprints plus COM3 prototype detail</small>
+              <small>OSM extrusions, landmarks, selection</small>
             </span>
             <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
           </button>
@@ -1296,9 +1381,29 @@ export function CampusMap() {
                 <dt>Status</dt>
                 <dd>{selectedSearchEntity.sourceStatus}</dd>
               </div>
+              {selectedBuildingVisual ? (
+                <>
+                  <div>
+                    <dt>Levels</dt>
+                    <dd>{selectedBuildingVisual.levels ?? 'Unknown'}</dd>
+                  </div>
+                  <div>
+                    <dt>Height</dt>
+                    <dd>{selectedBuildingVisual.heightMeters ? `${selectedBuildingVisual.heightMeters} m` : 'Unknown'}</dd>
+                  </div>
+                  <div>
+                    <dt>Height source</dt>
+                    <dd>{selectedBuildingVisual.heightSourceStatus}</dd>
+                  </div>
+                  <div>
+                    <dt>3D detail</dt>
+                    <dd>{landmarkBuildingNames.includes(selectedBuildingVisual.name) ? 'Landmark tint' : 'OSM extrusion'}</dd>
+                  </div>
+                </>
+              ) : null}
             </dl>
             <p className="truthNote">
-              {selectedSearchEntity.detail}
+              {selectedBuildingVisual ? selectedBuildingVisual.detail : selectedSearchEntity.detail}
             </p>
           </>
         ) : selectedPanel === 'busStop' && selectedBusStop ? (
@@ -1462,10 +1567,10 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 3 venue intelligence</p>
+            <p className="eyebrow">Phase 4 3D campus detail</p>
             <h1>NUSpace</h1>
             <p>
-              NUSMods venue lookup now maps module venues to known campus places while public bus arrivals stay behind the server adapter.
+              3D building detail now highlights selected campus buildings while public bus arrivals and NUSMods venue lookup stay source-labelled.
             </p>
             <dl className="buildingFacts">
               <div>

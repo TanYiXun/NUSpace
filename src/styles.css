@@ -442,7 +442,7 @@ input {
 
 .buildingFacts div {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  grid-template-columns: minmax(68px, 80px) minmax(0, 1fr);
   gap: 12px;
 }
 
@@ -459,6 +459,8 @@ input {
   margin: 0;
   color: #1e2c38;
   font-size: 14px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .routeStops {

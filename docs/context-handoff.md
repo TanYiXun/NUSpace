@@ -8,18 +8,19 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `7bfea54 Merge pull request #22 from TanYiXun/phase3-review`.
+- Current branch: `phase4-3d-campus-detail`.
+- Latest `main` commit: `5825e72 Update handoff after Phase 3 review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 4 3D campus detail slice awaiting commit/PR.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: Phase 3 review checkpoint merged in PR #22.
-- Status: Phase 3 required scope is accepted with constraints in `docs/decisions/phase-3-review.md`; next implementation phase is `PLAN.md` section 13, Phase 4 3D campus detail.
+- Active plan section: `PLAN.md` section 13, Phase 4 3D campus detail.
+- Current slice: selected-building 3D highlight, landmark tint, and source-labelled building visual metadata.
+- Status: Phase 3 required scope is accepted with constraints in `docs/decisions/phase-3-review.md`; Phase 4 has started on `phase4-3d-campus-detail`.
+- Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
 
 ## Current Phase 1 Slice
@@ -172,6 +173,13 @@ Phase 3 review is documented in:
 
 - `docs/decisions/phase-3-review.md`
 
+Phase 4 3D detail screenshots are in `docs/screenshots/`:
+
+- `phase4-3d-detail-desktop-overview.png`
+- `phase4-3d-detail-desktop-selected-building.png`
+- `phase4-3d-detail-mobile-overview.png`
+- `phase4-3d-detail-mobile-selected-building.png`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
@@ -182,6 +190,8 @@ Latest checks passed on 2026-10-01:
 - `npm run validate:data`
 - `npm run build`
 - `npm run test:e2e`
+
+For the Phase 4 slice, `npm run test:e2e` passed with 5 passed and 5 skipped after adding the selected-building metadata smoke test. `npm run build` still reports the known Vite chunk-size warning.
 
 `npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval initially reused an old live-key server on `5173`, so that listener was stopped and the clean e2e run passed with 4 passed and 4 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
 
@@ -229,6 +239,7 @@ Known build warning:
 - Phase 2 public bus live polish PR #20 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 review PR #22 was pushed, opened, and merged to `main`; it records that the required NUSMods scope is complete with constraints.
+- Phase 4 branch adds selected-state highlighting for non-COM3 building extrusions, a restrained landmark tint for sourced landmark names, selected-building 3D metadata rows, and Phase 4 visual checkpoint screenshots.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -238,9 +249,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Start Phase 4 3D campus detail from updated `main`. Recommended next options:
+Complete the current Phase 4 3D campus detail slice. Recommended next options:
 
-1. Create a fresh Phase 4 branch from `main`.
-2. Start with sourced 3D style/highlight improvements and a Phase 4 ADR before any terrain work.
-3. Keep terrain blocked until elevation source, license, alignment, and mobile performance are documented.
+1. Commit the Phase 4 slice.
+2. Push, open, and merge a PR after review.
+3. Continue Phase 4 with additional 3D detail only where source/provenance and performance are documented.
 4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 13, and docs/context-handoff.md, then continue.`

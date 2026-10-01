@@ -8,17 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `7c52d9f Merge pull request #21 from TanYiXun/phase2-compact-bus-eta-labels`.
+- Current branch: `phase3-review`.
+- Latest `main` commit: `ab2f886 Update handoff after compact bus ETAs`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 3 review documentation updates.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: compact public bus ETA labels are merged; next work can return to Phase 3 from a fresh branch.
+- Current slice: Phase 3 review checkpoint.
+- Status: Phase 3 required scope is accepted with constraints in `docs/decisions/phase-3-review.md`; next implementation phase is `PLAN.md` section 13, Phase 4 3D campus detail.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
 
 ## Current Phase 1 Slice
@@ -167,6 +168,10 @@ Phase 3 selected module screenshots are in `docs/screenshots/`:
 - `phase3-selected-module-panel-desktop.png`
 - `phase3-selected-module-panel-mobile.png`
 
+Phase 3 review is documented in:
+
+- `docs/decisions/phase-3-review.md`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
@@ -223,6 +228,7 @@ Known build warning:
 - Phase 3 selected module panel PR #19 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 public bus live polish PR #20 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
+- Phase 3 review branch records that the required NUSMods scope is complete with constraints.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -232,9 +238,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Continue Phase 3 NUSMods intelligence. Recommended next options:
+Complete the Phase 3 review checkpoint, merge it to `main`, then start Phase 4 3D campus detail. Recommended next options:
 
-1. Restart the local preview from updated `main` after merge.
-2. Start the next Phase 3 slice on a fresh branch.
-3. Expand venue mappings only with documented provenance.
-4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`
+1. Run the full checkpoint checks.
+2. Push, open, and merge the Phase 3 review PR.
+3. Start Phase 4 from updated `main` on a fresh branch.
+4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 13, and docs/context-handoff.md, then continue.`

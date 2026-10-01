@@ -1,6 +1,6 @@
 # NUSpace
 
-NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 completed the first outdoor campus MVP checkpoint with constraints. Phase 2 built the transit layer behind server-side data boundaries. Phase 3 is adding NUSMods venue intelligence.
+NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 completed the first outdoor campus MVP checkpoint with constraints. Phase 2 built the transit layer behind server-side data boundaries. Phase 3 completed the required NUSMods venue intelligence scope with confidence-labelled mappings.
 
 ## Current Phase
 
@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 3 NUSMods module lookup and selected-module interaction have landed after the Phase 2 transit checkpoints. The next Phase 3 slice should expand venue mappings only with documented provenance. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
+Current work: Phase 4 3D campus detail can start after the Phase 3 review checkpoint. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
 
 ## Commands
 

@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 3 NUSMods module lookup is in progress after the Phase 2 transit checkpoints. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
+Current work: Phase 3 NUSMods module lookup has landed after the Phase 2 transit checkpoints. The next Phase 3 slice should expand venue mappings or selected-module interaction without inferring room-level geometry. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
 
 ## Commands
 

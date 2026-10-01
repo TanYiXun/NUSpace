@@ -1350,10 +1350,10 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 2 transit boundary</p>
+            <p className="eyebrow">Phase 3 venue intelligence</p>
             <h1>NUSpace</h1>
             <p>
-              Public bus arrivals now load through the server-side LTA DataMall adapter. The AccountKey is never exposed in browser code.
+              NUSMods venue lookup now maps module venues to known campus places while public bus arrivals stay behind the server adapter.
             </p>
             <dl className="buildingFacts">
               <div>

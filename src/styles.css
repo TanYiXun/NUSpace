@@ -199,11 +199,11 @@ input {
   position: absolute;
   right: 88px;
   z-index: calc(var(--z-sheet) + 1);
-  width: 284px;
-  padding: var(--space-3);
+  width: 300px;
+  padding: 12px;
   border: 1px solid var(--color-panel-border);
   border-radius: var(--radius-sheet);
-  background: var(--color-panel);
+  background: rgb(255 255 255 / 96%);
   box-shadow: var(--shadow-sheet);
 }
 
@@ -217,10 +217,10 @@ input {
 
 .floatingMenuHeader {
   display: grid;
-  grid-template-columns: 1fr auto auto;
+  grid-template-columns: minmax(0, auto) 1fr auto;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-1) var(--space-1) var(--space-3);
+  gap: 10px;
+  padding: 2px 0 8px;
 }
 
 .floatingMenuHeader h2 {
@@ -232,7 +232,8 @@ input {
 .floatingMenuHeader p {
   margin: 0;
   color: var(--color-muted);
-  font-size: 12px;
+  font-size: 13px;
+  text-align: right;
 }
 
 .floatingMenuClose {
@@ -262,10 +263,10 @@ input {
 .layerChoice {
   display: grid;
   width: 100%;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-3);
+  gap: 12px;
+  padding: 10px 8px;
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
@@ -289,23 +290,37 @@ input {
   background: var(--color-route-d1);
 }
 
+.routeChoice {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
 .choiceText {
   display: grid;
   gap: 2px;
+  min-width: 0;
 }
 
 .choiceText strong {
+  color: #172330;
   font-size: 14px;
+  line-height: 1.2;
 }
 
 .choiceText small {
   color: var(--color-muted);
   font-size: 12px;
+  line-height: 1.25;
 }
 
 .choiceMeta,
 .layerState {
-  color: var(--color-muted);
+  display: inline-grid;
+  min-width: 44px;
+  min-height: 26px;
+  place-items: center;
+  border-radius: 999px;
+  background: #edf3f6;
+  color: #485766;
   font-size: 12px;
   font-weight: 700;
 }
@@ -482,7 +497,7 @@ input {
   font-size: 14px;
 }
 
-.transitStatusCard span,
+.transitStatusHeader span,
 .transitStatusCard p {
   display: block;
   margin: 3px 0 0;
@@ -508,10 +523,10 @@ input {
 
 .publicBusRow {
   display: grid;
-  grid-template-columns: 44px 1fr auto;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 9px;
-  padding: 8px;
+  gap: 12px;
+  padding: 10px;
   border: 1px solid #e2e9ee;
   border-radius: 7px;
   background: #ffffff;
@@ -519,27 +534,28 @@ input {
 
 .publicBusService {
   display: inline-grid;
-  min-width: 34px;
-  height: 28px;
+  min-width: 44px;
+  height: 34px;
   place-items: center;
   border-radius: 6px;
   background: #285f9f;
-  color: #ffffff;
-  font-size: 13px;
+  color: #ffffff !important;
+  font-size: 14px;
   font-weight: 800;
+  line-height: 1;
 }
 
 .publicBusTimes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+  display: grid;
+  gap: 3px;
 }
 
 .publicBusTime {
-  min-width: 42px;
+  min-width: 0;
   color: #1b2a35;
   font-size: 13px;
   font-weight: 700;
+  line-height: 1.22;
 }
 
 .publicBusTime[data-stale='true'] {
@@ -548,8 +564,9 @@ input {
 
 .publicBusMeta {
   color: #5b6b7a;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .moduleLookupCard {

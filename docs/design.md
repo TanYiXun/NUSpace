@@ -348,6 +348,24 @@ Known visual issues:
 
 - The overview sheet is becoming dense on mobile. Future Phase 3 work should consider a dedicated selected-module panel instead of adding more content to the overview state.
 
+## Phase 3 UI Polish
+
+This checkpoint tightens the layer popover and live public bus rows after Phase 3 made the overview sheet denser. It does not add new data or change transit truth labels.
+
+Accepted visual checkpoints:
+
+- [Phase 3 UI polish layer menu desktop](screenshots/ui-polish-layer-menu-desktop.png).
+- [Phase 3 UI polish live public bus card desktop](screenshots/ui-polish-live-public-bus-card-desktop.png).
+- [Phase 3 UI polish layer menu mobile](screenshots/ui-polish-layer-menu-mobile.png).
+- [Phase 3 UI polish live public bus card mobile](screenshots/ui-polish-live-public-bus-card-mobile.png).
+
+Accepted behavior:
+
+- Layer state indicators use compact chips and no longer stretch the menu layout.
+- Public bus service badges keep high-contrast white text instead of inheriting muted card text.
+- Public bus rows are denser while preserving route number, next arrivals, and SEA/WAB labels.
+- The overview stage label reflects Phase 3 venue intelligence.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

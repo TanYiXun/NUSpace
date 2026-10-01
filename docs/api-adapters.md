@@ -29,10 +29,11 @@ Adapter boundary:
 - Upstream failures return `upstream_error` with HTTP 502.
 - Successful responses are cached in memory for 20 seconds per bus stop code.
 - Arrival estimates older than five minutes are marked stale in the normalized response.
+- LTA `Type` and `Feature` fields are normalized per arriving bus so the UI can show single-deck, double-deck, and wheelchair-accessible indicators beside each timing.
 - NUS ISB live arrivals, live vehicle positions, and crowd levels remain unavailable until official NUS, uNivUS, or ConnectX access is documented.
 - NUS ISB static mode is local UI data only; it uses NUS route-list references and keeps the D1 display corridor labelled source-pending.
 
-The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`). It shows the missing-key state when no server key is configured and renders service rows, upcoming minutes, load, accessibility feature, fetched time, and cache status when the endpoint returns `ok`. The stop-code reference comes from NUS public transport access pages and is tracked separately from OSM campus markers in `data/curated/phase2-public-bus-stops.json`.
+The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`). It shows the missing-key state when no server key is configured and renders service rows, upcoming minutes, load, accessibility feature, fetched time, and cache status when the endpoint returns `ok`. A follow-up UI pass should move vehicle type and wheelchair accessibility from the compact row summary into each individual timing, similar to `Arr · Double`, `10 · Single`, or a wheelchair-accessible indicator. The stop-code reference comes from NUS public transport access pages and is tracked separately from OSM campus markers in `data/curated/phase2-public-bus-stops.json`.
 
 Local verification on 2026-09-18 confirmed the endpoint returned `ok` for stop `16069` with 8 public bus services after `LTA_DATAMALL_ACCOUNT_KEY` was configured in ignored `.env.local`. The key was not committed or exposed to frontend code.
 

@@ -948,6 +948,10 @@ Tasks:
 4. Cache responses.
 5. Show public bus arrivals for stops near NUS.
 6. Label public bus data as LTA public bus data.
+7. Display per-arrival vehicle type and accessibility metadata where LTA provides it:
+   - `SD` as single-deck or `Single`
+   - `DD` as double-deck or `Double`
+   - `WAB` as wheelchair-accessible using an accessible icon plus text label
 
 Acceptance criteria:
 
@@ -955,6 +959,7 @@ Acceptance criteria:
 - Public bus arrivals display for at least one verified public bus stop.
 - Error state appears when LTA API fails.
 - Cache behavior is documented.
+- Each shown public bus timing should preserve the corresponding LTA vehicle type and wheelchair-accessibility feature when present; do not infer these fields when absent.
 
 ### 11.2 NUS ISB Static Mode
 
@@ -1497,6 +1502,7 @@ Display rules:
 - `Estimated` must never use the same visual treatment as `Live`.
 - `Prototype` data must not appear in production builds unless a debug flag is enabled.
 - `Permission required` should explain the missing official access without exposing private endpoint details.
+- Public bus timing metadata such as single-deck, double-deck, and wheelchair-accessible bus must be shown only when provided by the approved source, and icon-only indicators must have accessible text labels.
 
 ### 15.5 Failure Modes
 

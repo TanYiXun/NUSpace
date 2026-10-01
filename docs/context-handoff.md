@@ -8,18 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `61d2308 Merge pull request #17 from TanYiXun/phase3-nusmods-module-lookup`.
+- Current branch: `ui-polish-layer-bus-cards`.
+- Latest `main` commit: `c1aa289 Update handoff after NUSMods lookup`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 3 UI polish for layer menu, live public bus card rows, stale Phase 3 overview label, design notes, e2e label assertions, and fresh visual checkpoints.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: module-code lookup is merged; next Phase 3 work should expand venue mappings or selected-module interaction without inferring room-level geometry.
-- The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
+- Current slice: UI polish after the module-code lookup checkpoint. This branch fixes layer menu density, public bus row styling, and stale overview copy.
+- The user has been reviewing the running local app. Current preview started on `http://127.0.0.1:5174/` because an older server occupied `5173`; the stale `5173` listener was stopped before e2e.
 
 ## Current Phase 1 Slice
 
@@ -152,18 +152,26 @@ Phase 3 NUSMods screenshots are in `docs/screenshots/`:
 - `phase3-nusmods-module-lookup-desktop.png`
 - `phase3-nusmods-module-lookup-mobile.png`
 
+Phase 3 UI polish screenshots are in `docs/screenshots/`:
+
+- `ui-polish-layer-menu-desktop.png`
+- `ui-polish-live-public-bus-card-desktop.png`
+- `ui-polish-layer-menu-mobile.png`
+- `ui-polish-live-public-bus-card-mobile.png`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
 
 - `npm run lint`
 - `npm run typecheck`
+- `npm run test -- --run src/nusmods/venueMapper.test.ts src/nusmods/nusModsModuleLookup.test.ts src/transit/publicBusArrivals.test.ts`
 - `npm run test`
 - `npm run validate:data`
 - `npm run build`
 - `npm run test:e2e`
 
-`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval passed with 3 passed and 3 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
+`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval initially reused an old live-key server on `5173`, so that listener was stopped and the clean e2e run passed with 4 passed and 4 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
 
 Known build warning:
 
@@ -204,6 +212,7 @@ Known build warning:
 - Phase 2 live public bus arrivals PR #15 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 NUS ISB static mode PR #16 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 NUSMods module lookup PR #17 was pushed, opened with screenshots, and merged to `main`.
+- Current `ui-polish-layer-bus-cards` branch fixes the Phase 3 layer popover, live public bus card row styling, and stale overview label, with desktop and mobile screenshots captured from the running app.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -215,7 +224,8 @@ Known build warning:
 
 Continue Phase 3 NUSMods intelligence. Recommended next options:
 
-1. Expand venue mappings only with documented provenance.
-2. Consider moving module lookup into a selected-module panel if overview sheet density becomes too high.
-3. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
-4. Continue with a fresh task: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`
+1. Commit, push, open, and merge the `ui-polish-layer-bus-cards` checkpoint.
+2. Start the next Phase 3 slice on a fresh branch after merge.
+3. Prefer selected-module interaction or expanded venue mappings only with documented provenance.
+4. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
+5. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`

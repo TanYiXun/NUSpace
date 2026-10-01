@@ -5,7 +5,7 @@ test('desktop separates MVP bus stop seed from static route overlay', async ({ p
 
   await page.goto('/');
 
-  await expect(page.getByText('Phase 2 transit boundary', { exact: false })).toBeVisible();
+  await expect(page.getByText('Phase 3 venue intelligence', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
   await expect(page.getByText('10 OSM markers')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
@@ -144,7 +144,7 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'View shuttle routes' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('26 searchable')).toBeVisible();
-  await expect(page.getByText('Phase 2 transit boundary')).toBeVisible();
+  await expect(page.getByText('Phase 3 venue intelligence')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
 

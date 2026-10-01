@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase3-selected-module-panel`.
-- Latest `main` commit: `a2ae695 Merge pull request #18 from TanYiXun/ui-polish-layer-bus-cards`.
+- Current branch: `main`.
+- Latest `main` commit: `f1b1349 Merge pull request #19 from TanYiXun/phase3-selected-module-panel`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 3 selected-module panel, compact NUSMods overview launcher, selected-module e2e update, docs, and fresh visual checkpoints.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: selected-module interaction after the module-code lookup checkpoint. Successful NUSMods searches now open a dedicated selected-module sheet instead of expanding venue rows inside the overview card.
+- Current slice: selected-module interaction is merged. Successful NUSMods searches now open a dedicated selected-module sheet instead of expanding venue rows inside the overview card.
 - The user has been reviewing the running local app. Current preview is still available at `http://127.0.0.1:5174/`; e2e uses its own clean no-env server on `5173`.
 
 ## Current Phase 1 Slice
@@ -217,7 +217,7 @@ Known build warning:
 - Phase 2 NUS ISB static mode PR #16 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 NUSMods module lookup PR #17 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 UI polish PR #18 was pushed, opened with screenshots, and merged to `main`.
-- Current `phase3-selected-module-panel` branch opens successful NUSMods lookups in a selected-module sheet, keeps the overview card compact, and focuses the map on the first verified curated venue mapping.
+- Phase 3 selected module panel PR #19 was pushed, opened with screenshots, and merged to `main`.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -229,8 +229,7 @@ Known build warning:
 
 Continue Phase 3 NUSMods intelligence. Recommended next options:
 
-1. Commit, push, open, and merge the `phase3-selected-module-panel` checkpoint.
-2. Start the next Phase 3 slice on a fresh branch after merge.
-3. Expand venue mappings only with documented provenance.
-4. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
-5. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`
+1. Start the next Phase 3 slice on a fresh branch from `main`.
+2. Expand venue mappings only with documented provenance.
+3. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
+4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`

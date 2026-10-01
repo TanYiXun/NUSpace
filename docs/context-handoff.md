@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase3-nusmods-module-lookup`.
-- Latest `main` commit: `f7e938e Merge pull request #16 from TanYiXun/phase2-isb-static-mode`.
+- Current branch: `main`.
+- Latest `main` commit: `61d2308 Merge pull request #17 from TanYiXun/phase3-nusmods-module-lookup`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 3 NUSMods module lookup branch.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: module-code lookup, lesson venue summaries, confidence-labelled venue mappings, and nearest known bus stop suggestions.
+- Current slice: module-code lookup is merged; next Phase 3 work should expand venue mappings or selected-module interaction without inferring room-level geometry.
 - The user has been reviewing the running local app at `http://127.0.0.1:5173/`.
 
 ## Current Phase 1 Slice
@@ -203,18 +203,19 @@ Known build warning:
 - Phase 2 public bus UI PR #14 was pushed, opened with a screenshot, and merged to `main`.
 - Phase 2 live public bus arrivals PR #15 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 NUS ISB static mode PR #16 was pushed, opened with screenshots, and merged to `main`.
+- Phase 3 NUSMods module lookup PR #17 was pushed, opened with screenshots, and merged to `main`.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
 - Current branch renames the opt-in D1 route surface to static route mode, adds `src/transit/nusIsbStaticRoutes.ts`, documents NUS UCI and NUS Campus Map route-list sources, and keeps D1 geometry source-pending with no live arrivals.
-- Current branch adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest known bus stop suggestions from existing curated places.
+- Merged PR #17 adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest known bus stop suggestions from existing curated places.
 
 ## Next Recommended Action
 
 Continue Phase 3 NUSMods intelligence. Recommended next options:
 
-1. Review the Phase 3 NUSMods module lookup branch.
-2. Verify the UI with a mocked or live module code such as `CS1010S`.
-3. If approved, create a PR and merge this branch.
-4. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
+1. Expand venue mappings only with documented provenance.
+2. Consider moving module lookup into a selected-module panel if overview sheet density becomes too high.
+3. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
+4. Continue with a fresh task: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`

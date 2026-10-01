@@ -343,6 +343,7 @@ Accepted behavior:
 
 - Public bus rows auto-refresh every 20 seconds while the app is open.
 - The timestamp says `Last fetched` and separates browser refresh behavior from the server cache duration.
+- Visible public bus ETAs omit the word `min` to reduce grid clutter; ETA cells keep explicit accessible labels such as `4 minutes`.
 - `SD` and `DD` are rendered as `Single` and `Double`.
 - `WAB` is rendered as the Material Symbols `accessible` icon with accessible text on the ETA cell.
 - Vehicle type and accessibility are shown per arriving bus, not summarized from only the first ETA in a service row.

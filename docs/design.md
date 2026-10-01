@@ -328,6 +328,26 @@ Known visual issues:
 - The D1 line and stop positions still need source-confirmed geometry before they can be treated as production route data.
 - Static mode currently exposes only the existing D1 display corridor; A1, A2, D2, K, P, R1, and R2 remain source-referenced but not displayable as route geometry.
 
+## Phase 3 NUSMods Module Lookup
+
+This checkpoint adds a compact NUSMods module lookup card to the map sheet. The card is part of the operational map UI, not a dashboard surface.
+
+Accepted visual checkpoints:
+
+- [Phase 3 NUSMods module lookup desktop](screenshots/phase3-nusmods-module-lookup-desktop.png).
+- [Phase 3 NUSMods module lookup mobile](screenshots/phase3-nusmods-module-lookup-mobile.png).
+
+Accepted behavior:
+
+- Module lookup stays inside the existing map-first bottom sheet.
+- Venue rows show original venue code, mapped place when known, nearest known bus stop when available, and confidence label.
+- Unknown venues are shown as unmapped rather than silently guessed.
+- The card does not imply room-level geometry, indoor routing, or current occupancy.
+
+Known visual issues:
+
+- The overview sheet is becoming dense on mobile. Future Phase 3 work should consider a dedicated selected-module panel instead of adding more content to the overview state.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

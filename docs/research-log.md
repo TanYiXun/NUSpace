@@ -114,3 +114,11 @@
 - Finding: NUS public pages confirm current ISB route families and point users to uNivUS for up-to-the-minute schedules and live locations, but the public pages do not provide a documented machine-readable route geometry or live-arrival API.
 - Decision: keep the existing D1 display corridor as a hidden source-pending static route layer. Rename the current route UI to `Static route`, show the D1 stop sequence, route color, and `Live arrivals unavailable`, and keep live NUS shuttle arrivals blocked.
 - Confidence: medium for the static route UI boundary, low for route geometry accuracy until official or permissioned source-confirmed geometry is available.
+
+## 2026-10-01 - Phase 3 NUSMods Module Lookup
+
+- Task: implement the first NUSMods intelligence slice with module-code lookup, lesson venue summaries, confidence-labelled venue mapping, and nearest known bus stop suggestions.
+- Sources checked: NUSMods public API index and official NUSMods repository.
+- Finding: NUSMods exposes module JSON by academic year and module code. AY2026/2027 `CS1010S` includes `semesterData[].timetable[]` rows with venue codes such as `BIZ2-0224`.
+- Decision: fetch module data directly from the public NUSMods API, normalize venue codes locally, map only verified campus-place prefixes, and leave unknown venues unmapped.
+- Confidence: high for API shape and source boundary, medium for building-level venue mappings, low for room-level navigation until room geometry is verified.

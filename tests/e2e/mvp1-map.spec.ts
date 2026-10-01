@@ -100,6 +100,40 @@ test('desktop renders public bus arrivals when the project endpoint returns live
   await expect(page.getByText('Live public bus arrivals from LTA DataMall public bus data')).toBeVisible();
 });
 
+test('desktop maps NUSMods module venues with confidence metadata', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
+
+  await page.route('https://api.nusmods.com/v2/2026-2027/modules/CS1010S.json', async (route) => {
+    await route.fulfill({
+      contentType: 'application/json',
+      body: JSON.stringify({
+        moduleCode: 'CS1010S',
+        title: 'Programming Methodology',
+        semesterData: [
+          {
+            semester: 1,
+            timetable: [
+              { lessonType: 'Tutorial', venue: 'BIZ2-0224' },
+              { lessonType: 'Tutorial', venue: 'BIZ2-0224' },
+              { lessonType: 'Lecture', venue: 'COM3-01-23' },
+              { lessonType: 'Lecture', venue: 'LT27' },
+            ],
+          },
+        ],
+      }),
+    });
+  });
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Search' }).click();
+
+  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('BIZ2-0224');
+  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('BIZ2');
+  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('medium');
+  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('LT27');
+  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('unknown');
+});
+
 test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile-chromium', 'mobile-only smoke test');
 

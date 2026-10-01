@@ -1,6 +1,6 @@
 # API Adapters
 
-Phase 2 adds the first server-side runtime API adapter for LTA DataMall public bus arrivals. No NUS, uNivUS, ConnectX, NUSMods, or indoor-routing API integration has been added.
+Phase 2 adds the first server-side runtime API adapter for LTA DataMall public bus arrivals. Phase 3 adds client-side lookup against the NUSMods public API. No NUS, uNivUS, ConnectX, or indoor-routing API integration has been added.
 
 Phase 0 Prototype A loads a public MapLibre style URL directly in the browser.
 
@@ -37,3 +37,19 @@ The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`). It sho
 Local verification on 2026-09-18 confirmed the endpoint returned `ok` for stop `16069` with 8 public bus services after `LTA_DATAMALL_ACCOUNT_KEY` was configured in ignored `.env.local`. The key was not committed or exposed to frontend code.
 
 See `docs/decisions/phase-2-transit-plan.md` for the Phase 2 source and adapter plan.
+
+## Phase 3 NUSMods Boundary
+
+The module lookup UI calls:
+
+```text
+GET https://api.nusmods.com/v2/2026-2027/modules/{moduleCode}.json
+```
+
+Adapter boundary:
+
+- NUSMods is used only for module metadata and lesson venue codes.
+- Venue codes are normalized before matching.
+- Venue mappings show `high`, `medium`, `low`, or `unknown` confidence.
+- Unknown venue codes remain unmapped with a helpful fallback.
+- Room-level geometry, indoor routing, and occupancy are not inferred from venue codes.

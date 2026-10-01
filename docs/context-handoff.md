@@ -8,18 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase4-3d-campus-detail`.
-- Latest `main` commit: `5825e72 Update handoff after Phase 3 review`.
+- Current branch: `phase4-review`.
+- Latest `main` commit: `270bbad Merge pull request #23 from TanYiXun/phase4-3d-campus-detail`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 4 3D campus detail slice awaiting commit/PR.
+- Active uncommitted work: Phase 4 review documentation updates.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 13, Phase 4 3D campus detail.
-- Current slice: selected-building 3D highlight, landmark tint, and source-labelled building visual metadata.
-- Status: Phase 3 required scope is accepted with constraints in `docs/decisions/phase-3-review.md`; Phase 4 has started on `phase4-3d-campus-detail`.
+- Current slice: Phase 4 review checkpoint.
+- Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; Phase 5 indoor navigation is blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
 
@@ -180,6 +180,10 @@ Phase 4 3D detail screenshots are in `docs/screenshots/`:
 - `phase4-3d-detail-mobile-overview.png`
 - `phase4-3d-detail-mobile-selected-building.png`
 
+Phase 4 review is documented in:
+
+- `docs/decisions/phase-4-review.md`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
@@ -239,7 +243,8 @@ Known build warning:
 - Phase 2 public bus live polish PR #20 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 review PR #22 was pushed, opened, and merged to `main`; it records that the required NUSMods scope is complete with constraints.
-- Phase 4 branch adds selected-state highlighting for non-COM3 building extrusions, a restrained landmark tint for sourced landmark names, selected-building 3D metadata rows, and Phase 4 visual checkpoint screenshots.
+- Phase 4 3D campus detail PR #23 was pushed, opened with screenshots, and merged to `main`.
+- Phase 4 review branch records that the sourced 3D campus-detail scope is complete with constraints.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -249,9 +254,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Complete the current Phase 4 3D campus detail slice. Recommended next options:
+Complete the Phase 4 review checkpoint. Recommended next options:
 
-1. Commit the Phase 4 slice.
-2. Push, open, and merge a PR after review.
-3. Continue Phase 4 with additional 3D detail only where source/provenance and performance are documented.
-4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 13, and docs/context-handoff.md, then continue.`
+1. Run the checkpoint checks.
+2. Push, open, and merge the Phase 4 review PR.
+3. Do not begin Phase 5 indoor implementation until `PLAN.md` section 14.0 has legal indoor data and QA artifacts.
+4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 14.0, and docs/context-handoff.md, then continue.`

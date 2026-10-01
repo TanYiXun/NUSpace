@@ -8,18 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase2-compact-bus-eta-labels`.
-- Latest `main` commit: `ac26835 Update handoff after public bus live polish`.
+- Current branch: `main`.
+- Latest `main` commit: `7c52d9f Merge pull request #21 from TanYiXun/phase2-compact-bus-eta-labels`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: compact public bus ETA labels, refreshed live-polish screenshots, e2e assertion update, and handoff update.
+- Active uncommitted work: none.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration polish.
-- Current slice: visible public bus ETA cells omit `min` for less clutter while keeping explicit accessible labels such as `4 minutes`.
-- The user has been reviewing the running local app. The live preview on `5173` was stopped temporarily so `npm run test:e2e` could run against its clean no-env server.
+- Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
+- Current slice: compact public bus ETA labels are merged; next work can return to Phase 3 from a fresh branch.
+- The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
 
 ## Current Phase 1 Slice
 
@@ -222,7 +222,7 @@ Known build warning:
 - Phase 3 UI polish PR #18 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 selected module panel PR #19 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 public bus live polish PR #20 was pushed, opened with screenshots, and merged to `main`.
-- Current `phase2-compact-bus-eta-labels` branch keeps the PR #20 auto-refresh and Material Symbols accessibility behavior, but shortens visible ETAs from `4 min` to `4` while preserving accessible labels.
+- Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -232,9 +232,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Continue the current compact public bus ETA checkpoint. Recommended next options:
+Continue Phase 3 NUSMods intelligence. Recommended next options:
 
-1. Commit, push, open, and merge `phase2-compact-bus-eta-labels`.
-2. Restart the local preview from updated `main` after merge.
-3. Then return to Phase 3 only from a fresh branch.
-4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 11.1, and docs/context-handoff.md, then continue.`
+1. Restart the local preview from updated `main` after merge.
+2. Start the next Phase 3 slice on a fresh branch.
+3. Expand venue mappings only with documented provenance.
+4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`

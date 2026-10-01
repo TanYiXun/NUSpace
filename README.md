@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 3 NUSMods module lookup has landed after the Phase 2 transit checkpoints. The next Phase 3 slice should expand venue mappings or selected-module interaction without inferring room-level geometry. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
+Current work: Phase 3 NUSMods module lookup and selected-module interaction have landed after the Phase 2 transit checkpoints. The next Phase 3 slice should expand venue mappings only with documented provenance. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry.
 
 ## Commands
 
@@ -45,7 +45,7 @@ The current prototype includes only source-labelled NUS-area data:
 
 No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
 
-NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Venue mappings are confidence-labelled against the curated campus place seed and do not imply room-level geometry or indoor navigation.
+NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Successful searches open a selected-module sheet with confidence-labelled venue mappings against the curated campus place seed and do not imply room-level geometry or indoor navigation.
 
 ## Transit Adapter Notes
 

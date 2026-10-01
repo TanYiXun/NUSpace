@@ -366,6 +366,22 @@ Accepted behavior:
 - Public bus rows are denser while preserving route number, next arrivals, and SEA/WAB labels.
 - The overview stage label reflects Phase 3 venue intelligence.
 
+## Phase 3 Selected Module Panel
+
+This checkpoint moves successful NUSMods lookup results out of the overview card and into a selected-module detail sheet. The overview card remains a compact search launcher.
+
+Accepted visual checkpoints:
+
+- [Phase 3 selected module panel desktop](screenshots/phase3-selected-module-panel-desktop.png).
+- [Phase 3 selected module panel mobile](screenshots/phase3-selected-module-panel-mobile.png).
+
+Accepted behavior:
+
+- Submitting a valid module code opens a `Selected module` sheet.
+- The map camera focuses on the first venue with a verified curated place mapping.
+- Venue rows show lesson count, mapped place or unmapped state, nearest known bus stop when available, and confidence label.
+- The sheet preserves the warning that confidence labels do not imply room-level geometry, indoor routing, live occupancy, or official timetable routing.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

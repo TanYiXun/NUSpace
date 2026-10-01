@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase4-review`.
-- Latest `main` commit: `270bbad Merge pull request #23 from TanYiXun/phase4-3d-campus-detail`.
+- Current branch: `main`.
+- Latest `main` commit: `1c6c233 Merge pull request #24 from TanYiXun/phase4-review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 4 review documentation updates.
+- Active uncommitted work: none.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 13, Phase 4 3D campus detail.
-- Current slice: Phase 4 review checkpoint.
+- Active plan section: `PLAN.md` section 14.0, Indoor Data Acquisition And QA Gate.
+- Current slice: Phase 5 is not started; indoor navigation is blocked on legal data and QA artifacts.
 - Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; Phase 5 indoor navigation is blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
@@ -244,7 +244,7 @@ Known build warning:
 - Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 review PR #22 was pushed, opened, and merged to `main`; it records that the required NUSMods scope is complete with constraints.
 - Phase 4 3D campus detail PR #23 was pushed, opened with screenshots, and merged to `main`.
-- Phase 4 review branch records that the sourced 3D campus-detail scope is complete with constraints.
+- Phase 4 review PR #24 was pushed, opened, and merged to `main`; it records that the sourced 3D campus-detail scope is complete with constraints.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -254,9 +254,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Complete the Phase 4 review checkpoint. Recommended next options:
+Phase 5 indoor navigation is blocked until the section 14.0 data gate has evidence. Recommended next options:
 
-1. Run the checkpoint checks.
-2. Push, open, and merge the Phase 4 review PR.
-3. Do not begin Phase 5 indoor implementation until `PLAN.md` section 14.0 has legal indoor data and QA artifacts.
+1. Collect or document legal floor-plan/data permission for one candidate building.
+2. Create the Phase 5 indoor data acquisition and QA artifacts before implementing indoor routing.
+3. Do not infer rooms, floors, corridors, lifts, accessibility paths, or indoor routes from venue codes or screenshots.
 4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 14.0, and docs/context-handoff.md, then continue.`

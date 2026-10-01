@@ -5,7 +5,7 @@ test('desktop separates MVP bus stop seed from static route overlay', async ({ p
 
   await page.goto('/');
 
-  await expect(page.getByText('Phase 3 venue intelligence', { exact: false })).toBeVisible();
+  await expect(page.getByText('Phase 4 3D campus detail', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
   await expect(page.getByText('10 OSM markers')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
@@ -140,6 +140,19 @@ test('desktop maps NUSMods module venues with confidence metadata', async ({ pag
   await expect(page.getByText('room-level geometry')).toBeVisible();
 });
 
+test('desktop exposes 3D building detail source metadata', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
+
+  await page.goto('/');
+  await page.getByPlaceholder('Search NUS').fill('Central Library');
+  await page.getByRole('button', { name: 'Central Library Library' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Central Library' })).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: 'estimated-from-levels' })).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: 'Landmark tint' })).toBeVisible();
+  await expect(page.getByText('OSM-sourced building point derived from way geometry')).toBeVisible();
+});
+
 test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile-chromium', 'mobile-only smoke test');
 
@@ -150,7 +163,7 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'View shuttle routes' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('26 searchable')).toBeVisible();
-  await expect(page.getByText('Phase 3 venue intelligence')).toBeVisible();
+  await expect(page.getByText('Phase 4 3D campus detail')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
 

@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 4 3D campus detail can start after the Phase 3 review checkpoint. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
+Current work: Phase 4 3D campus detail has started with source-safe selected-building highlighting and building visual metadata. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
 
 ## Commands
 

@@ -8,17 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase3-review`.
-- Latest `main` commit: `ab2f886 Update handoff after compact bus ETAs`.
+- Current branch: `main`.
+- Latest `main` commit: `7bfea54 Merge pull request #22 from TanYiXun/phase3-review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 3 review documentation updates.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: Phase 3 review checkpoint.
+- Current slice: Phase 3 review checkpoint merged in PR #22.
 - Status: Phase 3 required scope is accepted with constraints in `docs/decisions/phase-3-review.md`; next implementation phase is `PLAN.md` section 13, Phase 4 3D campus detail.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
 
@@ -228,7 +228,7 @@ Known build warning:
 - Phase 3 selected module panel PR #19 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 public bus live polish PR #20 was pushed, opened with screenshots, and merged to `main`.
 - Phase 2 compact public bus ETA labels PR #21 was pushed, opened with screenshots, and merged to `main`.
-- Phase 3 review branch records that the required NUSMods scope is complete with constraints.
+- Phase 3 review PR #22 was pushed, opened, and merged to `main`; it records that the required NUSMods scope is complete with constraints.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -238,9 +238,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Complete the Phase 3 review checkpoint, merge it to `main`, then start Phase 4 3D campus detail. Recommended next options:
+Start Phase 4 3D campus detail from updated `main`. Recommended next options:
 
-1. Run the full checkpoint checks.
-2. Push, open, and merge the Phase 3 review PR.
-3. Start Phase 4 from updated `main` on a fresh branch.
+1. Create a fresh Phase 4 branch from `main`.
+2. Start with sourced 3D style/highlight improvements and a Phase 4 ADR before any terrain work.
+3. Keep terrain blocked until elevation source, license, alignment, and mobile performance are documented.
 4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 13, and docs/context-handoff.md, then continue.`

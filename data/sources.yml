@@ -85,13 +85,13 @@ sources:
     attribution_required: true
     commercial_use_allowed: unknown
     redistribution_allowed: unknown
-    derived_data_rules: Keep manually curated route displays labelled static, source-pending, or prototype-placeholder until official route geometry or a permitted feed is documented
+    derived_data_rules: Keep manually curated route displays labelled prototype, source-pending, or prototype-placeholder until official route geometry, verified stop positions, or a permitted feed is documented
     date_checked: 2026-10-01
     next_review_date: 2026-11-01
     source_status: manual-reference
     used_for:
       - Phase 2 NUS ISB route-list reference
-      - Phase 2 static route disclosure copy
+      - Phase 2 prototype route disclosure copy
     limitations:
       - Public page confirms route families and points users to uNivUS for up-to-the-minute schedules and live locations
       - Route maps are image-based and are not ingested as production geometry
@@ -103,19 +103,19 @@ sources:
     documentation_url: https://map.nus.edu.sg/index.php/main/mobile/shuttle_routes
     terms_or_license_url: https://nus.edu.sg/legal-information-notices
     license: Public website reference; rights remain with NUS
-    allowed_use: Manual reference for the existence of listed NUS shuttle route controls in static route UI
+    allowed_use: Manual reference for the existence of listed NUS shuttle route controls in prototype route UI
     disallowed_use: Do not scrape or infer route geometry, live arrivals, live vehicle positions, or stop coordinates from the page without permission
     attribution_text: Shuttle route list from NUS Campus Map
     attribution_required: true
     commercial_use_allowed: unknown
     redistribution_allowed: unknown
-    derived_data_rules: Use only for source-labelled static route UI until official route data is available
+    derived_data_rules: Use only for source-labelled prototype route UI until official route data and verified stop positions are available
     date_checked: 2026-10-01
     next_review_date: 2026-11-01
     source_status: manual-reference
     used_for:
-      - Phase 2 NUS ISB static route source boundary
-      - Phase 2 D1 static route control label
+      - Phase 2 NUS ISB prototype route source boundary
+      - Phase 2 D1 prototype route control label
     limitations:
       - Page lists route controls but does not expose a documented public route geometry API
       - Does not provide live NUS ISB arrivals, crowd level, or live vehicle positions
@@ -168,7 +168,8 @@ sources:
       - MVP 1 OSM-sourced visible building footprint seed
     limitations:
       - Community-maintained OSM data is not official NUS data
-      - OSM bus stop coordinates do not provide live NUS ISB arrivals, crowd levels, or official shuttle route membership
+      - OSM bus stop coordinates are seed markers only and may be offset from actual boarding points
+      - OSM bus stop coordinates do not provide live NUS ISB arrivals, crowd levels, official shuttle route membership, or official stop locations
       - Bounded extract was curated into `data/curated/mvp1-campus-places.json`; selected OSM way/full responses were curated into `data/curated/mvp1-building-footprints.geojson`; the full raw OSM XML dumps are not committed
       - Some OSM objects inside the query bounds may be outside NUS-controlled campus areas and must be curated before display
   - id: lta-datamall-dynamic-apis

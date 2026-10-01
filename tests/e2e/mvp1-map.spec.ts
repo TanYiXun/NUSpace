@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test';
 
-test('desktop separates MVP bus stop seed from static route overlay', async ({ page }, testInfo) => {
+test('desktop separates MVP bus stop seed from prototype route overlay', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
 
   await page.goto('/');
 
   await expect(page.getByText('Phase 4 3D campus detail', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
-  await expect(page.getByText('10 OSM markers')).toBeVisible();
+  await expect(page.getByText('10 OSM seed markers')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Heng Mui Keng Terrace')).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
@@ -15,19 +15,19 @@ test('desktop separates MVP bus stop seed from static route overlay', async ({ p
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /Bus stop seed/ })).toContainText('On');
-  await expect(page.getByRole('button', { name: /Static route/ })).toContainText('Off');
+  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('Off');
   await page.getByRole('button', { name: 'Close map layers' }).click();
-  await expect(page.getByRole('button', { name: /Static route/ })).toBeHidden();
+  await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
-  await page.getByRole('button', { name: /Static route/ }).click();
-  await expect(page.getByRole('button', { name: /Static route/ })).toContainText('On');
+  await page.getByRole('button', { name: /Prototype route/ }).click();
+  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('On');
 
   await page.getByRole('button', { name: 'View shuttle routes' }).click();
-  await page.getByRole('button', { name: /Show D1 static route/ }).click();
-  await expect(page.getByRole('heading', { name: 'D1 static route' })).toBeVisible();
-  await expect(page.getByText('Live arrivals unavailable')).toBeVisible();
-  await expect(page.getByText('not official NUS shuttle route geometry')).toBeVisible();
+  await page.getByRole('button', { name: /Show D1 prototype route/ }).click();
+  await expect(page.getByRole('heading', { name: 'D1 prototype route' })).toBeVisible();
+  await expect(page.getByText('No live or scheduled arrivals')).toBeVisible();
+  await expect(page.getByText('not official NUS shuttle geometry')).toBeVisible();
 });
 
 test('desktop renders public bus arrivals when the project endpoint returns live rows', async ({ page }, testInfo) => {
@@ -164,6 +164,7 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('26 searchable')).toBeVisible();
   await expect(page.getByText('Phase 4 3D campus detail')).toBeVisible();
+  await expect(page.getByText('10 OSM seed markers')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
 

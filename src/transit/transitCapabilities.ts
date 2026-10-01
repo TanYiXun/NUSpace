@@ -38,10 +38,10 @@ export const transitCapabilities: TransitCapability[] = [
   },
   {
     id: 'nusIsbStaticRoutes',
-    label: 'NUS shuttle static routes',
+    label: 'NUS shuttle prototype routes',
     status: 'source_pending',
     sourceId: 'nus-campus-map-shuttle-routes',
-    userFacingState: 'Static route mode is available with source-pending geometry.',
+    userFacingState: 'Prototype route mode is available with source-pending geometry and unverified stop positions.',
   },
   {
     id: 'nusIsbLiveArrivals',

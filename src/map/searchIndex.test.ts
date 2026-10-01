@@ -20,4 +20,12 @@ describe('searchEntities', () => {
     expect(searchIndex.filter((entity) => entity.type === 'building')).toHaveLength(13);
     expect(searchIndex.filter((entity) => entity.type === 'bus_stop')).toHaveLength(10);
   });
+
+  it('keeps OSM bus stop coordinates labelled as unverified seed references', () => {
+    const busStops = searchIndex.filter((entity) => entity.type === 'bus_stop');
+
+    expect(busStops).toHaveLength(10);
+    expect(busStops.every((entity) => entity.sourceStatus === 'manual-reference')).toBe(true);
+    expect(busStops.every((entity) => entity.subtitle.includes('position unverified'))).toBe(true);
+  });
 });

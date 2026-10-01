@@ -1264,8 +1264,8 @@ export function CampusMap() {
           <button className="routeChoice" type="button" onClick={focusRoute}>
             <span className="routeSwatch" aria-hidden="true" />
             <span className="choiceText">
-              <strong>Show D1 static route</strong>
-              <small>Source pending geometry, live unavailable</small>
+              <strong>Show D1 prototype route</strong>
+              <small>Geometry and stop positions unverified</small>
             </span>
             <span className="choiceMeta">{visibleLayers.prototypeRoute ? 'Shown' : 'Hidden'}</span>
           </button>
@@ -1290,14 +1290,14 @@ export function CampusMap() {
           <button className="layerChoice" type="button" onClick={() => toggleLayer('busStops')}>
             <span className="choiceText">
               <strong>Bus stop seed</strong>
-              <small>OSM bus stop markers, no arrivals</small>
+              <small>OSM stop seeds, positions unverified</small>
             </span>
             <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
           </button>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('prototypeRoute')}>
             <span className="choiceText">
-              <strong>Static route</strong>
-              <small>D1 source-pending geometry</small>
+              <strong>Prototype route</strong>
+              <small>D1 geometry and stops unverified</small>
             </span>
             <span className="layerState">{visibleLayers.prototypeRoute ? 'On' : 'Off'}</span>
           </button>
@@ -1434,7 +1434,11 @@ export function CampusMap() {
                     <dd>{selectedBusStop.sourceLabel}</dd>
                   </div>
                   <div>
-                    <dt>Status</dt>
+                    <dt>Position</dt>
+                    <dd>Unverified seed</dd>
+                  </div>
+                  <div>
+                    <dt>Source status</dt>
                     <dd>{selectedBusStop.sourceStatus}</dd>
                   </div>
                   <div>
@@ -1465,7 +1469,7 @@ export function CampusMap() {
           <>
             <div className="sheetHeaderRow">
               <div>
-                <p className="eyebrow">Static route</p>
+                <p className="eyebrow">Prototype route</p>
                 <div className="routeTitleRow">
                   <span className="routeBadge">{d1StaticRoute.code}</span>
                   <h1>{d1StaticRoute.name}</h1>
@@ -1485,7 +1489,7 @@ export function CampusMap() {
             <dl className="routeFacts">
               <div>
                 <dt>Status</dt>
-                <dd>Static route</dd>
+                <dd>Prototype</dd>
               </div>
               <div>
                 <dt>Arrivals</dt>
@@ -1493,17 +1497,17 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Geometry</dt>
-                <dd>Source pending</dd>
+                <dd>Unverified</dd>
               </div>
             </dl>
-            <ol className="routeStops" aria-label="D1 static stop sequence">
+            <ol className="routeStops" aria-label="D1 prototype stop sequence">
               {d1StaticRoute.stopSequence.map((stop) => (
                 <li key={stop}>{stop}</li>
               ))}
             </ol>
             <div className="sheetBody">
               <p className="truthNote">
-                This route is selectable as a static planning layer only. The displayed line is not official NUS shuttle route geometry, has no real-time arrivals, and has no live vehicle positions.
+                This route is selectable as a prototype planning layer only. The displayed line and stop sequence are not official NUS shuttle geometry, have no verified stop positions, no real-time arrivals, and no live vehicle positions.
               </p>
             </div>
           </>
@@ -1554,7 +1558,7 @@ export function CampusMap() {
                       {venue.lessonCount} lesson{venue.lessonCount === 1 ? '' : 's'} · {venue.mapping.place?.name ?? 'Unmapped venue'}
                     </small>
                     <small>
-                      {venue.mapping.nearestBusStop ? `Nearest known bus stop: ${venue.mapping.nearestBusStop.name}` : venue.mapping.note}
+                      {venue.mapping.nearestBusStop ? `Nearest OSM seed stop: ${venue.mapping.nearestBusStop.name}` : venue.mapping.note}
                     </small>
                   </span>
                   <em data-confidence={venue.mapping.confidence}>{venue.mapping.confidence}</em>
@@ -1583,7 +1587,7 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Bus stops</dt>
-                <dd>{campusBusStopCount} OSM markers</dd>
+                <dd>{campusBusStopCount} OSM seed markers</dd>
               </div>
               <div>
                 <dt>Public bus</dt>

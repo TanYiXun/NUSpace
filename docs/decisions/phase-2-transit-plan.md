@@ -36,7 +36,7 @@ NUS ISB:
 
 - Public bus arrivals: `requires_key`.
 - Public bus route metadata: `requires_key`.
-- NUS ISB static route layer: `source_pending`.
+- NUS ISB prototype route layer: `source_pending`.
 - NUS ISB live arrivals: `requires_official_access`.
 - Live NUS vehicle positions: `requires_official_access`.
 - Crowd level: `requires_official_access`.

@@ -9,7 +9,7 @@ Phase 1 currently reads curated local datasets from the repository:
 - `data/curated/mvp1-campus-places.json`
 - `data/curated/mvp1-building-footprints.geojson`
 
-These files are OSM-sourced curated data, not runtime API adapters. The D1 static route display remains local source-pending data and is hidden by default because it is not source-confirmed MVP route geometry.
+These files are OSM-sourced curated data, not runtime API adapters. The D1 prototype route display remains local source-pending data and is hidden by default because it is not source-confirmed MVP route geometry or verified stop positions.
 
 ## Phase 2 Transit Adapter Boundary
 
@@ -32,7 +32,7 @@ Adapter boundary:
 - LTA `Type` and `Feature` fields are normalized per arriving bus so the UI can show single-deck, double-deck, and wheelchair-accessible indicators beside each timing.
 - The frontend refreshes the visible public bus arrival state every 20 seconds while the app is open; the 20-second server cache controls DataMall request frequency, not whether the browser can ask again.
 - NUS ISB live arrivals, live vehicle positions, and crowd levels remain unavailable until official NUS, uNivUS, or ConnectX access is documented.
-- NUS ISB static mode is local UI data only; it uses NUS route-list references and keeps the D1 display corridor labelled source-pending.
+- NUS ISB prototype route mode is local UI data only; it uses NUS route-list references and keeps the D1 display corridor labelled source-pending with unverified stop positions.
 
 The current UI calls this endpoint for `Heng Mui Keng Terrace` (`16069`). It shows the missing-key state when no server key is configured and renders service rows, upcoming minutes, per-arrival single/double-deck labels, wheelchair-accessible indicators, fetched time, auto-refresh interval, and cache status when the endpoint returns `ok`. The stop-code reference comes from NUS public transport access pages and is tracked separately from OSM campus markers in `data/curated/phase2-public-bus-stops.json`.
 

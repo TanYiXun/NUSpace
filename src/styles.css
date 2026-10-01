@@ -197,7 +197,7 @@ input {
 
 .floatingMenu {
   position: absolute;
-  right: 88px;
+  right: min(464px, calc(100% - 320px));
   z-index: calc(var(--z-sheet) + 1);
   width: 300px;
   padding: 12px;
@@ -283,6 +283,15 @@ input {
   outline: none;
 }
 
+.layerChoiceUnavailable {
+  cursor: default;
+}
+
+.layerChoiceUnavailable:hover,
+.layerChoiceUnavailable:focus {
+  background: transparent;
+}
+
 .routeSwatch {
   width: 5px;
   height: 34px;
@@ -293,6 +302,16 @@ input {
 .routeChoice {
   grid-template-columns: 5px minmax(0, 1fr) max-content;
   gap: 10px;
+}
+
+.routeChoiceUnavailable {
+  grid-template-columns: minmax(0, 1fr) auto;
+  cursor: default;
+}
+
+.routeChoiceUnavailable:hover,
+.routeChoiceUnavailable:focus {
+  background: transparent;
 }
 
 .choiceText {

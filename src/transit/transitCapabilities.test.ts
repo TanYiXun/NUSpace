@@ -15,10 +15,11 @@ describe('transitCapabilities', () => {
     expect(getTransitCapability('nusIsbCrowdLevel')?.status).toBe('requires_official_access');
   });
 
-  it('keeps the static NUS shuttle route layer source pending', () => {
+  it('keeps NUS shuttle route geometry source pending', () => {
     expect(getTransitCapability('nusIsbStaticRoutes')).toMatchObject({
       status: 'source_pending',
       sourceId: 'nus-campus-map-shuttle-routes',
+      userFacingState: 'Blocked until permitted route geometry and verified stop positions are documented.',
     });
   });
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { d1StaticRoute, getNusIsbStaticRoute, nusIsbStaticRoutes } from './nusIsbStaticRoutes';
 
 describe('nusIsbStaticRoutes', () => {
-  it('defines a selectable D1 prototype route with stop sequence and route color', () => {
+  it('retains the historical D1 prototype route fixture with source-pending geometry', () => {
     expect(getNusIsbStaticRoute('D1')).toMatchObject({
       code: 'D1',
       name: 'D1 prototype route',

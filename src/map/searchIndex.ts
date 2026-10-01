@@ -36,28 +36,11 @@ type RawCampusPlace = {
   detail: string;
 };
 
-const routePrototypeEntity: SearchEntity = {
-  id: 'd1-route',
-  name: 'D1 prototype route',
-  aliases: ['d1', 'd1 route', 'shuttle to utown', 'bus to utown', 'prototype route'],
-  type: 'route',
-  coordinates: [103.7736, 1.2987],
-  zoom: 16.15,
-  pitch: 58,
-  bearing: -24,
-  subtitle: 'Prototype source-pending route',
-  sourceStatus: 'prototype-placeholder',
-  sourceId: 'manual-osm-d1-prototype-route',
-  sourceLabel: 'Manual D1 display corridor',
-  detail: 'Prototype route mode. No verified stop positions, live arrivals, live vehicle positions, or official source-confirmed route geometry.',
-};
-
 export const searchIndex: SearchEntity[] = [
   ...(campusPlaces.places as unknown as RawCampusPlace[]).map((place) => ({
     ...place,
     coordinates: place.coordinates as LngLatLike,
   })),
-  routePrototypeEntity,
 ];
 
 function normalizeSearchTerm(value: string) {

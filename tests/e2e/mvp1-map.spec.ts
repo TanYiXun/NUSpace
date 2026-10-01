@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('desktop separates MVP bus stop seed from prototype route overlay', async ({ page }, testInfo) => {
+test('desktop blocks NUS shuttle routes until source data exists', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
 
   await page.goto('/');
@@ -15,19 +15,13 @@ test('desktop separates MVP bus stop seed from prototype route overlay', async (
 
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /Bus stop seed/ })).toContainText('On');
-  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('Off');
-  await page.getByRole('button', { name: 'Close map layers' }).click();
   await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
-
-  await page.getByRole('button', { name: 'Change map layers' }).click();
-  await page.getByRole('button', { name: /Prototype route/ }).click();
-  await expect(page.getByRole('button', { name: /Prototype route/ })).toContainText('On');
+  await page.getByRole('button', { name: 'Close map layers' }).click();
 
   await page.getByRole('button', { name: 'View shuttle routes' }).click();
-  await page.getByRole('button', { name: /Show D1 prototype route/ }).click();
-  await expect(page.getByRole('heading', { name: 'D1 prototype route' })).toBeVisible();
-  await expect(page.getByText('No live or scheduled arrivals')).toBeVisible();
-  await expect(page.getByText('not official NUS shuttle geometry')).toBeVisible();
+  await expect(page.getByText('NUS shuttle routes unavailable')).toBeVisible();
+  await expect(page.getByText('Needs permitted route geometry and verified stop positions before display')).toBeVisible();
+  await expect(page.getByText('Blocked')).toBeVisible();
 });
 
 test('desktop renders public bus arrivals when the project endpoint returns live rows', async ({ page }, testInfo) => {

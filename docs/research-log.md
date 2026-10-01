@@ -70,7 +70,7 @@
 - Task: keep the MVP 1 transit layer honest while official NUS shuttle route geometry and live data remain unavailable.
 - Source checked: existing `manual-osm-d1-prototype-route` metadata and Phase 0 route data.
 - Finding: the current D1 route has `source_status=prototype-placeholder`, `can_ship=false`, and `review_status=prototype-only`.
-- Decision: keep OSM bus stop markers as the default visible transit seed and hide the simulated D1 corridor by default. The D1 corridor remains available only through explicit prototype route controls.
+- Decision: keep OSM bus stop markers as the default visible transit seed. The simulated D1 corridor was initially hidden behind explicit prototype controls, then superseded by the de-prototype checkpoint that removes normal user-facing paths into dummy NUS routing.
 - Confidence: high for truthful UI state, low for actual NUS route geometry until source-confirmed route data is added.
 
 ## 2026-09-18 - Phase 2 Transit Planning

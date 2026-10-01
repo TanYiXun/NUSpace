@@ -8,18 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `bus-stop-coordinate-truth`.
-- Latest `main` commit: `afc3497 Update handoff after Phase 4 review`.
+- Current branch: `main`.
+- Latest `main` commit: `703b30a Merge pull request #25 from TanYiXun/bus-stop-coordinate-truth`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: bus stop and prototype route truth-label refinement.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 14.0, Indoor Data Acquisition And QA Gate.
 - Current slice: Phase 5 is not started; indoor navigation is blocked on legal data and QA artifacts.
-- Current refinement: OSM bus stop points are now manual-reference seed markers with unverified-position UI wording; D1 is labelled as a prototype route, not a static route.
+- Latest refinement: OSM bus stop points are manual-reference seed markers with unverified-position UI wording; D1 is labelled as a prototype route, not a static route.
 - Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; Phase 5 indoor navigation is blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
@@ -256,14 +256,14 @@ Known build warning:
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
-- Current branch restores the opt-in D1 route surface to prototype route wording, documents NUS UCI and NUS Campus Map route-list sources, and keeps D1 geometry and stop positions source-pending with no live arrivals.
-- Merged PR #17 adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest known bus stop suggestions from existing curated places.
+- PR #25 restores the opt-in D1 route surface to prototype route wording, documents unverified OSM bus stop seed coordinates, and keeps D1 geometry and stop positions source-pending with no live arrivals.
+- Merged PR #17 adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest OSM seed stop suggestions from existing curated places.
 
 ## Next Recommended Action
 
-Complete the bus stop/route truth checkpoint before any next phase work. Recommended next options:
+Phase 5 indoor navigation and real NUS shuttle implementation are both blocked on data gates. Recommended next options:
 
-1. Commit, push, open, and merge the bus stop/route truth PR.
-2. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
+1. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
+2. For live NUS shuttle implementation, obtain official NUS/uNivUS/ConnectX access.
 3. For Phase 5 indoor navigation, collect legal indoor data and QA artifacts before implementation.
 4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 14.0, and docs/context-handoff.md, then continue.`

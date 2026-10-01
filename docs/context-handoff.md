@@ -8,21 +8,21 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `deprototype-map-transit-3d`.
-- Latest `main` commit: `88e9348 Update handoff after bus stop truth checkpoint`.
+- Current branch: `main`.
+- Latest `main` commit: `5637d7d Deprototype transit and 3D map surfaces (#26)`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: de-prototype map/transit/3D refinement.
+- Active uncommitted work: none.
 
 ## Current Phase
 
 - Active plan sections: `PLAN.md` section 11.2, section 13, section 13.1.1, and section 15.4.
-- Current slice: de-prototype current map, transit, and 3D surfaces before moving on.
+- Current slice: de-prototype map/transit/3D checkpoint is merged; next work should start from a fresh task.
 - Latest refinement: OSM bus stop points remain manual-reference seed markers with unverified-position UI wording; D1 prototype routing is no longer surfaced as normal route UI; terrain is shown only as blocked until source/license/alignment/performance are documented; OSM building footprints get procedural facade bands and roof caps for visual depth; `PLAN.md` now includes a one-building recognizable model and xray shell slice for NTU Map/Finute Maps style future work.
-- Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; this branch adds a stricter post-review truth checkpoint in `docs/decisions/deprototype-map-transit-3d.md`. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
+- Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; PR #26 added a stricter post-review truth checkpoint in `docs/decisions/deprototype-map-transit-3d.md`. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
-- The user has been reviewing the running local app. Restart the local preview from this branch before judging the UI.
+- The user has been reviewing the running local app. Local preview is expected at `http://127.0.0.1:5173/` from merged `main`.
 
 ## Current Phase 1 Slice
 
@@ -264,16 +264,18 @@ Known build warning:
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
 - PR #25 restored the opt-in D1 route surface to prototype route wording, documented unverified OSM bus stop seed coordinates, and kept D1 geometry and stop positions source-pending with no live arrivals.
-- Current branch supersedes that route surface by removing normal user-facing paths into dummy D1 routing and showing a blocked NUS shuttle route state instead.
+- PR #26 superseded that route surface by removing normal user-facing paths into dummy D1 routing and showing a blocked NUS shuttle route state instead. It also added procedural facade/roof depth for OSM building footprints, fixed blocked-route/layer menu overflow, added screenshots, and added `PLAN.md` section 13.1.1 for a one-building recognizable model and xray shell slice.
 - Merged PR #17 adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest OSM seed stop suggestions from existing curated places.
 
 ## Next Recommended Action
 
-De-prototype refinement should be completed and merged before starting new feature scope. Recommended next options:
+Start the next feature from a fresh task. Recommended next options:
 
-1. Finish checks and visual QA for `deprototype-map-transit-3d`, then push, open, and merge the checkpoint.
-2. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
-3. For NTU Map/Finute Maps style 3D, implement `PLAN.md` section 13.1.1 as a one-building recognizable model and xray shell slice before broad 3D expansion.
+1. For verified bus stop planting, read `PLAN.md` section 7.1, section 11.2, section 15.4, and this handoff. Do not mark stops verified without official/permitted data or a documented field-survey method.
+2. For NTU Map/Finute Maps style 3D, implement `PLAN.md` section 13.1.1 as a one-building recognizable model and xray shell slice before broad 3D expansion.
+3. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
 4. For terrain, document elevation source, license, alignment, mobile performance, and boundary treatment before implementation.
 5. For Phase 5 indoor navigation, collect legal indoor data and QA artifacts before implementation.
-6. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 13.1.1, section 15.4, and docs/context-handoff.md, then continue.`
+6. Fresh task prompt options:
+   - `Read AGENTS.md, PLAN.md section 7.1, section 11.2, section 15.4, and docs/context-handoff.md, then continue with verified bus stop planting.`
+   - `Read AGENTS.md, PLAN.md section 13.1.1, section 15.4, and docs/context-handoff.md, then continue with the one-building 3D xray slice.`

@@ -12,7 +12,7 @@ The implementation satisfies the required features:
 
 - Building extrusions are visible for the curated Kent Ridge key-area footprint set.
 - Selected buildings are highlighted in the 3D footprint layer, including non-COM3 buildings.
-- Existing static route overlays remain visible in pitched 3D view.
+- Existing prototype route overlays remain visible in pitched 3D view.
 - A restrained landmark material tint is applied only to sourced landmark names already present in the curated footprint data.
 - Selected building sheets expose levels, visual height, height-source status, and 3D-detail mode.
 

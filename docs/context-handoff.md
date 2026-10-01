@@ -8,17 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `1c6c233 Merge pull request #24 from TanYiXun/phase4-review`.
+- Current branch: `bus-stop-coordinate-truth`.
+- Latest `main` commit: `afc3497 Update handoff after Phase 4 review`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: bus stop and prototype route truth-label refinement.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` section 14.0, Indoor Data Acquisition And QA Gate.
 - Current slice: Phase 5 is not started; indoor navigation is blocked on legal data and QA artifacts.
+- Current refinement: OSM bus stop points are now manual-reference seed markers with unverified-position UI wording; D1 is labelled as a prototype route, not a static route.
 - Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; Phase 5 indoor navigation is blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Restart the local preview from updated `main` before judging the UI.
@@ -184,6 +185,11 @@ Phase 4 review is documented in:
 
 - `docs/decisions/phase-4-review.md`
 
+Bus stop and route truth checkpoint screenshots are in `docs/screenshots/`:
+
+- `bus-stop-coordinate-truth-mobile-selected.png`
+- `prototype-route-truth-desktop.png`
+
 ## Checks Last Run
 
 Latest checks passed on 2026-10-01:
@@ -245,18 +251,19 @@ Known build warning:
 - Phase 3 review PR #22 was pushed, opened, and merged to `main`; it records that the required NUSMods scope is complete with constraints.
 - Phase 4 3D campus detail PR #23 was pushed, opened with screenshots, and merged to `main`.
 - Phase 4 review PR #24 was pushed, opened, and merged to `main`; it records that the sourced 3D campus-detail scope is complete with constraints.
+- Current branch downgrades OSM bus stop seed coordinates to manual-reference, adds validation/tests for that boundary, and restores D1 to prototype route wording because route geometry and stop positions are unverified.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
-- Current branch renames the opt-in D1 route surface to static route mode, adds `src/transit/nusIsbStaticRoutes.ts`, documents NUS UCI and NUS Campus Map route-list sources, and keeps D1 geometry source-pending with no live arrivals.
+- Current branch restores the opt-in D1 route surface to prototype route wording, documents NUS UCI and NUS Campus Map route-list sources, and keeps D1 geometry and stop positions source-pending with no live arrivals.
 - Merged PR #17 adds NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest known bus stop suggestions from existing curated places.
 
 ## Next Recommended Action
 
-Phase 5 indoor navigation is blocked until the section 14.0 data gate has evidence. Recommended next options:
+Complete the bus stop/route truth checkpoint before any next phase work. Recommended next options:
 
-1. Collect or document legal floor-plan/data permission for one candidate building.
-2. Create the Phase 5 indoor data acquisition and QA artifacts before implementing indoor routing.
-3. Do not infer rooms, floors, corridors, lifts, accessibility paths, or indoor routes from venue codes or screenshots.
+1. Commit, push, open, and merge the bus stop/route truth PR.
+2. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
+3. For Phase 5 indoor navigation, collect legal indoor data and QA artifacts before implementation.
 4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 14.0, and docs/context-handoff.md, then continue.`

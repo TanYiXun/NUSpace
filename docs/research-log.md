@@ -112,8 +112,8 @@
 - Task: implement the next Phase 2 slice for static NUS shuttle route selection without claiming official route geometry or live timings.
 - Sources checked: NUS UCI Internal Shuttle Bus page and NUS Campus Map shuttle routes page.
 - Finding: NUS public pages confirm current ISB route families and point users to uNivUS for up-to-the-minute schedules and live locations, but the public pages do not provide a documented machine-readable route geometry or live-arrival API.
-- Decision: keep the existing D1 display corridor as a hidden source-pending static route layer. Rename the current route UI to `Static route`, show the D1 stop sequence, route color, and `Live arrivals unavailable`, and keep live NUS shuttle arrivals blocked.
-- Confidence: medium for the static route UI boundary, low for route geometry accuracy until official or permissioned source-confirmed geometry is available.
+- Decision: keep the existing D1 display corridor as a hidden source-pending prototype route layer. Show the D1 stop sequence only as unverified prototype data, keep route color for UI testing, and keep live NUS shuttle arrivals blocked.
+- Confidence: medium for the prototype route UI boundary, low for route geometry and stop-position accuracy until official or permissioned source-confirmed geometry is available.
 
 ## 2026-10-01 - Phase 3 NUSMods Module Lookup
 

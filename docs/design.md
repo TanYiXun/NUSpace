@@ -237,8 +237,8 @@ Accepted behavior:
 
 - The default sheet identifies the current checkpoint as Phase 1 data foundation.
 - Searchable place counts are visible and source-scoped.
-- OSM bus stop markers are selectable from the map layer and from search.
-- Selected OSM bus stops show source, status, and arrivals as `Not enabled`.
+- OSM bus stop seed markers are selectable from the map layer and from search.
+- Selected OSM bus stops show source, manual-reference status, unverified-position wording, and arrivals as `Not enabled`.
 - The UI does not imply official NUS shuttle timings, official NUS ISB route geometry, live vehicle positions, crowd level, indoor maps, or official NUS bus stop data.
 
 Known visual issues:
@@ -299,16 +299,16 @@ Accepted behavior:
 - The layer menu separates `Bus stop seed` from `Prototype route`.
 - The shuttle route menu labels route geometry as source pending.
 - Opening the D1 corridor explicitly describes it as prototype-only, simulated, not official route geometry, and not live.
-- OSM bus stop selected states continue to show source/status and `Arrivals: Not enabled`.
+- OSM bus stop selected states continue to show source/status, unverified coordinate wording, and `Arrivals: Not enabled`.
 
 Known visual issues:
 
 - The route UI still exists before verified NUS shuttle route geometry is available, so all D1 entry points must keep prototype wording.
 - The route sequence and coordinates remain Phase 0 prototype data, not an MVP route dataset.
 
-## Phase 2 NUS ISB Static Mode
+## Phase 2 NUS ISB Prototype Route Mode
 
-This checkpoint renames the opt-in D1 route surface from a prototype route control to a static, source-pending shuttle route mode. The route remains hidden by default and remains unsuitable as official geometry.
+This checkpoint keeps the opt-in D1 route surface as a prototype, source-pending shuttle route mode. The route remains hidden by default and remains unsuitable as official geometry or verified stop positions.
 
 Accepted visual checkpoints:
 
@@ -318,16 +318,16 @@ Accepted visual checkpoints:
 
 Accepted behavior:
 
-- The layer menu separates `Bus stop seed` from `Static route`.
-- The shuttle route menu offers `Show D1 static route`.
-- Opening D1 shows `Static route`, `Live arrivals unavailable`, and `Source pending` labels.
+- The layer menu separates `Bus stop seed` from `Prototype route`.
+- The shuttle route menu offers `Show D1 prototype route`.
+- Opening D1 shows `Prototype route`, no live or scheduled arrivals, and unverified geometry labels.
 - The displayed line is still manually curated placeholder geometry and is not live vehicle data.
-- No static route estimate is presented as an official live ETA.
+- No prototype route estimate is presented as an official live ETA.
 
 Known visual issues:
 
 - The D1 line and stop positions still need source-confirmed geometry before they can be treated as production route data.
-- Static mode currently exposes only the existing D1 display corridor; A1, A2, D2, K, P, R1, and R2 remain source-referenced but not displayable as route geometry.
+- Prototype mode currently exposes only the existing D1 display corridor; A1, A2, D2, K, P, R1, and R2 remain source-referenced but not displayable as route geometry.
 
 ## Phase 2 Public Bus Live Polish
 
@@ -433,6 +433,23 @@ Visual constraints:
 - Landmark tinting is a navigation cue, not decorative coloring.
 - Height values remain source-labelled and must not be treated as official architectural height.
 - Terrain remains out of scope until source, license, alignment, and performance are documented.
+
+## Bus Stop And Route Truth Checkpoint
+
+This checkpoint tightens transit truth labels after visual review showed the campus bus stop points should not be treated as accurate planted stops.
+
+Accepted visual checkpoints:
+
+- [Bus stop coordinate truth mobile selected](screenshots/bus-stop-coordinate-truth-mobile-selected.png).
+- [Prototype route truth desktop](screenshots/prototype-route-truth-desktop.png).
+
+Accepted behavior:
+
+- OSM bus stop markers are labelled as seed positions.
+- Selected bus stop sheets show `Position: Unverified seed` and `Source status: manual-reference`.
+- NUSMods nearest-stop helper copy says `Nearest OSM seed stop`.
+- The D1 route layer is labelled `Prototype route`, not `Static route`.
+- The D1 route detail sheet states that the displayed line and stop sequence are not official NUS shuttle geometry and have no verified stop positions.
 
 ## Phase 1 MVP Layout Polish
 

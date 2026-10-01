@@ -110,6 +110,12 @@ function validateCuratedPlace(place, index, seenIds) {
   if (place.sourceId.startsWith('osm-')) {
     assert(place.osm?.type && place.osm?.id, `${context} must preserve OSM object type and id`);
   }
+
+  if (place.type === 'bus_stop' && place.sourceId === 'osm-api-nus-kent-ridge-map') {
+    assert(place.sourceStatus === 'manual-reference', `${context} OSM bus stop seed must be manual-reference, not verified`);
+    assert(place.subtitle.includes('position unverified'), `${context} must disclose unverified bus stop position in subtitle`);
+    assert(place.detail.includes('not an official NUS ISB stop record'), `${context} must disclose bus stop seed limitations`);
+  }
 }
 
 function validateCuratedBuildingFootprint(feature, index) {

@@ -51,7 +51,7 @@ Known check warning:
   - Evidence: overview sheet reports `13 visible footprints`; `data/curated/mvp1-building-footprints.geojson` contains 13 OSM-sourced footprints.
 
 - [x] At least 8 NUS bus stops are visible.
-  - Evidence: overview sheet reports `10 OSM markers`; `data/curated/mvp1-campus-places.json` includes OSM-sourced bus stop entities.
+  - Evidence: overview sheet reports `10 OSM seed markers`; `data/curated/mvp1-campus-places.json` includes OSM-sourced bus stop seed entities.
   - Constraint: these are OSM community map bus stop points, not official NUS ISB stop records.
 
 - [x] At least one NUS shuttle route is visible.

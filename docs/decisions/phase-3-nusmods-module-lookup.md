@@ -13,7 +13,7 @@ NUSMods module lookup is available in the overview sheet:
 - Venue codes are normalized before matching.
 - Known venue prefixes map to curated campus places with confidence metadata.
 - Unknown venue codes remain unmapped.
-- Nearest known bus stop suggestions are shown when a mapped place exists.
+- Nearest OSM seed bus stop suggestions are shown when a mapped place exists.
 
 The implementation does not infer room-level data:
 

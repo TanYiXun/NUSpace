@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 5 indoor navigation is blocked at the data-acquisition and QA gate until legal floor-plan data, room/POI inventory, entrances, connectors, inaccessible/private areas, and QA notes exist for at least one building. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
+Current work: Phase 5 indoor navigation is blocked at the data-acquisition and QA gate until legal floor-plan data, room/POI inventory, entrances, connectors, inaccessible/private areas, and QA notes exist for at least one building. The D1 route is selectable only as an opt-in prototype route layer; its displayed line and stop sequence remain manually curated placeholder geometry and must not be treated as official route geometry or verified stop positions. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
 
 ## Commands
 
@@ -40,8 +40,8 @@ The current prototype includes only source-labelled NUS-area data:
 - COM3 footprint from OpenStreetMap relation `15780831`, with placeholder height.
 - MVP 1 Kent Ridge place seed from a bounded OpenStreetMap API extract, curated into `data/curated/mvp1-campus-places.json`.
 - MVP 1 Kent Ridge building footprints from OpenStreetMap way/full responses and the COM3 relation, curated into `data/curated/mvp1-building-footprints.geojson`.
-- Manually curated D1-style route and stops for static route UI and animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
-- OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
+- Manually curated D1-style route and stops for prototype route UI and animation testing only, hidden by default because it is not source-confirmed MVP route geometry or verified stop positions.
+- OSM-sourced bus stop seed markers for selectable map/search testing. Their positions are unverified manual-reference points, not official NUS ISB stop records or exact boarding points.
 
 No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment, refresh every 20 seconds while the app is open, and show per-arrival single/double-deck and wheelchair-accessible indicators when LTA provides them. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
 

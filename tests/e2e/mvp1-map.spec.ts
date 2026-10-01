@@ -127,11 +127,14 @@ test('desktop maps NUSMods module venues with confidence metadata', async ({ pag
   await page.goto('/');
   await page.getByRole('button', { name: 'Search' }).click();
 
-  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('BIZ2-0224');
-  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('BIZ2');
-  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('medium');
-  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('LT27');
-  await expect(page.getByLabel('NUSMods venue mappings')).toContainText('unknown');
+  await expect(page.getByText('Selected module')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'CS1010S' })).toBeVisible();
+  await expect(page.getByLabel('NUSMods selected module venue mappings')).toContainText('BIZ2-0224');
+  await expect(page.getByLabel('NUSMods selected module venue mappings')).toContainText('BIZ2');
+  await expect(page.getByLabel('NUSMods selected module venue mappings')).toContainText('medium');
+  await expect(page.getByLabel('NUSMods selected module venue mappings')).toContainText('LT27');
+  await expect(page.getByLabel('NUSMods selected module venue mappings')).toContainText('unknown');
+  await expect(page.getByText('room-level geometry')).toBeVisible();
 });
 
 test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {

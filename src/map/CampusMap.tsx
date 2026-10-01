@@ -79,7 +79,7 @@ const BUS_STOP_LAYER_IDS = [
 ];
 
 type LngLatPosition = [number, number];
-type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop';
+type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop' | 'module';
 type SheetState = 'collapsed' | 'half' | 'expanded';
 type LayerKey = 'buildings' | 'busStops' | 'prototypeRoute';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
@@ -462,7 +462,32 @@ export function CampusMap() {
       status: 'loading',
       message: 'Loading NUSMods module venues.',
     });
-    setNusModsModuleState(await fetchNusModsModuleUiState(moduleQuery));
+    const nextState = await fetchNusModsModuleUiState(moduleQuery);
+    setNusModsModuleState(nextState);
+
+    if (nextState.status !== 'ok') {
+      updateSheet('overview', 'half');
+      return;
+    }
+
+    const primaryMappedPlace = nextState.venues.find((venue) => venue.mapping.place)?.mapping.place;
+
+    setSelectedSearchEntity(null);
+    setSelectedBusStop(null);
+    setSearchResults([]);
+    setLayerMenuOpen(false);
+    setRouteMenuOpen(false);
+    updateSheet('module', 'expanded');
+
+    if (primaryMappedPlace && mapRef.current) {
+      mapRef.current.easeTo({
+        center: primaryMappedPlace.coordinates as LngLatPosition,
+        zoom: 17,
+        pitch: 52,
+        bearing: mapRef.current.getBearing(),
+        duration: 900,
+      });
+    }
   };
 
   const selectBusStop = useCallback((entity: SearchEntity) => {
@@ -1348,6 +1373,64 @@ export function CampusMap() {
               </p>
             </div>
           </>
+        ) : selectedPanel === 'module' && nusModsModuleState.status === 'ok' ? (
+          <>
+            <div className="sheetHeaderRow">
+              <div>
+                <p className="eyebrow">Selected module</p>
+                <h1>{nusModsModuleState.moduleCode}</h1>
+                <p>{nusModsModuleState.title}</p>
+              </div>
+              <div className="sheetActions">
+                <button className="sheetAction" type="button" aria-label="Collapse module details" title="Collapse module details" onClick={() => setSheetState('collapsed')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">keyboard_arrow_down</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Expand module details" title="Expand module details" onClick={() => setSheetState('expanded')}>
+                  <span className="material-symbols-outlined" aria-hidden="true">open_in_full</span>
+                </button>
+                <button className="sheetAction" type="button" aria-label="Close module details" title="Close module details" onClick={clearSelection}>
+                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
+                </button>
+              </div>
+            </div>
+            <dl className="buildingFacts">
+              <div>
+                <dt>Academic year</dt>
+                <dd>{nusModsModuleState.academicYear}</dd>
+              </div>
+              <div>
+                <dt>Venues</dt>
+                <dd>{nusModsModuleState.venueCount} unique</dd>
+              </div>
+              <div>
+                <dt>Source</dt>
+                <dd>{nusModsModuleState.sourceLabel}</dd>
+              </div>
+              <div>
+                <dt>Room detail</dt>
+                <dd>Not inferred</dd>
+              </div>
+            </dl>
+            <div className="moduleVenueRows moduleVenueRowsDetailed" aria-label="NUSMods selected module venue mappings">
+              {nusModsModuleState.venues.map((venue) => (
+                <div className="moduleVenueRow" key={venue.venue}>
+                  <span>
+                    <strong>{venue.venue}</strong>
+                    <small>
+                      {venue.lessonCount} lesson{venue.lessonCount === 1 ? '' : 's'} · {venue.mapping.place?.name ?? 'Unmapped venue'}
+                    </small>
+                    <small>
+                      {venue.mapping.nearestBusStop ? `Nearest known bus stop: ${venue.mapping.nearestBusStop.name}` : venue.mapping.note}
+                    </small>
+                  </span>
+                  <em data-confidence={venue.mapping.confidence}>{venue.mapping.confidence}</em>
+                </div>
+              ))}
+            </div>
+            <p className="truthNote">
+              Venue mappings come from NUSMods venue codes matched against curated campus place aliases. Confidence labels do not imply room-level geometry, indoor routing, live occupancy, or official NUS timetable routing.
+            </p>
+          </>
         ) : (
           <>
             <p className="eyebrow">Phase 3 venue intelligence</p>
@@ -1433,22 +1516,11 @@ export function CampusMap() {
               {nusModsModuleState.status === 'ok' ? (
                 <>
                   <p>
-                    {nusModsModuleState.moduleCode} · {nusModsModuleState.title} · {nusModsModuleState.venueCount} venues from {nusModsModuleState.sourceLabel}
+                    Found {nusModsModuleState.moduleCode} · {nusModsModuleState.venueCount} venues from {nusModsModuleState.sourceLabel}.
                   </p>
-                  <div className="moduleVenueRows" aria-label="NUSMods venue mappings">
-                    {nusModsModuleState.venues.map((venue) => (
-                      <div className="moduleVenueRow" key={venue.venue}>
-                        <span>
-                          <strong>{venue.venue}</strong>
-                          <small>
-                            {venue.mapping.place?.name ?? 'Unmapped venue'}
-                            {venue.mapping.nearestBusStop ? ` · nearest stop ${venue.mapping.nearestBusStop.name}` : ''}
-                          </small>
-                        </span>
-                        <em data-confidence={venue.mapping.confidence}>{venue.mapping.confidence}</em>
-                      </div>
-                    ))}
-                  </div>
+                  <button className="moduleOpenButton" type="button" onClick={() => updateSheet('module', 'expanded')}>
+                    View venue mappings
+                  </button>
                 </>
               ) : (
                 <p>{nusModsModuleState.message}</p>

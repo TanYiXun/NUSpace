@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useCallback, useEffect, useRef, useState, type CSSProperties, type FormEvent } from 'react';
 import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
@@ -12,6 +12,10 @@ import {
 } from '../transit/publicBusArrivals';
 import { defaultPublicBusStop } from '../transit/publicBusStops';
 import { d1StaticRoute } from '../transit/nusIsbStaticRoutes';
+import {
+  fetchNusModsModuleUiState,
+  type NusModsModuleUiState,
+} from '../nusmods/nusModsModuleLookup';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -88,6 +92,10 @@ const initialPublicBusArrivalState: PublicBusArrivalUiState = {
   cacheTtlSeconds: 0,
   arrivals: [],
   message: 'Checking the NUSpace public bus endpoint.',
+};
+const initialNusModsModuleState: NusModsModuleUiState = {
+  status: 'idle',
+  message: 'Search a module code to inspect lesson venues.',
 };
 
 function getPublicBusStatusLabel(state: PublicBusArrivalUiState) {
@@ -328,6 +336,10 @@ export function CampusMap() {
   const [publicBusArrivalState, setPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
     initialPublicBusArrivalState,
   );
+  const [moduleQuery, setModuleQuery] = useState('CS1010S');
+  const [nusModsModuleState, setNusModsModuleState] = useState<NusModsModuleUiState>(
+    initialNusModsModuleState,
+  );
   const stageStyle = {
     '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
   } as CSSProperties;
@@ -442,6 +454,15 @@ export function CampusMap() {
         timeout: 8_000,
       },
     );
+  };
+
+  const lookupNusModsModule = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setNusModsModuleState({
+      status: 'loading',
+      message: 'Loading NUSMods module venues.',
+    });
+    setNusModsModuleState(await fetchNusModsModuleUiState(moduleQuery));
   };
 
   const selectBusStop = useCallback((entity: SearchEntity) => {
@@ -1393,8 +1414,48 @@ export function CampusMap() {
                 <p>{publicBusArrivalState.message}</p>
               )}
             </div>
+            <form className="moduleLookupCard" aria-label="NUSMods module venue lookup" onSubmit={lookupNusModsModule}>
+              <div className="moduleLookupHeader">
+                <div>
+                  <strong>NUSMods venue lookup</strong>
+                  <span>Module venues mapped to known campus places</span>
+                </div>
+                <div className="moduleLookupControls">
+                  <input
+                    aria-label="Module code"
+                    value={moduleQuery}
+                    onChange={(event) => setModuleQuery(event.target.value)}
+                    placeholder="CS1010S"
+                  />
+                  <button type="submit">Search</button>
+                </div>
+              </div>
+              {nusModsModuleState.status === 'ok' ? (
+                <>
+                  <p>
+                    {nusModsModuleState.moduleCode} · {nusModsModuleState.title} · {nusModsModuleState.venueCount} venues from {nusModsModuleState.sourceLabel}
+                  </p>
+                  <div className="moduleVenueRows" aria-label="NUSMods venue mappings">
+                    {nusModsModuleState.venues.map((venue) => (
+                      <div className="moduleVenueRow" key={venue.venue}>
+                        <span>
+                          <strong>{venue.venue}</strong>
+                          <small>
+                            {venue.mapping.place?.name ?? 'Unmapped venue'}
+                            {venue.mapping.nearestBusStop ? ` · nearest stop ${venue.mapping.nearestBusStop.name}` : ''}
+                          </small>
+                        </span>
+                        <em data-confidence={venue.mapping.confidence}>{venue.mapping.confidence}</em>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <p>{nusModsModuleState.message}</p>
+              )}
+            </form>
             <p className="truthNote">
-              LTA public bus arrivals use the server-side adapter only. No live NUS shuttle API, official route geometry, indoor maps, or NUS shuttle real-time arrivals are enabled.
+              LTA public bus arrivals use the server-side adapter only. NUSMods venue mappings show confidence and never infer room-level detail. No live NUS shuttle API, official route geometry, indoor maps, or NUS shuttle real-time arrivals are enabled.
             </p>
             {locationStatus !== 'idle' ? (
               <p className="locationNote">

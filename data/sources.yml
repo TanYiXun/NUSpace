@@ -119,6 +119,31 @@ sources:
     limitations:
       - Page lists route controls but does not expose a documented public route geometry API
       - Does not provide live NUS ISB arrivals, crowd level, or live vehicle positions
+  - id: nusmods-public-api
+    name: NUSMods public API
+    source_owner: NUSMods
+    source_url: https://api.nusmods.com/v2/
+    documentation_url: https://github.com/nusmodifications/nusmods
+    terms_or_license_url: https://github.com/nusmodifications/nusmods/blob/master/LICENSE
+    license: MIT for NUSMods project; module data availability is provided through the public API
+    allowed_use: Phase 3 module lookup, lesson venue display, and venue-code mapping with confidence metadata
+    disallowed_use: Do not infer room-level geometry, indoor routes, current occupancy, or official venue coordinates from module venue codes alone
+    attribution_text: Module and timetable data from NUSMods public API
+    attribution_required: true
+    commercial_use_allowed: true
+    redistribution_allowed: true
+    derived_data_rules: Preserve academic year, module code, venue code, and mapping confidence; unknown venues must remain unmapped
+    date_checked: 2026-10-01
+    next_review_date: 2026-11-01
+    source_status: verified
+    used_for:
+      - Phase 3 NUSMods module lookup
+      - Phase 3 lesson venue summaries
+      - Phase 3 venue-code to campus-place mapping
+    limitations:
+      - Venue codes identify lesson locations but do not prove room geometry or indoor navigability
+      - Module data changes by academic year and semester
+      - Public API should be used responsibly and cached later if traffic grows
   - id: osm-api-nus-kent-ridge-map
     name: OpenStreetMap bounded NUS Kent Ridge extract
     source_owner: OpenStreetMap contributors

@@ -42,6 +42,20 @@ Before making any code, data, design, or documentation change:
 
 Read the full `PLAN.md` before starting a new milestone, creating an ADR, changing architecture, changing data-source policy, or declaring a phase complete.
 
+## 3.1 Context And Credit Discipline
+
+Keep continuation tasks lean. When a phase or PR checkpoint is approved or merged, prefer starting a fresh Codex task instead of carrying a long conversation forward. The fresh-task prompt should be concise, for example:
+
+```text
+Read AGENTS.md, PLAN.md section X, and docs/context-handoff.md, then continue.
+```
+
+Do not paste `AGENTS.md`, large `PLAN.md` excerpts, long command outputs, or screenshot attachments into a fresh task unless changing or reviewing that exact content. Treat `docs/context-handoff.md` as the memory bridge and keep it concise, current, and factual.
+
+Read only the relevant `PLAN.md` sections for ordinary task work. Read the full plan only in the cases listed above. Summarize command output instead of pasting logs; prefer `git diff --stat`, targeted checks, and concise endpoint summaries. Use browser automation documentation only when browser automation is actually needed.
+
+For visual work, capture screenshots at phase, prototype, or PR checkpoints, or when visual inspection is necessary to verify a UI change. For small non-visual changes, use notes or existing screenshots rather than creating new screenshot sets.
+
 ## 4. Project Phasing Is Mandatory
 
 Do not jump directly into the full MVP.
@@ -250,7 +264,7 @@ If a selectable map feature is implemented, it must be selectable directly on th
 
 ## 11. UI Review Requirements
 
-Any UI-affecting task must produce screenshots or visual notes for relevant states:
+Any UI-affecting task must produce screenshots or visual notes for relevant states. Capture fresh screenshots when the task is a phase, prototype, or PR checkpoint, or when visual inspection is necessary to verify the change:
 
 - mobile campus overview
 - selected building

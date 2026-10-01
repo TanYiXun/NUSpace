@@ -12,6 +12,9 @@ export type PublicBusArrivalUiState = {
   busStopCode?: string;
   arrivalCount: number;
   message: string;
+  cacheHit: boolean;
+  cacheTtlSeconds: number;
+  arrivals: PublicBusArrivalUiService[];
 };
 
 type PublicBusArrivalApiResponse = {
@@ -19,19 +22,45 @@ type PublicBusArrivalApiResponse = {
   sourceLabel?: string;
   busStopCode?: string;
   fetchedAt?: string;
-  arrivals?: unknown[];
+  cache?: {
+    hit?: boolean;
+    ttlSeconds?: number;
+  };
+  arrivals?: PublicBusArrivalUiService[];
   message?: string;
+};
+
+export type PublicBusArrivalUiEstimate = {
+  sequence: 1 | 2 | 3;
+  estimatedArrival: string | null;
+  estimatedArrivalMinutes: number | null;
+  load: string | null;
+  type: string | null;
+  feature: string | null;
+  latitude: number | null;
+  longitude: number | null;
+  isStale: boolean;
+};
+
+export type PublicBusArrivalUiService = {
+  serviceNo: string;
+  operator: string;
+  nextBuses: PublicBusArrivalUiEstimate[];
 };
 
 export function toPublicBusArrivalUiState(payload: PublicBusArrivalApiResponse): PublicBusArrivalUiState {
   const status = payload.status ?? 'upstream_error';
+  const arrivals = Array.isArray(payload.arrivals) ? payload.arrivals : [];
 
   return {
     status,
     sourceLabel: payload.sourceLabel ?? 'LTA DataMall public bus data',
     fetchedAt: payload.fetchedAt,
     busStopCode: payload.busStopCode,
-    arrivalCount: Array.isArray(payload.arrivals) ? payload.arrivals.length : 0,
+    arrivalCount: arrivals.length,
+    cacheHit: payload.cache?.hit ?? false,
+    cacheTtlSeconds: payload.cache?.ttlSeconds ?? 0,
+    arrivals,
     message: payload.message ?? (
       status === 'ok'
         ? 'Arrival response received.'
@@ -56,6 +85,9 @@ export async function fetchPublicBusArrivalUiState(
       sourceLabel: 'LTA DataMall public bus data',
       busStopCode,
       arrivalCount: 0,
+      cacheHit: false,
+      cacheTtlSeconds: 0,
+      arrivals: [],
       message: 'Unable to reach the NUSpace public bus endpoint.',
     };
   }

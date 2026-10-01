@@ -469,6 +469,13 @@ input {
   background: rgb(255 255 255 / 74%);
 }
 
+.transitStatusHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .transitStatusCard strong {
   display: block;
   color: #1c2b36;
@@ -482,6 +489,67 @@ input {
   color: #5a6977;
   font-size: 12px;
   line-height: 1.36;
+}
+
+.transitStatusPill {
+  flex: 0 0 auto;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: #edf3f6;
+  color: #354657;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.publicBusRows {
+  display: grid;
+  gap: 6px;
+}
+
+.publicBusRow {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 9px;
+  padding: 8px;
+  border: 1px solid #e2e9ee;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.publicBusService {
+  display: inline-grid;
+  min-width: 34px;
+  height: 28px;
+  place-items: center;
+  border-radius: 6px;
+  background: #285f9f;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.publicBusTimes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.publicBusTime {
+  min-width: 42px;
+  color: #1b2a35;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.publicBusTime[data-stale='true'] {
+  color: #8a4e1f;
+}
+
+.publicBusMeta {
+  color: #5b6b7a;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .etaRows {

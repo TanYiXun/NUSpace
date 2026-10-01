@@ -19,6 +19,7 @@ describe('searchEntities', () => {
     expect(searchIndex.length).toBeGreaterThanOrEqual(20);
     expect(searchIndex.filter((entity) => entity.type === 'building')).toHaveLength(13);
     expect(searchIndex.filter((entity) => entity.type === 'bus_stop')).toHaveLength(10);
+    expect(searchIndex.filter((entity) => entity.type === 'route')).toHaveLength(0);
   });
 
   it('keeps OSM bus stop coordinates labelled as unverified seed references', () => {

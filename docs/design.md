@@ -278,7 +278,7 @@ Known visual issues:
 
 ## Phase 1 MVP Transit Truth Layer
 
-This checkpoint separates MVP transit data from prototype transit animation. OSM bus stop markers remain available by default as sourced map data. The D1 corridor is retained only as an opt-in prototype overlay for animation and route UI testing.
+This historical checkpoint separated MVP transit data from prototype transit animation. OSM bus stop markers remained available by default as sourced map data. The D1 corridor was retained only as an opt-in prototype overlay for animation and route UI testing, but that user-facing route surface is superseded by the de-prototype checkpoint below.
 
 Accepted visual checkpoints:
 
@@ -293,7 +293,7 @@ Capture source:
 - Desktop viewport: default in-app browser viewport, captured at 1280 x 720.
 - Mobile viewport: 390 x 844.
 
-Accepted behavior:
+Historical accepted behavior:
 
 - The default map does not show the D1 prototype route.
 - The layer menu separates `Bus stop seed` from `Prototype route`.
@@ -301,14 +301,14 @@ Accepted behavior:
 - Opening the D1 corridor explicitly describes it as prototype-only, simulated, not official route geometry, and not live.
 - OSM bus stop selected states continue to show source/status, unverified coordinate wording, and `Arrivals: Not enabled`.
 
-Known visual issues:
+Superseded behavior:
 
-- The route UI still exists before verified NUS shuttle route geometry is available, so all D1 entry points must keep prototype wording.
 - The route sequence and coordinates remain Phase 0 prototype data, not an MVP route dataset.
+- Current UI must block NUS shuttle routes until permitted geometry and verified stop positions exist.
 
 ## Phase 2 NUS ISB Prototype Route Mode
 
-This checkpoint keeps the opt-in D1 route surface as a prototype, source-pending shuttle route mode. The route remains hidden by default and remains unsuitable as official geometry or verified stop positions.
+This historical checkpoint kept the opt-in D1 route surface as a prototype, source-pending shuttle route mode. It is superseded by the de-prototype checkpoint below because the current product surface should not expose dummy NUS routing.
 
 Accepted visual checkpoints:
 
@@ -316,7 +316,7 @@ Accepted visual checkpoints:
 - [Phase 2 ISB static route detail desktop](screenshots/phase2-isb-static-route-detail-desktop.png).
 - [Phase 2 ISB static route detail mobile](screenshots/phase2-isb-static-route-detail-mobile.png).
 
-Accepted behavior:
+Historical accepted behavior:
 
 - The layer menu separates `Bus stop seed` from `Prototype route`.
 - The shuttle route menu offers `Show D1 prototype route`.
@@ -450,6 +450,32 @@ Accepted behavior:
 - NUSMods nearest-stop helper copy says `Nearest OSM seed stop`.
 - The D1 route layer is labelled `Prototype route`, not `Static route`.
 - The D1 route detail sheet states that the displayed line and stop sequence are not official NUS shuttle geometry and have no verified stop positions.
+
+## De-Prototype Map, Transit, And 3D Surfaces
+
+This checkpoint removes normal user paths into the dummy D1 route and moves the current UI toward source-backed map detail. It does not claim official NUS shuttle routing, exact planted bus stop positions, terrain, indoor routing, or NTU Map-quality custom building meshes.
+
+Accepted behavior:
+
+- The shuttle route menu shows `NUS shuttle routes unavailable` until permitted route geometry and verified stop positions exist.
+- The layer menu no longer offers a `Prototype route` toggle.
+- Terrain appears only as a blocked layer note until elevation source, license, alignment, and mobile performance are documented.
+- OSM building footprints render procedural facade bands and roof caps for visual depth.
+- Building detail copy keeps the procedural nature visible and does not claim official architectural models.
+- OSM bus stop markers remain seed positions, not exact boarding points.
+
+Accepted visual checkpoints:
+
+- [De-prototype shuttle routes blocked desktop](screenshots/deprototype-shuttle-routes-blocked-desktop.png).
+- [De-prototype terrain blocked layers desktop](screenshots/deprototype-terrain-blocked-layers-desktop.png).
+- [De-prototype 3D buildings desktop](screenshots/deprototype-3d-buildings-desktop.png).
+
+Visual constraints:
+
+- Procedural facade bands and roof caps are depth cues, not official building models.
+- Do not compare the current slab-derived footprint render as complete against NTU Map. NTU Map-like quality requires building-specific modelling, reviewed sources, and a separate checkpoint.
+- The next NTU Map/Finute Maps style target is a one-building recognizable model and xray shell with floor selector, tracked in `PLAN.md` section 13.1.1.
+- No shuttle route line, stop sequence, live vehicle marker, or route ETA may be shown as a current feature until the data gate passes.
 
 ## Phase 1 MVP Layout Polish
 

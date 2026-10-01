@@ -14,7 +14,7 @@ Do not promote the current campus bus stop markers or D1 route display into prod
 
 The current bus stop markers are OSM seed coordinates. They are useful for map/search interaction and rough campus context, but their exact boarding-point positions are unverified. They are now labelled `manual-reference` in the curated place seed and exposed in the UI as unverified seed positions.
 
-The current D1 line remains an opt-in prototype route. It is not a static production route because both its route geometry and stop positions are not source-confirmed.
+The current D1 line was previously kept as an opt-in prototype route. It is not a static production route because both its route geometry and stop positions are not source-confirmed. The de-prototype checkpoint now removes normal user-facing paths into that dummy route until permitted route geometry and verified stop positions exist.
 
 ## Implementation
 
@@ -22,7 +22,7 @@ The current D1 line remains an opt-in prototype route. It is not a static produc
 - Selected bus stop sheets show `Position: Unverified seed`.
 - Layer and overview copy refer to `OSM seed markers`.
 - NUSMods venue rows say `Nearest OSM seed stop`.
-- The D1 surface is labelled `Prototype route`, not `Static route`.
+- The D1 surface is not exposed as a normal current route layer.
 - Data validation fails if OSM bus stop seeds are marked as `verified`.
 
 ## Screenshots

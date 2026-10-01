@@ -1088,6 +1088,50 @@ Improve the visual campus model while keeping performance acceptable.
 - Selected building highlighting.
 - Optional terrain if it improves navigation and does not harm performance.
 
+### 13.1.1 Recognizable Building Model And Xray Slice
+
+The current MapLibre `fill-extrusion` path is not enough for NTU Map or Finute Maps style campus recognition. It proves footprint alignment and basic selection only. Add a follow-up slice before broad 3D expansion:
+
+Goal:
+
+Build one legally sourced, recognizable NUS building model with a selected-building xray shell and floor selector.
+
+Recommended target:
+
+- COM 3, Central Library, or another building where source permission and floor metadata are easiest to verify.
+
+Required artifacts:
+
+- building footprint and height source
+- visible massing reference or permissioned model source
+- floor count and naming convention
+- public entrances and outdoor connection points
+- floor selector labels
+- explicit source/confidence metadata
+- visual QA screenshots against the NTU Map/Finute Maps reference
+
+Implementation options:
+
+- MapLibre custom layer with Three.js for one GLTF or procedural mesh
+- deck.gl `ScenegraphLayer` or equivalent only if it integrates cleanly with map camera
+- multi-part GeoJSON extrusions only when the building can be represented accurately enough without pretending to be a real model
+
+Xray rules:
+
+- A floor selector may be implemented once floor names/counts are verified.
+- Do not show rooms, corridors, toilets, lifts, labs, or indoor POIs until `PLAN.md` section 14.0 passes for that building.
+- If floor plans are not legally available, xray mode may show only a translucent shell and verified floor list, labelled as `building shell only`.
+- Do not copy NTU Map, Finute Maps, Apple Maps, Google Maps, uNivUS, or any proprietary 3D assets, icons, textures, labels, routes, floor plans, or interaction data.
+
+Acceptance criteria:
+
+- The selected building looks recognizably different from a plain slab.
+- The model aligns with the base map and selected footprint.
+- The floor selector does not overflow on mobile or desktop.
+- The UI clearly states whether it is a shell-only model or verified indoor detail.
+- The implementation remains performant on mobile.
+- The review states whether the one-building result is good enough to scale.
+
 ### 13.2 Terrain Guidance
 
 Terrain is optional. Test before committing.

@@ -2,8 +2,6 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Form
 import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
-import d1RouteRaw from '../../data/prototype/d1-route.geojson?raw';
-import d1StopsRaw from '../../data/prototype/d1-stops.geojson?raw';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
@@ -13,7 +11,6 @@ import {
   type PublicBusArrivalUiState,
 } from '../transit/publicBusArrivals';
 import { defaultPublicBusStop } from '../transit/publicBusStops';
-import { d1StaticRoute } from '../transit/nusIsbStaticRoutes';
 import {
   fetchNusModsModuleUiState,
   type NusModsModuleUiState,
@@ -22,7 +19,10 @@ import {
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
 const CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID = 'mvp1-building-footprints';
+const CAMPUS_BUILDING_DETAIL_SOURCE_ID = 'mvp1-building-visual-detail';
 const CAMPUS_BUILDING_EXTRUSION_LAYER_ID = 'mvp1-building-extrusions';
+const CAMPUS_BUILDING_FACADE_BANDS_LAYER_ID = 'mvp1-building-facade-bands';
+const CAMPUS_BUILDING_ROOF_CAPS_LAYER_ID = 'mvp1-building-roof-caps';
 const CAMPUS_BUILDING_OUTLINE_LAYER_ID = 'mvp1-building-outlines';
 const CAMPUS_BUILDING_LABEL_LAYER_ID = 'mvp1-building-labels';
 const COM3_EXTRUSION_LAYER_ID = 'prototype-com3-extrusion';
@@ -30,28 +30,15 @@ const COM3_FLOOR_BANDS_LAYER_ID = 'prototype-com3-floor-bands';
 const COM3_ROOF_CAP_LAYER_ID = 'prototype-com3-roof-cap';
 const COM3_OUTLINE_LAYER_ID = 'prototype-com3-outline';
 const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
-const D1_ROUTE_SOURCE_ID = 'prototype-d1-route';
-const D1_STOPS_SOURCE_ID = 'prototype-d1-stops';
-const D1_BUS_SOURCE_ID = 'prototype-d1-simulated-bus';
 const CAMPUS_BUS_STOPS_SOURCE_ID = 'mvp1-campus-bus-stops';
 const USER_LOCATION_SOURCE_ID = 'user-location';
-const D1_ROUTE_CASING_LAYER_ID = 'prototype-d1-route-casing';
-const D1_ROUTE_LAYER_ID = 'prototype-d1-route-line';
-const D1_ROUTE_ARROWS_LAYER_ID = 'prototype-d1-route-arrows';
-const D1_STOP_CIRCLES_LAYER_ID = 'prototype-d1-stop-circles';
-const D1_STOP_LABELS_LAYER_ID = 'prototype-d1-stop-labels';
-const D1_BUS_CIRCLE_LAYER_ID = 'prototype-d1-bus-circle';
-const D1_BUS_LABEL_LAYER_ID = 'prototype-d1-bus-label';
 const CAMPUS_BUS_STOP_CIRCLES_LAYER_ID = 'mvp1-campus-bus-stop-circles';
 const CAMPUS_BUS_STOP_LABELS_LAYER_ID = 'mvp1-campus-bus-stop-labels';
 const USER_LOCATION_ACCURACY_LAYER_ID = 'user-location-accuracy';
 const USER_LOCATION_DOT_LAYER_ID = 'user-location-dot';
 const PUBLIC_BUS_REFRESH_MS = 20_000;
 const com3Building = JSON.parse(com3BuildingRaw) as GeoJSON.FeatureCollection;
-const d1Route = JSON.parse(d1RouteRaw) as GeoJSON.FeatureCollection;
-const d1Stops = JSON.parse(d1StopsRaw) as GeoJSON.FeatureCollection;
 const COM3_FEATURE_ID = 'prototype_com3_osm_relation_15780831';
-const D1_ANIMATION_DURATION_MS = 26000;
 const mvp1BuildingFootprints = JSON.parse(mvp1BuildingFootprintsRaw) as GeoJSON.FeatureCollection;
 const campusBuildingFootprints = {
   ...mvp1BuildingFootprints,
@@ -65,6 +52,8 @@ const landmarkBuildingNames = [
 ];
 const BUILDING_LAYER_IDS = [
   CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
+  CAMPUS_BUILDING_FACADE_BANDS_LAYER_ID,
+  CAMPUS_BUILDING_ROOF_CAPS_LAYER_ID,
   CAMPUS_BUILDING_OUTLINE_LAYER_ID,
   CAMPUS_BUILDING_LABEL_LAYER_ID,
   COM3_EXTRUSION_LAYER_ID,
@@ -73,24 +62,15 @@ const BUILDING_LAYER_IDS = [
   COM3_OUTLINE_LAYER_ID,
   COM3_LABEL_LAYER_ID,
 ];
-const PROTOTYPE_ROUTE_LAYER_IDS = [
-  D1_ROUTE_CASING_LAYER_ID,
-  D1_ROUTE_LAYER_ID,
-  D1_ROUTE_ARROWS_LAYER_ID,
-  D1_STOP_CIRCLES_LAYER_ID,
-  D1_STOP_LABELS_LAYER_ID,
-  D1_BUS_CIRCLE_LAYER_ID,
-  D1_BUS_LABEL_LAYER_ID,
-];
 const BUS_STOP_LAYER_IDS = [
   CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
   CAMPUS_BUS_STOP_LABELS_LAYER_ID,
 ];
 
 type LngLatPosition = [number, number];
-type SelectedPanel = 'overview' | 'route' | 'building' | 'search' | 'busStop' | 'module';
+type SelectedPanel = 'overview' | 'building' | 'search' | 'busStop' | 'module';
 type SheetState = 'collapsed' | 'half' | 'expanded';
-type LayerKey = 'buildings' | 'busStops' | 'prototypeRoute';
+type LayerKey = 'buildings' | 'busStops';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
 type BuildingVisualMetadata = {
   id: string;
@@ -254,83 +234,70 @@ function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.Fea
 
 const com3VisualDetails = createCom3VisualDetails(com3Building);
 
-function getFirstSymbolLayerId(map: maplibregl.Map) {
-  return map.getStyle().layers?.find((layer) => layer.type === 'symbol')?.id;
-}
+function createCampusBuildingVisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
+  const features = source.features.flatMap((feature) => {
+    const properties = feature.properties ?? {};
 
-function getD1RouteCoordinates(): LngLatPosition[] {
-  const routeFeature = d1Route.features[0];
-
-  if (!routeFeature || routeFeature.geometry.type !== 'LineString') {
-    return [];
-  }
-
-  return routeFeature.geometry.coordinates as LngLatPosition[];
-}
-
-function getSegmentDistance(start: LngLatPosition, end: LngLatPosition) {
-  const lngDistance = (end[0] - start[0]) * 111_320;
-  const latDistance = (end[1] - start[1]) * 110_540;
-
-  return Math.hypot(lngDistance, latDistance);
-}
-
-function interpolateRoutePosition(routeCoordinates: LngLatPosition[], progress: number): LngLatPosition {
-  if (routeCoordinates.length === 0) {
-    return [103.77345, 1.29474];
-  }
-
-  const segmentDistances = routeCoordinates.slice(0, -1).map((coordinate, index) => (
-    getSegmentDistance(coordinate, routeCoordinates[index + 1])
-  ));
-  const totalDistance = segmentDistances.reduce((sum, distance) => sum + distance, 0);
-  const targetDistance = progress * totalDistance;
-  let walkedDistance = 0;
-
-  for (let index = 0; index < segmentDistances.length; index += 1) {
-    const segmentDistance = segmentDistances[index];
-    const nextWalkedDistance = walkedDistance + segmentDistance;
-
-    if (targetDistance <= nextWalkedDistance || index === segmentDistances.length - 1) {
-      const start = routeCoordinates[index];
-      const end = routeCoordinates[index + 1];
-      const segmentProgress = segmentDistance === 0
-        ? 0
-        : (targetDistance - walkedDistance) / segmentDistance;
-
-      return [
-        start[0] + (end[0] - start[0]) * segmentProgress,
-        start[1] + (end[1] - start[1]) * segmentProgress,
-      ];
+    if (typeof feature.id !== 'string' || feature.geometry.type !== 'Polygon') {
+      return [];
     }
 
-    walkedDistance = nextWalkedDistance;
-  }
+    const heightMeters = typeof properties.height_m === 'number' ? properties.height_m : 0;
+    const sourceId = typeof properties.source_id === 'string' ? properties.source_id : 'unknown';
 
-  return routeCoordinates[routeCoordinates.length - 1];
-}
+    if (heightMeters < 10) {
+      return [];
+    }
 
-function createSimulatedBusFeature(coordinates: LngLatPosition): GeoJSON.FeatureCollection {
+    const bandCount = Math.min(Math.max(Math.floor(heightMeters / 8), 1), 5);
+    const bandFeatures = Array.from({ length: bandCount }, (_, index) => {
+      const baseHeight = Math.round(((index + 1) * heightMeters) / (bandCount + 1) * 10) / 10;
+
+      return {
+        type: 'Feature' as const,
+        id: `${feature.id}_facade_band_${index + 1}`,
+        properties: {
+          name: 'Campus building facade band',
+          source_id: sourceId,
+          visual_source_status: 'prototype-placeholder',
+          building_id: feature.id,
+          base_m: baseHeight,
+          height_m: baseHeight + 0.22,
+          note: 'Procedural facade band generated from a sourced OSM footprint for visual depth only.',
+        },
+        geometry: feature.geometry,
+      };
+    });
+
+    return [
+      ...bandFeatures,
+      {
+        type: 'Feature' as const,
+        id: `${feature.id}_roof_cap`,
+        properties: {
+          name: 'Campus building roof cap',
+          source_id: sourceId,
+          visual_source_status: 'prototype-placeholder',
+          building_id: feature.id,
+          base_m: heightMeters,
+          height_m: heightMeters + 0.45,
+          note: 'Procedural roof cap generated from a sourced OSM footprint for visual depth only.',
+        },
+        geometry: feature.geometry,
+      },
+    ];
+  });
+
   return {
     type: 'FeatureCollection',
-    features: [
-      {
-        type: 'Feature',
-        id: 'prototype_d1_simulated_vehicle',
-        properties: {
-          name: 'Simulated D1 bus',
-          route_code: 'D1',
-          source_status: 'prototype-placeholder',
-          is_live: false,
-          note: 'Animated prototype marker only. Not a live NUS shuttle position.',
-        },
-        geometry: {
-          type: 'Point',
-          coordinates,
-        },
-      },
-    ],
+    features,
   };
+}
+
+const campusBuildingVisualDetails = createCampusBuildingVisualDetails(campusBuildingFootprints);
+
+function getFirstSymbolLayerId(map: maplibregl.Map) {
+  return map.getStyle().layers?.find((layer) => layer.type === 'symbol')?.id;
 }
 
 function createUserLocationFeature(coordinates: LngLatPosition, accuracy: number): GeoJSON.FeatureCollection {
@@ -384,7 +351,6 @@ const campusBuildingFootprintCount = mvp1BuildingFootprints.features.length;
 export function CampusMap() {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
   const selectedCampusBuildingRef = useRef<string | null>(null);
   const [mapState, setMapState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [selectedPanel, setSelectedPanel] = useState<SelectedPanel>('overview');
@@ -398,7 +364,6 @@ export function CampusMap() {
   const [visibleLayers, setVisibleLayers] = useState<Record<LayerKey, boolean>>({
     buildings: true,
     busStops: true,
-    prototypeRoute: false,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
   const [publicBusArrivalState, setPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
@@ -478,35 +443,10 @@ export function CampusMap() {
     const nextValue = !visibleLayers[layer];
     const layerIds = layer === 'buildings'
       ? BUILDING_LAYER_IDS
-      : layer === 'busStops'
-        ? BUS_STOP_LAYER_IDS
-        : PROTOTYPE_ROUTE_LAYER_IDS;
+      : BUS_STOP_LAYER_IDS;
 
     setVisibleLayers((current) => ({ ...current, [layer]: nextValue }));
     setMapLayerVisibility(layerIds, nextValue);
-  };
-
-  const focusRoute = () => {
-    const map = mapRef.current;
-
-    setSelectedSearchEntity(null);
-    setSelectedBusStop(null);
-    setVisibleLayers((current) => ({ ...current, prototypeRoute: true }));
-    setMapLayerVisibility(PROTOTYPE_ROUTE_LAYER_IDS, true);
-    updateSheet('route', 'half');
-    setRouteMenuOpen(false);
-    setLayerMenuOpen(false);
-    setSelectedBuildingState(null);
-
-    if (map) {
-      map.easeTo({
-        center: [103.77295, 1.29864],
-        zoom: 15.8,
-        pitch: 54,
-        bearing: -24,
-        duration: 900,
-      });
-    }
   };
 
   const focusCurrentLocation = () => {
@@ -597,7 +537,7 @@ export function CampusMap() {
 
     setSelectedSearchEntity(entity);
     setSelectedBusStop(entity.type === 'bus_stop' ? entity : null);
-    updateSheet(entity.id === 'com3' ? 'building' : entity.type === 'bus_stop' ? 'busStop' : entity.type === 'route' ? 'route' : 'search');
+    updateSheet(entity.id === 'com3' ? 'building' : entity.type === 'bus_stop' ? 'busStop' : 'search');
     setSearchQuery(entity.name);
     setSearchResults([]);
     setLayerMenuOpen(false);
@@ -613,13 +553,8 @@ export function CampusMap() {
       });
 
       setSelectedBuildingState(entity.type === 'building' ? entity.id : null);
-
-      if (entity.type === 'route') {
-        setVisibleLayers((current) => ({ ...current, prototypeRoute: true }));
-        setMapLayerVisibility(PROTOTYPE_ROUTE_LAYER_IDS, true);
-      }
     }
-  }, [setMapLayerVisibility, setSelectedBuildingState, updateSheet]);
+  }, [setSelectedBuildingState, updateSheet]);
 
   useEffect(() => {
     let isCurrent = true;
@@ -682,21 +617,9 @@ export function CampusMap() {
         data: campusBuildingFootprints,
       });
 
-      const d1RouteCoordinates = getD1RouteCoordinates();
-
-      map.addSource(D1_ROUTE_SOURCE_ID, {
+      map.addSource(CAMPUS_BUILDING_DETAIL_SOURCE_ID, {
         type: 'geojson',
-        data: d1Route,
-      });
-
-      map.addSource(D1_STOPS_SOURCE_ID, {
-        type: 'geojson',
-        data: d1Stops,
-      });
-
-      map.addSource(D1_BUS_SOURCE_ID, {
-        type: 'geojson',
-        data: createSimulatedBusFeature(interpolateRoutePosition(d1RouteCoordinates, 0)),
+        data: campusBuildingVisualDetails,
       });
 
       map.addSource(CAMPUS_BUS_STOPS_SOURCE_ID, {
@@ -762,6 +685,42 @@ export function CampusMap() {
             0.94,
             0.72,
           ],
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: CAMPUS_BUILDING_FACADE_BANDS_LAYER_ID,
+        type: 'fill-extrusion',
+        source: CAMPUS_BUILDING_DETAIL_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'Campus building facade band'],
+        minzoom: 15.4,
+        paint: {
+          'fill-extrusion-color': '#ede9df',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 15.4, 0.38, 17, 0.7],
+          'fill-extrusion-vertical-gradient': false,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: CAMPUS_BUILDING_ROOF_CAPS_LAYER_ID,
+        type: 'fill-extrusion',
+        source: CAMPUS_BUILDING_DETAIL_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'Campus building roof cap'],
+        minzoom: 15,
+        paint: {
+          'fill-extrusion-color': [
+            'match',
+            ['get', 'building_id'],
+            ['central-library-building', 'university-cultural-centre', 'create-tower', 'education-resource-centre'],
+            '#d0c9bd',
+            '#bbb9b1',
+          ],
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': ['interpolate', ['linear'], ['zoom'], 15, 0.48, 17, 0.76],
+          'fill-extrusion-vertical-gradient': false,
         },
       }, firstSymbolLayerId);
 
@@ -866,87 +825,6 @@ export function CampusMap() {
       });
 
       map.addLayer({
-        id: D1_ROUTE_CASING_LAYER_ID,
-        type: 'line',
-        source: D1_ROUTE_SOURCE_ID,
-        layout: {
-          'line-cap': 'round',
-          'line-join': 'round',
-        },
-        paint: {
-          'line-color': '#ffffff',
-          'line-width': ['interpolate', ['linear'], ['zoom'], 14, 5, 18, 10],
-          'line-opacity': 0.86,
-        },
-      });
-
-      map.addLayer({
-        id: D1_ROUTE_LAYER_ID,
-        type: 'line',
-        source: D1_ROUTE_SOURCE_ID,
-        layout: {
-          'line-cap': 'round',
-          'line-join': 'round',
-        },
-        paint: {
-          'line-color': '#8d55c7',
-          'line-width': ['interpolate', ['linear'], ['zoom'], 14, 3, 18, 6],
-          'line-opacity': 0.78,
-        },
-      });
-
-      map.addLayer({
-        id: D1_ROUTE_ARROWS_LAYER_ID,
-        type: 'symbol',
-        source: D1_ROUTE_SOURCE_ID,
-        layout: {
-          'symbol-placement': 'line',
-          'symbol-spacing': 90,
-          'text-field': '>',
-          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 11, 18, 16],
-          'text-font': ['Open Sans Semibold'],
-          'text-keep-upright': false,
-        },
-        paint: {
-          'text-color': '#5c2a91',
-          'text-halo-color': '#ffffff',
-          'text-halo-width': 1.2,
-        },
-      });
-
-      map.addLayer({
-        id: D1_STOP_CIRCLES_LAYER_ID,
-        type: 'circle',
-        source: D1_STOPS_SOURCE_ID,
-        paint: {
-          'circle-color': '#ffffff',
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 4, 18, 7],
-          'circle-stroke-color': '#7f42bd',
-          'circle-stroke-width': 2.5,
-        },
-      });
-
-      map.addLayer({
-        id: D1_STOP_LABELS_LAYER_ID,
-        type: 'symbol',
-        source: D1_STOPS_SOURCE_ID,
-        minzoom: 15,
-        layout: {
-          'text-field': ['get', 'name'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 15, 10, 18, 13],
-          'text-font': ['Open Sans Semibold'],
-          'text-anchor': 'top',
-          'text-offset': [0, 0.8],
-          'text-allow-overlap': false,
-        },
-        paint: {
-          'text-color': '#352046',
-          'text-halo-color': '#ffffff',
-          'text-halo-width': 1.5,
-        },
-      });
-
-      map.addLayer({
         id: CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
         type: 'circle',
         source: CAMPUS_BUS_STOPS_SOURCE_ID,
@@ -978,40 +856,6 @@ export function CampusMap() {
           'text-halo-color': '#ffffff',
           'text-halo-width': 1.4,
         },
-      });
-
-      map.addLayer({
-        id: D1_BUS_CIRCLE_LAYER_ID,
-        type: 'circle',
-        source: D1_BUS_SOURCE_ID,
-        paint: {
-          'circle-color': '#7f42bd',
-          'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 8, 18, 13],
-          'circle-stroke-color': '#ffffff',
-          'circle-stroke-width': 3,
-          'circle-opacity': 0.96,
-        },
-      });
-
-      map.addLayer({
-        id: D1_BUS_LABEL_LAYER_ID,
-        type: 'symbol',
-        source: D1_BUS_SOURCE_ID,
-        layout: {
-          'text-field': ['get', 'route_code'],
-          'text-font': ['Open Sans Semibold'],
-          'text-size': ['interpolate', ['linear'], ['zoom'], 14, 10, 18, 13],
-          'text-allow-overlap': true,
-        },
-        paint: {
-          'text-color': '#ffffff',
-        },
-      });
-
-      PROTOTYPE_ROUTE_LAYER_IDS.forEach((layerId) => {
-        if (map.getLayer(layerId)) {
-          map.setLayoutProperty(layerId, 'visibility', 'none');
-        }
       });
 
       map.addLayer({
@@ -1079,38 +923,6 @@ export function CampusMap() {
         }
       });
 
-      [D1_ROUTE_LAYER_ID, D1_BUS_CIRCLE_LAYER_ID].forEach((layerId) => {
-        map.on('mouseenter', layerId, () => {
-          map.getCanvas().style.cursor = 'pointer';
-        });
-        map.on('mouseleave', layerId, () => {
-          map.getCanvas().style.cursor = '';
-        });
-        map.on('click', layerId, () => {
-          setSelectedSearchEntity(null);
-          setSelectedBusStop(null);
-          updateSheet('route');
-          setSelectedBuildingState(null);
-        });
-      });
-
-      map.on('mouseenter', D1_STOP_CIRCLES_LAYER_ID, () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', D1_STOP_CIRCLES_LAYER_ID, () => {
-        map.getCanvas().style.cursor = '';
-      });
-      map.on('click', D1_STOP_CIRCLES_LAYER_ID, (event) => {
-        const stopName = event.features?.[0]?.properties?.name as string | undefined;
-        const stopEntity = searchEntities(stopName ?? '').find((entity) => entity.type === 'bus_stop');
-
-        if (stopEntity) {
-          selectBusStop(stopEntity);
-        } else {
-          updateSheet('route');
-        }
-      });
-
       map.on('mouseenter', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, () => {
         map.getCanvas().style.cursor = 'pointer';
       });
@@ -1131,10 +943,7 @@ export function CampusMap() {
           layers: [
             COM3_EXTRUSION_LAYER_ID,
             CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
-            D1_ROUTE_LAYER_ID,
-            D1_STOP_CIRCLES_LAYER_ID,
             CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
-            D1_BUS_CIRCLE_LAYER_ID,
           ],
         });
 
@@ -1143,21 +952,6 @@ export function CampusMap() {
         }
       });
 
-      const animateBus = (timestamp: number) => {
-        const progress = (timestamp % D1_ANIMATION_DURATION_MS) / D1_ANIMATION_DURATION_MS;
-        const busSource = map.getSource(D1_BUS_SOURCE_ID);
-
-        if (busSource && 'setData' in busSource) {
-          (busSource as maplibregl.GeoJSONSource).setData(createSimulatedBusFeature(
-            interpolateRoutePosition(d1RouteCoordinates, progress),
-          ));
-        }
-
-        animationFrameRef.current = window.requestAnimationFrame(animateBus);
-      };
-
-      animationFrameRef.current = window.requestAnimationFrame(animateBus);
-
       setMapState('ready');
     });
     map.once('error', () => setMapState('error'));
@@ -1165,9 +959,6 @@ export function CampusMap() {
     mapRef.current = map;
 
     return () => {
-      if (animationFrameRef.current !== null) {
-        window.cancelAnimationFrame(animationFrameRef.current);
-      }
       map.remove();
       mapRef.current = null;
     };
@@ -1228,7 +1019,7 @@ export function CampusMap() {
         <button
           className="mapControlButton"
           type="button"
-          data-active={routeMenuOpen || selectedPanel === 'route'}
+          data-active={routeMenuOpen}
           aria-label="View shuttle routes"
           title="View shuttle routes"
           onClick={() => {
@@ -1256,19 +1047,18 @@ export function CampusMap() {
         <div className="floatingMenu" data-menu="routes">
           <div className="floatingMenuHeader">
             <h2>Shuttle routes</h2>
-            <p>Source pending</p>
+            <p>Official data needed</p>
             <button className="floatingMenuClose" type="button" aria-label="Close shuttle routes" title="Close shuttle routes" onClick={() => setRouteMenuOpen(false)}>
               <span className="material-symbols-outlined" aria-hidden="true">close</span>
             </button>
           </div>
-          <button className="routeChoice" type="button" onClick={focusRoute}>
-            <span className="routeSwatch" aria-hidden="true" />
+          <div className="routeChoice routeChoiceUnavailable" role="note">
             <span className="choiceText">
-              <strong>Show D1 prototype route</strong>
-              <small>Geometry and stop positions unverified</small>
+              <strong>NUS shuttle routes unavailable</strong>
+              <small>Needs permitted route geometry and verified stop positions before display</small>
             </span>
-            <span className="choiceMeta">{visibleLayers.prototypeRoute ? 'Shown' : 'Hidden'}</span>
-          </button>
+            <span className="choiceMeta">Blocked</span>
+          </div>
         </div>
       ) : null}
       {layerMenuOpen ? (
@@ -1283,7 +1073,7 @@ export function CampusMap() {
           <button className="layerChoice" type="button" onClick={() => toggleLayer('buildings')}>
             <span className="choiceText">
               <strong>Building detail</strong>
-              <small>OSM extrusions, landmarks, selection</small>
+              <small>OSM extrusions with procedural depth</small>
             </span>
             <span className="layerState">{visibleLayers.buildings ? 'On' : 'Off'}</span>
           </button>
@@ -1294,13 +1084,13 @@ export function CampusMap() {
             </span>
             <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
           </button>
-          <button className="layerChoice" type="button" onClick={() => toggleLayer('prototypeRoute')}>
+          <div className="layerChoice layerChoiceUnavailable" role="note">
             <span className="choiceText">
-              <strong>Prototype route</strong>
-              <small>D1 geometry and stops unverified</small>
+              <strong>Terrain</strong>
+              <small>Needs elevation source, license, alignment, and mobile performance check</small>
             </span>
-            <span className="layerState">{visibleLayers.prototypeRoute ? 'On' : 'Off'}</span>
-          </button>
+            <span className="layerState">Blocked</span>
+          </div>
         </div>
       ) : null}
       <div className="statusPanel" data-state={mapState} data-sheet={sheetState}>
@@ -1397,7 +1187,7 @@ export function CampusMap() {
                   </div>
                   <div>
                     <dt>3D detail</dt>
-                    <dd>{landmarkBuildingNames.includes(selectedBuildingVisual.name) ? 'Landmark tint' : 'OSM extrusion'}</dd>
+                    <dd>{landmarkBuildingNames.includes(selectedBuildingVisual.name) ? 'Procedural bands, landmark tint' : 'Procedural bands'}</dd>
                   </div>
                 </>
               ) : null}
@@ -1465,52 +1255,6 @@ export function CampusMap() {
               </p>
             </div>
           </>
-        ) : selectedPanel === 'route' ? (
-          <>
-            <div className="sheetHeaderRow">
-              <div>
-                <p className="eyebrow">Prototype route</p>
-                <div className="routeTitleRow">
-                  <span className="routeBadge">{d1StaticRoute.code}</span>
-                  <h1>{d1StaticRoute.name}</h1>
-                </div>
-              </div>
-              <div className="sheetActions">
-                <button className="sheetAction" type="button" aria-label="Close route details" title="Close route details" onClick={clearSelection}>
-                  <span className="material-symbols-outlined" aria-hidden="true">close</span>
-                </button>
-              </div>
-            </div>
-            <p>
-              {mapState === 'error'
-                ? 'Basemap failed to load.'
-                : d1StaticRoute.detail}
-            </p>
-            <dl className="routeFacts">
-              <div>
-                <dt>Status</dt>
-                <dd>Prototype</dd>
-              </div>
-              <div>
-                <dt>Arrivals</dt>
-                <dd>{d1StaticRoute.frequencyNote}</dd>
-              </div>
-              <div>
-                <dt>Geometry</dt>
-                <dd>Unverified</dd>
-              </div>
-            </dl>
-            <ol className="routeStops" aria-label="D1 prototype stop sequence">
-              {d1StaticRoute.stopSequence.map((stop) => (
-                <li key={stop}>{stop}</li>
-              ))}
-            </ol>
-            <div className="sheetBody">
-              <p className="truthNote">
-                This route is selectable as a prototype planning layer only. The displayed line and stop sequence are not official NUS shuttle geometry, have no verified stop positions, no real-time arrivals, and no live vehicle positions.
-              </p>
-            </div>
-          </>
         ) : selectedPanel === 'module' && nusModsModuleState.status === 'ok' ? (
           <>
             <div className="sheetHeaderRow">
@@ -1574,7 +1318,7 @@ export function CampusMap() {
             <p className="eyebrow">Phase 4 3D campus detail</p>
             <h1>NUSpace</h1>
             <p>
-              3D building detail now highlights selected campus buildings while public bus arrivals and NUSMods venue lookup stay source-labelled.
+              OSM building footprints now have selected highlights and procedural visual depth. Shuttle routes stay unavailable until route geometry and stop positions are verified.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1588,6 +1332,10 @@ export function CampusMap() {
               <div>
                 <dt>Bus stops</dt>
                 <dd>{campusBusStopCount} OSM seed markers</dd>
+              </div>
+              <div>
+                <dt>Shuttles</dt>
+                <dd>Source required</dd>
               </div>
               <div>
                 <dt>Public bus</dt>

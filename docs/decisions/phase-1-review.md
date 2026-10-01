@@ -45,7 +45,7 @@ Known check warning:
   - Evidence: `src/map/mapConfig.ts` uses the documented OpenFreeMap MapLibre style. No Google Maps API is used.
 
 - [x] At least 20 places are searchable.
-  - Evidence: overview sheet reports `26 searchable`; validation enforces the MVP 1 seed minimum.
+  - Evidence: overview sheet reports `26 searchable`; validation enforces the MVP 1 seed minimum. Current search removes prototype route entities from normal user search.
 
 - [x] At least 10 buildings are visible.
   - Evidence: overview sheet reports `13 visible footprints`; `data/curated/mvp1-building-footprints.geojson` contains 13 OSM-sourced footprints.
@@ -55,12 +55,12 @@ Known check warning:
   - Constraint: these are OSM community map bus stop points, not official NUS ISB stop records.
 
 - [x] At least one NUS shuttle route is visible.
-  - Evidence: the D1 prototype corridor can be shown through the shuttle route control or the prototype route layer.
-  - Constraint: this criterion passes only as a prototype/disclosed route state. The route is hidden by default, marked source pending, and not presented as MVP-quality official route geometry.
-  - Follow-up: Phase 2 must either replace it with source-confirmed route geometry or keep routes unavailable/disabled.
+  - Historical evidence: the D1 prototype corridor could be shown through the shuttle route control or the prototype route layer.
+  - Current constraint: this criterion only passed as a prototype/disclosed route state. The current UI keeps NUS shuttle routes unavailable until permitted route geometry and verified stop positions exist.
+  - Follow-up: replace it with source-confirmed route geometry or keep routes unavailable/disabled.
 
 - [x] Clicking a place opens details.
-  - Evidence: buildings, OSM bus stops, search results, and prototype route stops open source/status detail sheets.
+  - Evidence: buildings, OSM bus stops, and search results open source/status detail sheets. Historical prototype route stops are no longer exposed as normal current UI.
 
 - [x] Data source status is traceable for every displayed entity.
   - Evidence: `data/sources.yml`, curated data properties, selected detail sheets, and validation all preserve source ids/statuses.

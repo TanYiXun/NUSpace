@@ -16,7 +16,8 @@ Phase 2 can be reviewed as complete for the LTA public bus integration path:
 - The UI renders live-style public bus service rows when the endpoint returns `ok`.
 - The UI labels data as LTA public bus data and keeps it distinct from NUS ISB shuttle data.
 - Local live verification returned `ok` for stop `16069` with 8 public bus services after the AccountKey was configured in ignored `.env.local`.
-- Follow-up display polish should show each arrival's LTA vehicle type and wheelchair-accessibility feature beside the corresponding timing, rather than only summarizing the first arriving bus in the row.
+- Public bus rows auto-refresh every 20 seconds while the app is open.
+- Each shown timing displays the corresponding LTA vehicle type and wheelchair-accessibility feature when present, rather than summarizing only the first arriving bus in the row.
 
 The phase is not complete for NUS shuttle live integration:
 
@@ -62,5 +63,3 @@ The local live verification used `.env.local`, which is ignored by git through t
 Proceed to Phase 3 only if the user accepts that Phase 2 NUS ISB live integration remains blocked by official-access requirements.
 
 If more Phase 2 work is desired before Phase 3, add more public bus stop codes only when each code has documented source provenance.
-
-Public bus row polish is also a valid follow-up: use the existing normalized LTA `type` and `feature` fields to show `Single`, `Double`, and wheelchair-accessible indicators beside each ETA. Do not infer accessibility or vehicle type when LTA omits the field.

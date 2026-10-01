@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   fetchPublicBusArrivalUiState,
+  getPublicBusVehicleTypeLabel,
+  isPublicBusWheelchairAccessible,
   toPublicBusArrivalUiState,
 } from './publicBusArrivals';
 
@@ -64,12 +66,21 @@ describe('public bus arrival UI state', () => {
             expect.objectContaining({
               estimatedArrivalMinutes: 4,
               load: 'SEA',
+              type: 'SD',
               feature: 'WAB',
             }),
           ],
         },
       ],
     });
+  });
+
+  it('formats LTA vehicle type and accessibility codes for user-facing timing cells', () => {
+    expect(getPublicBusVehicleTypeLabel('SD')).toBe('Single');
+    expect(getPublicBusVehicleTypeLabel('DD')).toBe('Double');
+    expect(getPublicBusVehicleTypeLabel(null)).toBeNull();
+    expect(isPublicBusWheelchairAccessible('WAB')).toBe(true);
+    expect(isPublicBusWheelchairAccessible(null)).toBe(false);
   });
 
   it('fetches through the project endpoint rather than DataMall directly', async () => {

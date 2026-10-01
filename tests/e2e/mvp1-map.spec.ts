@@ -56,7 +56,7 @@ test('desktop renders public bus arrivals when the project endpoint returns live
                 estimatedArrival: '2026-09-18T08:04:00.000Z',
                 estimatedArrivalMinutes: 4,
                 load: 'SEA',
-                type: 'SD',
+                type: 'DD',
                 feature: 'WAB',
                 latitude: 1.29,
                 longitude: 103.77,
@@ -97,7 +97,10 @@ test('desktop renders public bus arrivals when the project endpoint returns live
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('96');
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('4 min');
   await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('11 min');
+  await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('Double');
+  await expect(page.getByLabel('Live public bus arrivals from LTA DataMall')).toContainText('Single');
   await expect(page.getByText('Live public bus arrivals from LTA DataMall public bus data')).toBeVisible();
+  await expect(page.getByText('Auto-refreshes every 20s')).toBeVisible();
 });
 
 test('desktop maps NUSMods module venues with confidence metadata', async ({ page }, testInfo) => {

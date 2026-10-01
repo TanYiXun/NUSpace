@@ -291,7 +291,8 @@ input {
 }
 
 .routeChoice {
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: 5px minmax(0, 1fr) max-content;
+  gap: 10px;
 }
 
 .choiceText {
@@ -304,12 +305,14 @@ input {
   color: #172330;
   font-size: 14px;
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .choiceText small {
   color: var(--color-muted);
   font-size: 12px;
   line-height: 1.25;
+  overflow-wrap: anywhere;
 }
 
 .choiceMeta,
@@ -323,6 +326,7 @@ input {
   color: #485766;
   font-size: 12px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .statusPanel {
@@ -523,7 +527,7 @@ input {
 
 .publicBusRow {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) auto;
+  grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
   gap: 12px;
   padding: 10px;
@@ -547,7 +551,23 @@ input {
 
 .publicBusTimes {
   display: grid;
+  grid-template-columns: repeat(3, minmax(44px, 1fr));
+  gap: 6px;
+}
+
+.publicBusEstimate {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  min-width: 0;
+}
+
+.publicBusTimeLine {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   gap: 3px;
+  min-width: 0;
 }
 
 .publicBusTime {
@@ -562,11 +582,18 @@ input {
   color: #8a4e1f;
 }
 
-.publicBusMeta {
-  color: #5b6b7a;
-  font-size: 12px;
+.publicBusWheelchairIcon {
+  color: #237343;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.publicBusDeck {
+  color: #657483;
+  font-size: 10px;
   font-weight: 700;
-  white-space: nowrap;
+  line-height: 1.1;
 }
 
 .moduleLookupCard {

@@ -165,6 +165,7 @@ Icon strategy:
   - collapse sheet/details: `keyboard_arrow_down`
   - expand sheet/details: `open_in_full`
   - close selected details: `close`
+  - wheelchair-accessible public bus arrival: `accessible`
 - Do not use raw text glyphs such as `+`, `-`, or `x` for sheet controls because they conflict with map zoom semantics and look inconsistent beside the map controls.
 - Before MVP 1, decide whether to keep the external Material Symbols font, self-host it, or replace it with packaged icons.
 
@@ -328,6 +329,25 @@ Known visual issues:
 - The D1 line and stop positions still need source-confirmed geometry before they can be treated as production route data.
 - Static mode currently exposes only the existing D1 display corridor; A1, A2, D2, K, P, R1, and R2 remain source-referenced but not displayable as route geometry.
 
+## Phase 2 Public Bus Live Polish
+
+This checkpoint makes live LTA public bus rows behave more like a transit product surface: visible arrivals refresh while the app is open, each ETA carries its own vehicle metadata, and wheelchair accessibility uses the documented Material Symbols icon system instead of a platform emoji or raw backend code.
+
+Accepted visual checkpoints:
+
+- [Phase 2 public bus live polish desktop](screenshots/phase2-public-bus-live-polish-desktop.png).
+- [Phase 2 public bus live polish mobile](screenshots/phase2-public-bus-live-polish-mobile.png).
+- [Phase 2 public bus live polish route menu mobile](screenshots/phase2-public-bus-live-polish-route-menu-mobile.png).
+
+Accepted behavior:
+
+- Public bus rows auto-refresh every 20 seconds while the app is open.
+- The timestamp says `Last fetched` and separates browser refresh behavior from the server cache duration.
+- `SD` and `DD` are rendered as `Single` and `Double`.
+- `WAB` is rendered as the Material Symbols `accessible` icon with accessible text on the ETA cell.
+- Vehicle type and accessibility are shown per arriving bus, not summarized from only the first ETA in a service row.
+- Route-menu text and state chips wrap within their own columns without overlapping or overflowing the popover.
+
 ## Phase 3 NUSMods Module Lookup
 
 This checkpoint adds a compact NUSMods module lookup card to the map sheet. The card is part of the operational map UI, not a dashboard surface.
@@ -363,7 +383,7 @@ Accepted behavior:
 
 - Layer state indicators use compact chips and no longer stretch the menu layout.
 - Public bus service badges keep high-contrast white text instead of inheriting muted card text.
-- Public bus rows are denser while preserving route number, next arrivals, and SEA/WAB labels.
+- Public bus rows are denser while preserving route number and next arrivals.
 - The overview stage label reflects Phase 3 venue intelligence.
 
 ## Phase 3 Selected Module Panel

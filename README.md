@@ -1,6 +1,6 @@
 # NUSpace
 
-NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 completed the first outdoor campus MVP checkpoint with constraints. Phase 2 built the transit layer behind server-side data boundaries. Phase 3 completed the required NUSMods venue intelligence scope with confidence-labelled mappings.
+NUSpace is an independent NUS-first campus map prototype. Phase 0 validated the technical and data foundations; Phase 1 completed the first outdoor campus MVP checkpoint with constraints. Phase 2 built the transit layer behind server-side data boundaries. Phase 3 completed the required NUSMods venue intelligence scope with confidence-labelled mappings. Phase 4 completed the sourced 3D campus-detail checkpoint with selected-building highlights and labelled visual-height metadata.
 
 ## Current Phase
 
@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: Phase 4 3D campus detail has started with source-safe selected-building highlighting and building visual metadata. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
+Current work: Phase 5 indoor navigation is blocked at the data-acquisition and QA gate until legal floor-plan data, room/POI inventory, entrances, connectors, inaccessible/private areas, and QA notes exist for at least one building. The D1 route is selectable as a static, source-pending route layer; its displayed line remains manually curated placeholder geometry and must not be treated as official route geometry. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data.
 
 ## Commands
 

@@ -8,6 +8,8 @@ import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
   fetchPublicBusArrivalUiState,
+  getPublicBusVehicleTypeLabel,
+  isPublicBusWheelchairAccessible,
   type PublicBusArrivalUiState,
 } from '../transit/publicBusArrivals';
 import { defaultPublicBusStop } from '../transit/publicBusStops';
@@ -44,6 +46,7 @@ const CAMPUS_BUS_STOP_CIRCLES_LAYER_ID = 'mvp1-campus-bus-stop-circles';
 const CAMPUS_BUS_STOP_LABELS_LAYER_ID = 'mvp1-campus-bus-stop-labels';
 const USER_LOCATION_ACCURACY_LAYER_ID = 'user-location-accuracy';
 const USER_LOCATION_DOT_LAYER_ID = 'user-location-dot';
+const PUBLIC_BUS_REFRESH_MS = 20_000;
 const com3Building = JSON.parse(com3BuildingRaw) as GeoJSON.FeatureCollection;
 const d1Route = JSON.parse(d1RouteRaw) as GeoJSON.FeatureCollection;
 const d1Stops = JSON.parse(d1StopsRaw) as GeoJSON.FeatureCollection;
@@ -138,6 +141,14 @@ function formatFetchedAt(value?: string) {
     minute: '2-digit',
     second: '2-digit',
   }).format(parsed);
+}
+
+function getPublicBusEstimateLabel(bus: PublicBusArrivalUiState['arrivals'][number]['nextBuses'][number]) {
+  const timeLabel = formatArrivalMinutes(bus.estimatedArrivalMinutes);
+  const vehicleTypeLabel = getPublicBusVehicleTypeLabel(bus.type);
+  const accessibilityLabel = isPublicBusWheelchairAccessible(bus.feature) ? 'wheelchair-accessible bus' : null;
+
+  return [timeLabel, accessibilityLabel, vehicleTypeLabel].filter(Boolean).join(', ');
 }
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
@@ -531,14 +542,20 @@ export function CampusMap() {
   useEffect(() => {
     let isCurrent = true;
 
-    fetchPublicBusArrivalUiState(defaultPublicBusStop.busStopCode).then((result) => {
-      if (isCurrent) {
-        setPublicBusArrivalState(result);
-      }
-    });
+    const refreshPublicBusArrivals = () => {
+      fetchPublicBusArrivalUiState(defaultPublicBusStop.busStopCode).then((result) => {
+        if (isCurrent) {
+          setPublicBusArrivalState(result);
+        }
+      });
+    };
+
+    refreshPublicBusArrivals();
+    const intervalId = window.setInterval(refreshPublicBusArrivals, PUBLIC_BUS_REFRESH_MS);
 
     return () => {
       isCurrent = false;
+      window.clearInterval(intervalId);
     };
   }, []);
 
@@ -1473,24 +1490,32 @@ export function CampusMap() {
                         <span className="publicBusTimes">
                           {service.nextBuses.map((bus) => (
                             <span
-                              className="publicBusTime"
-                              data-stale={bus.isStale}
+                              className="publicBusEstimate"
+                              aria-label={getPublicBusEstimateLabel(bus)}
                               key={`${service.serviceNo}-${bus.sequence}`}
                             >
-                              {formatArrivalMinutes(bus.estimatedArrivalMinutes)}
+                              <span className="publicBusTimeLine">
+                                {isPublicBusWheelchairAccessible(bus.feature) ? (
+                                  <span className="material-symbols-outlined publicBusWheelchairIcon" aria-hidden="true">accessible</span>
+                                ) : null}
+                                <span className="publicBusTime" data-stale={bus.isStale}>
+                                  {formatArrivalMinutes(bus.estimatedArrivalMinutes)}
+                                </span>
+                              </span>
+                              {getPublicBusVehicleTypeLabel(bus.type) ? (
+                                <span className="publicBusDeck">{getPublicBusVehicleTypeLabel(bus.type)}</span>
+                              ) : (
+                                <span className="publicBusDeck" aria-hidden="true">--</span>
+                              )}
                             </span>
                           ))}
-                        </span>
-                        <span className="publicBusMeta">
-                          {service.nextBuses[0]?.load ?? 'Load --'}
-                          {service.nextBuses[0]?.feature ? ` · ${service.nextBuses[0].feature}` : ''}
                         </span>
                       </div>
                     ))}
                   </div>
                   <p>
-                    Live public bus arrivals from {publicBusArrivalState.sourceLabel}. Updated {formatFetchedAt(publicBusArrivalState.fetchedAt)}
-                    {publicBusArrivalState.cacheHit ? `, cached for ${publicBusArrivalState.cacheTtlSeconds}s` : ''}.
+                    Live public bus arrivals from {publicBusArrivalState.sourceLabel}. Last fetched {formatFetchedAt(publicBusArrivalState.fetchedAt)}.
+                    Auto-refreshes every {PUBLIC_BUS_REFRESH_MS / 1000}s. Server cache: {publicBusArrivalState.cacheTtlSeconds}s.
                   </p>
                 </>
               ) : (

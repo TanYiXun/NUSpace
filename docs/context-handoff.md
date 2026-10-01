@@ -8,18 +8,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `f1b1349 Merge pull request #19 from TanYiXun/phase3-selected-module-panel`.
+- Current branch: `phase2-public-bus-live-polish`.
+- Latest `main` commit: `d212866 Document public bus timing metadata`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 2 public bus live-polish branch with auto-refresh, per-arrival Single/Double labels, Material Symbols `accessible` icon for WAB buses, route-menu overflow fix, docs, tests, and visual checkpoints.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 12, Phase 3 NUSMods intelligence.
-- Current slice: selected-module interaction is merged. Successful NUSMods searches now open a dedicated selected-module sheet instead of expanding venue rows inside the overview card.
-- The user has been reviewing the running local app. Current preview is still available at `http://127.0.0.1:5174/`; e2e uses its own clean no-env server on `5173`.
+- Active plan section: `PLAN.md` section 11.1, Phase 2 public bus integration polish.
+- Current slice: public bus timing rows now auto-refresh every 20 seconds and show per-arrival user-facing vehicle/accessibility metadata.
+- The user has been reviewing the running local app. The live preview on `5173` was stopped temporarily so `npm run test:e2e` could run against its clean no-env server.
 
 ## Current Phase 1 Slice
 
@@ -140,6 +140,9 @@ Phase 2 live public bus screenshots are in `docs/screenshots/`:
 
 - `phase2-live-public-bus-missing-key-desktop.png`
 - `phase2-live-public-bus-live-desktop.png`
+- `phase2-public-bus-live-polish-desktop.png`
+- `phase2-public-bus-live-polish-mobile.png`
+- `phase2-public-bus-live-polish-route-menu-mobile.png`
 
 Phase 2 NUS ISB static mode screenshots are in `docs/screenshots/`:
 
@@ -218,6 +221,7 @@ Known build warning:
 - Phase 3 NUSMods module lookup PR #17 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 UI polish PR #18 was pushed, opened with screenshots, and merged to `main`.
 - Phase 3 selected module panel PR #19 was pushed, opened with screenshots, and merged to `main`.
+- Current `phase2-public-bus-live-polish` branch changes the LTA public bus rows to refresh every 20 seconds, render `SD`/`DD` as `Single`/`Double`, render `WAB` as the Material Symbols `accessible` icon with accessible text, and keep route-menu text/chips from overlapping.
 - `data/curated/phase2-public-bus-stops.json` now references `Heng Mui Keng Terrace` (`16069`) separately from OSM campus markers, and the overview sheet shows the endpoint missing-key state when no server key is configured.
 - Merged PR #15 renders live public bus service rows when `/api/transit/public-bus-arrivals` returns `ok`, adds `.env.example`, adds `docs/decisions/phase-2-review.md`, and loads ignored `.env.local` into the Vite dev middleware server.
 - Local live verification on 2026-09-18 returned `ok` for `Heng Mui Keng Terrace` stop `16069` with 8 LTA public bus services. The key is stored only in ignored `.env.local`.
@@ -227,9 +231,9 @@ Known build warning:
 
 ## Next Recommended Action
 
-Continue Phase 3 NUSMods intelligence. Recommended next options:
+Continue the current public bus live-polish checkpoint. Recommended next options:
 
-1. Start the next Phase 3 slice on a fresh branch from `main`.
-2. Expand venue mappings only with documented provenance.
-3. Keep venue mappings confidence-labelled; do not infer room-level geometry or indoor routes.
-4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 12, and docs/context-handoff.md, then continue.`
+1. Commit, push, open, and merge `phase2-public-bus-live-polish`.
+2. Restart the local preview from updated `main` after merge.
+3. Then continue Phase 3 only from a fresh branch.
+4. Continue with a fresh task after a checkpoint if needed: `Read AGENTS.md, PLAN.md section 11.1, and docs/context-handoff.md, then continue.`

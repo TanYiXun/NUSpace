@@ -43,7 +43,7 @@ The current prototype includes only source-labelled NUS-area data:
 - Manually curated D1-style route and stops for static route UI and animation testing only, hidden by default because it is not source-confirmed MVP route geometry.
 - OSM-sourced bus stop markers for selectable map/search testing, not official NUS ISB data.
 
-No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
+No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment, refresh every 20 seconds while the app is open, and show per-arrival single/double-deck and wheelchair-accessible indicators when LTA provides them. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
 
 NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Successful searches open a selected-module sheet with confidence-labelled venue mappings against the curated campus place seed and do not imply room-level geometry or indoor navigation.
 
@@ -57,7 +57,7 @@ GET /api/transit/public-bus-arrivals?busStopCode=16069
 
 The endpoint is server-side only. It returns a `missing_key` unavailable response until `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. Do not put the AccountKey in frontend code, committed files, screenshots, logs, or pull request text.
 
-The overview sheet queries the endpoint for the manually referenced public bus stop `Heng Mui Keng Terrace` (`16069`) and shows live LTA public bus rows when the server returns them. This public bus stop reference is separate from the OSM-sourced NUS campus bus-stop markers and from NUS ISB shuttle data.
+The overview sheet queries the endpoint for the manually referenced public bus stop `Heng Mui Keng Terrace` (`16069`) and shows live LTA public bus rows when the server returns them. The frontend refreshes this visible state every 20 seconds; the server also keeps a 20-second in-memory cache so browser refreshes do not always become new DataMall calls. This public bus stop reference is separate from the OSM-sourced NUS campus bus-stop markers and from NUS ISB shuttle data.
 
 For local live testing, copy `.env.example` to `.env.local` and set `LTA_DATAMALL_ACCOUNT_KEY` there. `.env.local` is ignored by git through the `*.local` rule. Restart the Vite dev server after changing `.env.local`.
 

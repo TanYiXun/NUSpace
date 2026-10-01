@@ -48,6 +48,22 @@ export type PublicBusArrivalUiService = {
   nextBuses: PublicBusArrivalUiEstimate[];
 };
 
+export function getPublicBusVehicleTypeLabel(type: string | null) {
+  if (type === 'SD') {
+    return 'Single';
+  }
+
+  if (type === 'DD') {
+    return 'Double';
+  }
+
+  return null;
+}
+
+export function isPublicBusWheelchairAccessible(feature: string | null) {
+  return feature === 'WAB';
+}
+
 export function toPublicBusArrivalUiState(payload: PublicBusArrivalApiResponse): PublicBusArrivalUiState {
   const status = payload.status ?? 'upstream_error';
   const arrivals = Array.isArray(payload.arrivals) ? payload.arrivals : [];

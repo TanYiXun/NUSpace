@@ -952,6 +952,7 @@ Tasks:
    - `SD` as single-deck or `Single`
    - `DD` as double-deck or `Double`
    - `WAB` as wheelchair-accessible using an accessible icon plus text label
+8. Auto-refresh visible live public bus arrivals on a short interval while the app is open, with cleanup on unmount.
 
 Acceptance criteria:
 
@@ -960,6 +961,7 @@ Acceptance criteria:
 - Error state appears when LTA API fails.
 - Cache behavior is documented.
 - Each shown public bus timing should preserve the corresponding LTA vehicle type and wheelchair-accessibility feature when present; do not infer these fields when absent.
+- Live public bus timing UI must not rely only on page reload; it should refresh in the background and label the last fetched time separately from the server cache duration.
 
 ### 11.2 NUS ISB Static Mode
 

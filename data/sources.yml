@@ -43,6 +43,7 @@ sources:
       - Phase 0 Prototype B COM3 footprint
       - Phase 0 Prototype B COM3 building level count
       - Phase 0 Prototype E generated campus building pipeline input
+      - Phase 4 COM3 shell-only xray footprint and floor-count source
     limitations:
       - Footprint is community-maintained, not official NUS data
       - OSM supplies building:levels=6 but not exact building height

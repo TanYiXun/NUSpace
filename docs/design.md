@@ -477,6 +477,28 @@ Visual constraints:
 - The next NTU Map/Finute Maps style target is a one-building recognizable model and xray shell with floor selector, tracked in `PLAN.md` section 13.1.1.
 - No shuttle route line, stop sequence, live vehicle marker, or route ETA may be shown as a current feature until the data gate passes.
 
+## Phase 4 COM3 Xray Shell
+
+This checkpoint implements the first one-building xray slice from `PLAN.md` section 13.1.1. It uses the sourced COM3 OSM footprint and OSM `building:levels=6` to render a selected-building shell with six generic floor slices.
+
+Accepted behavior:
+
+- Selecting COM3 shows a translucent shell and floor slices on the map.
+- The COM3 detail sheet includes a compact floor selector labelled `L1` through `L6`.
+- The selected floor is highlighted in the xray shell.
+- Copy states `building shell only` and says no rooms, corridors, entrances, or indoor POIs are shown.
+
+Accepted visual checkpoints:
+
+- [Phase 4 COM3 xray shell desktop](screenshots/phase4-com3-xray-shell-desktop.png).
+- [Phase 4 COM3 xray shell mobile](screenshots/phase4-com3-xray-shell-mobile.png).
+
+Visual constraints:
+
+- Floor labels are generic selector labels, not official NUS floor names.
+- The xray shell is an interaction and recognizability test, not an official architectural model.
+- Do not add rooms, corridors, lifts, toilets, labs, public entrances, or indoor routes until the Phase 5 data gate passes.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

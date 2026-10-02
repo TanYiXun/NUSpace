@@ -482,6 +482,58 @@ input {
   overflow-wrap: anywhere;
 }
 
+.floorSelector {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 0;
+  padding: 12px;
+  border: 1px solid #d7e2e7;
+  border-radius: var(--radius-control);
+  background: rgb(247 250 250 / 82%);
+}
+
+.floorSelector strong {
+  display: block;
+  color: #1d2c37;
+  font-size: 14px;
+}
+
+.floorSelector span {
+  display: block;
+  margin-top: 2px;
+  color: #5f6e7a;
+  font-size: 12px;
+}
+
+.floorSelectorButtons {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(36px, 1fr));
+  gap: 6px;
+}
+
+.floorSelectorButton {
+  min-width: 0;
+  min-height: 34px;
+  border: 1px solid #b9c8d0;
+  border-radius: 7px;
+  background: #ffffff;
+  color: #24333f;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.floorSelectorButton[data-active="true"] {
+  border-color: #8a6516;
+  background: #e1b047;
+  color: #1d2430;
+}
+
+.floorSelectorButton:focus-visible {
+  outline: 3px solid rgb(35 91 138 / 30%);
+  outline-offset: 2px;
+}
+
 .routeStops {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

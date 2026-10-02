@@ -49,6 +49,8 @@ No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import,
 
 NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Successful searches open a selected-module sheet with confidence-labelled venue mappings against the curated campus place seed and do not imply room-level geometry or indoor navigation.
 
+Phase 4 now includes a COM3 shell-only xray slice. Selecting COM3 shows a translucent building shell and six generic floor slices derived from the sourced OSM footprint and `building:levels=6`; it does not include official floor names, entrances, rooms, corridors, indoor POIs, or indoor routing.
+
 ## Transit Adapter Notes
 
 The development server exposes:

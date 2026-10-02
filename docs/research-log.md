@@ -131,6 +131,14 @@
 - Decision: store raw JSON responses under `data/raw/nextbus-research/`, a processed static planning snapshot at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, and an app-facing 33-stop inventory at `data/curated/phase2-nus-isb-bus-stops.json`. Render the stops only as labelled `requires-permission` research markers with no live ETA/current-route claim.
 - Confidence: high for captured response shape on 2026-10-01, low for production/legal reusability until NUS/NextBus permission exists.
 
+## 2026-10-02 - Phase 4 COM3 Xray Shell Slice
+
+- Task: implement the `PLAN.md` section 13.1.1 one-building recognizable model and xray slice without adding unsourced indoor detail.
+- Sources checked: existing COM3 OSM footprint and `building:levels=6` metadata from `osm-overpass-com3`.
+- Finding: COM3 has a sourced footprint and verified OSM level count, but no verified public entrance coordinates, official floor names, floor plans, indoor rooms, corridors, or permissioned 3D model.
+- Decision: implement a shell-only xray from the COM3 footprint with six generic `L1` through `L6` floor slices and selected-floor highlighting. Keep entrances and indoor details blocked.
+- Confidence: high for footprint alignment and level count, low for official indoor semantics because no legal indoor source is available.
+
 ## 2026-10-01 - Phase 3 NUSMods Module Lookup
 
 - Task: implement the first NUSMods intelligence slice with module-code lookup, lesson venue summaries, confidence-labelled venue mapping, and nearest known bus stop suggestions.

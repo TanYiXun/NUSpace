@@ -1,6 +1,6 @@
 # Context Handoff
 
-Last updated: 2026-10-01
+Last updated: 2026-10-02
 
 This file is a concise working-memory handoff for long conversations, compaction, or fresh tasks. `PLAN.md` remains the source of truth for product scope and implementation requirements.
 
@@ -8,15 +8,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `5637d7d Deprototype transit and 3D map surfaces (#26)`.
+- Current branch: `one-building-xray-shell`.
+- Latest `main` commit: `6018f77 Merge pull request #27 from TanYiXun/nus-isb-research-stops`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: Phase 2 D1 stop-label planting slice. Files changed:
-  - `data/curated/phase2-nus-isb-stop-planting.json`
-  - `src/transit/nusIsbStopPlanting.ts`
-  - `src/transit/nusIsbStopPlanting.test.ts`
+- PR #27 added the NUS ISB research stop inventory and was merged to `main`.
+- Active uncommitted work: Phase 4 COM3 shell-only xray slice on `one-building-xray-shell`. Files changed:
+  - `data/curated/phase4-com3-xray-shell.json`
+  - `docs/decisions/phase-4-com3-xray-shell.md`
+  - `docs/screenshots/phase4-com3-xray-shell-desktop.png`
+  - `docs/screenshots/phase4-com3-xray-shell-mobile.png`
   - `src/map/CampusMap.tsx`
   - `scripts/data/validate-sources.mjs`
   - `tests/e2e/mvp1-map.spec.ts`
@@ -24,17 +26,15 @@ This file is a concise working-memory handoff for long conversations, compaction
   - `README.md`
   - `docs/data-pipeline.md`
   - `docs/research-log.md`
-  - `data/raw/nextbus-research/`
-  - `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`
-  - `docs/decisions/nextbus-research-snapshot.md`
+  - `src/styles.css`
 
 ## Current Phase
 
-- Active plan sections: `PLAN.md` section 7.1, section 11.2, and section 15.4.
-- Current slice: D1 stop-label planting plus NUS NextBus codelab API research extraction are in progress and uncommitted.
-- Latest refinement: OSM bus stop points remain manual-reference seed markers with unverified-position UI wording; selected planted D1 stops now show `D1 stop label` and `Route use: Name/order reference only`; COM3, Opp YIH, and YIH remain unplanted because no verified or field-surveyed boarding-point coordinate is documented. D1 prototype routing is still not surfaced as normal route UI. The NextBus codelab API research snapshot captured 33 stops and per-stop route refs; every derived record is `requires-permission` and now renders only as labelled NUS ISB research markers with no live/current/verified claim.
+- Active plan section: `PLAN.md` section 13.1.1, recognizable building model and xray slice.
+- Current slice: COM3 shell-only xray is implemented locally and uncommitted on `one-building-xray-shell`.
+- Latest refinement: Selecting COM3 shows a translucent shell, six generic `L1` through `L6` floor slices, and a selected-floor highlight. The selected-building sheet exposes a floor selector and states `building shell only`; no rooms, corridors, public entrances, outdoor connection points, indoor POIs, or official floor names are shown.
 - Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; PR #26 added a stricter post-review truth checkpoint in `docs/decisions/deprototype-map-transit-3d.md`. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
-- Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
+- Current local preview: none running. Last preview used `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1` for screenshots.
 - The user has been reviewing the running local app. Local preview is expected at `http://127.0.0.1:5173/` from merged `main`.
 
 ## Current Phase 1 Slice
@@ -209,33 +209,30 @@ De-prototype map/transit/3D checkpoint screenshots are in `docs/screenshots/`:
 - `deprototype-terrain-blocked-layers-desktop.png`
 - `deprototype-3d-buildings-desktop.png`
 
+Phase 4 COM3 xray shell screenshots are in `docs/screenshots/`:
+
+- `phase4-com3-xray-shell-desktop.png`
+- `phase4-com3-xray-shell-mobile.png`
+
 ## Checks Last Run
 
-Latest checks passed on 2026-10-01:
-
-- `npm run lint`
-- `npm run typecheck`
-- `npm run test`
-- `npm run validate:data`
-- `npm run build`
-- `npm run test:e2e`
-
-Latest uncommitted D1 stop-label planting checks passed on 2026-10-01:
+PR #27 NUS ISB research stop inventory was merged to `main` on 2026-10-02. Checks run before merge:
 
 - `npm run validate:data`
 - `npm run typecheck`
-- `npm run test` with 9 passed test files and 42 passed tests
+- `npm run test` with 44 passed tests
 - `npm run lint`
 - `npm run build` with the known Vite chunk-size warning
-- `npm run test:e2e` with 6 passed and 6 skipped after adding the planted-stop selected-sheet smoke test
+- `npm run test:e2e` with 7 passed and 7 skipped
 
-Latest uncommitted NextBus research snapshot checks passed on 2026-10-01:
+Latest uncommitted COM3 xray shell checks passed on 2026-10-02:
 
 - `npm run validate:data`
-- `npm run test` with 9 passed test files and 42 passed tests
+- `npm run typecheck`
+- `npm run test` with 44 passed tests
 - `npm run lint`
 - `npm run build` with the known Vite chunk-size warning
-- `npm run test:e2e` with 7 passed and 7 skipped after adding the full NUS ISB research-stop smoke test
+- `npm run test:e2e` with 8 passed and 8 skipped
 
 NextBus extraction details:
 
@@ -253,11 +250,7 @@ NextBus extraction details:
   - `docs/screenshots/nextbus-research-stops-overview.png`
   - `docs/screenshots/nextbus-research-selected-stop.png`
 
-The first `npm run test:e2e` attempt failed in the sandbox with `listen EPERM: operation not permitted 127.0.0.1:5173`. The escalated rerun initially reused a stale Node listener on `5173` and saw live-key state instead of the expected missing-key state. That listener was stopped, and the clean rerun passed. After the clean run, no process was listening on `127.0.0.1:5173`.
-
-For the Phase 4 slice, `npm run test:e2e` passed with 5 passed and 5 skipped after adding the selected-building metadata smoke test. `npm run build` still reports the known Vite chunk-size warning.
-
-`npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval initially reused an old live-key server on `5173`, so that listener was stopped and the clean e2e run passed with 4 passed and 4 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
+The previous `npm run test:e2e` localhost-bind/stale-server issue was resolved by stopping stale port `5173` listeners before clean runs. Current e2e passed cleanly with localhost approval.
 
 Known build warning:
 
@@ -268,6 +261,8 @@ Known build warning:
 - Historical D1 route path is a prototype placeholder for animation and UI testing only.
 - Historical D1 stop coordinates are still wrong or approximate in places.
 - Building footprint visual heights are OSM-level-derived estimates or prototype placeholders, not official architectural heights.
+- COM3 xray shell is shell-only. Floor labels are generic L1-L6 labels derived from OSM level count, not official floor names.
+- COM3 xray shell does not include public entrances, outdoor connection points, rooms, corridors, toilets, lifts, labs, indoor POIs, floor plans, accessibility paths, or indoor routing.
 - Do not treat the current route path as official NUS shuttle geometry.
 - Do not treat current stop points as verified bus stop locations.
 - D1 stop-label planting verifies label/order reference only; it does not verify exact boarding-point coordinates.
@@ -320,13 +315,8 @@ Known build warning:
 
 ## Next Recommended Action
 
-Start the next feature from a fresh task. Recommended next options:
+Commit, push, open, and merge the `one-building-xray-shell` branch after review. Then either:
 
-1. For verified bus stop planting, read `PLAN.md` section 7.1, section 11.2, section 15.4, and this handoff. Do not mark stops verified without official/permitted data or a documented field-survey method.
-2. For NTU Map/Finute Maps style 3D, implement `PLAN.md` section 13.1.1 as a one-building recognizable model and xray shell slice before broad 3D expansion.
-3. For real NUS shuttle implementation, obtain official/permitted route geometry and verified stop positions first.
-4. For terrain, document elevation source, license, alignment, mobile performance, and boundary treatment before implementation.
-5. For Phase 5 indoor navigation, collect legal indoor data and QA artifacts before implementation.
-6. Fresh task prompt options:
-   - `Read AGENTS.md, PLAN.md section 7.1, section 11.2, section 15.4, and docs/context-handoff.md, then continue with verified bus stop planting.`
-   - `Read AGENTS.md, PLAN.md section 13.1.1, section 15.4, and docs/context-handoff.md, then continue with the one-building 3D xray slice.`
+1. Decide whether the shell-only COM3 result is good enough to scale under `PLAN.md` section 13.1.1.
+2. Start terrain only after documenting elevation source, license, alignment, mobile performance, and boundary treatment.
+3. Start Phase 5 indoor navigation only after legal indoor data and QA artifacts exist for at least one building.

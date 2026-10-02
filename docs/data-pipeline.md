@@ -53,6 +53,7 @@ Phase 1 adds the first curated campus place seed:
 - `data/curated/mvp1-campus-places.json`
 - `data/curated/mvp1-building-footprints.geojson`
 - `data/curated/phase2-nus-isb-stop-planting.json`
+- `data/curated/phase4-com3-xray-shell.json`
 - `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`
 - Source id: `osm-api-nus-kent-ridge-map`
 - Source owner: OpenStreetMap contributors
@@ -72,6 +73,8 @@ Phase 2 adds `phase2-nus-isb-stop-planting.json` to attach official D1 route-map
 
 The NextBus codelab API research snapshot lives at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. The app derives `data/curated/phase2-nus-isb-bus-stops.json` from it so all 33 captured NUS ISB stops are searchable/selectable as labelled `requires-permission` research markers. It must not be marked verified, shown as live/current arrivals, or redistributed as official NUS data until permission and terms are documented. See `docs/decisions/nextbus-research-snapshot.md`.
 
+Phase 4 adds `phase4-com3-xray-shell.json` for the COM3 selected-building shell-only xray. It uses the sourced OSM COM3 footprint and OSM `building:levels=6` to generate six generic floor-slice labels. It does not include verified public entrances, outdoor connection points, floor plans, rooms, corridors, indoor POIs, or official floor names.
+
 Validation:
 
 ```bash
@@ -85,6 +88,7 @@ Validation checks the curated place schema, building footprint schema, D1 stop p
 - at least 8 bus stops
 - at least 10 visible building footprints
 - exactly 33 NextBus-derived NUS ISB research stops
+- exactly six COM3 shell-only floor selector labels
 
 Known data quality issues:
 
@@ -94,4 +98,5 @@ Known data quality issues:
 - OSM bus stops do not provide live NUS shuttle arrivals, crowd levels, route membership, or official NUS ISB operating data.
 - D1 stop-label planting verifies neither exact boarding-point coordinates nor route geometry; COM3, Opp YIH, and YIH remain unplanted until official/permitted coordinate data or a documented field survey exists.
 - NextBus codelab API records are `requires-permission` research data. They may render only with explicit research/permission-required labels and are not approved production stop coordinates, route geometry, live arrivals, or redistributable official data.
+- COM3 xray shell floor labels are generic labels derived from OSM level count, not official NUS floor names or indoor maps.
 - The current D1 route remains a prototype simulation and is not generated from this dataset.

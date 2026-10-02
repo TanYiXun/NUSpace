@@ -8,6 +8,7 @@ const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', 
 const curatedBuildingFootprintsFile = new URL('../../data/curated/mvp1-building-footprints.geojson', import.meta.url);
 const isbStopPlantingFile = new URL('../../data/curated/phase2-nus-isb-stop-planting.json', import.meta.url);
 const isbBusStopsFile = new URL('../../data/curated/phase2-nus-isb-bus-stops.json', import.meta.url);
+const com3XrayShellFile = new URL('../../data/curated/phase4-com3-xray-shell.json', import.meta.url);
 const nextbusResearchSnapshotFile = new URL('../../data/processed/nextbus-research/nus-nextbus-static-snapshot.json', import.meta.url);
 
 const NUS_BOUNDS = {
@@ -277,12 +278,35 @@ function validateIsbBusStopInventory(inventory, snapshot) {
   });
 }
 
+function validateCom3XrayShell(shell) {
+  assert(shell.schema === 'phase4-building-xray-shell-v1', 'COM3 xray shell must use the Phase 4 schema');
+  assert(shell.buildingId === 'com3', 'COM3 xray shell must target com3');
+  assert(Array.isArray(shell.sourceIds), 'COM3 xray shell must include sourceIds');
+  assert(shell.sourceIds.includes('osm-overpass-com3'), 'COM3 xray shell must reference the COM3 OSM source');
+  assert(shell.geometrySourceStatus === 'verified', 'COM3 xray shell footprint source must remain verified');
+  assert(shell.floorCountSourceStatus === 'verified', 'COM3 xray shell floor count must remain verified');
+  assert(shell.floorLabelSourceStatus === 'manual-reference', 'COM3 xray shell floor labels must stay manual-reference');
+  assert(shell.xrayStatus === 'building shell only', 'COM3 xray shell must stay shell-only');
+  assert(shell.heightSourceStatus === 'prototype-placeholder', 'COM3 xray shell height must stay prototype-placeholder');
+  assert(shell.heightMeters === 24, 'COM3 xray shell height must match the current COM3 visual height');
+  assert(shell.floorHeightMeters === 4, 'COM3 xray shell floor height must match the current visual floor height');
+  assert(Array.isArray(shell.floorSelectorLabels), 'COM3 xray shell must include floor selector labels');
+  assert(shell.floorSelectorLabels.length === 6, 'COM3 xray shell must expose six floor labels from OSM building:levels');
+  shell.floorSelectorLabels.forEach((label, index) => {
+    assert(label === `L${index + 1}`, `COM3 xray shell floor label ${index + 1} must be generic L${index + 1}`);
+  });
+  assert(shell.blockedArtifacts?.publicEntrances?.includes('Not enabled'), 'COM3 xray shell must keep public entrances blocked');
+  assert(shell.blockedArtifacts?.indoorDetail?.includes('Not enabled'), 'COM3 xray shell must keep indoor detail blocked');
+  assert(shell.detail.includes('must not be treated as official indoor detail'), 'COM3 xray shell must disclose indoor-detail limitation');
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
 const curatedBuildingFootprints = JSON.parse(await readFile(curatedBuildingFootprintsFile, 'utf8'));
 const isbStopPlanting = JSON.parse(await readFile(isbStopPlantingFile, 'utf8'));
 const isbBusStops = JSON.parse(await readFile(isbBusStopsFile, 'utf8'));
+const com3XrayShell = JSON.parse(await readFile(com3XrayShellFile, 'utf8'));
 const nextbusResearchSnapshot = JSON.parse(await readFile(nextbusResearchSnapshotFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
@@ -325,6 +349,7 @@ assert(Array.isArray(isbStopPlanting.routes), 'ISB stop planting must include ro
 isbStopPlanting.routes.forEach((route, index) => validateIsbStopPlantingRoute(route, index, seenPlaceIds));
 validateNextbusResearchSnapshot(nextbusResearchSnapshot);
 validateIsbBusStopInventory(isbBusStops, nextbusResearchSnapshot);
+validateCom3XrayShell(com3XrayShell);
 
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
@@ -333,4 +358,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, and NextBus research snapshot contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NextBus research snapshot, and COM3 xray shell contain required metadata.');

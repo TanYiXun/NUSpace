@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Form
 import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
+import com3XrayShell from '../../data/curated/phase4-com3-xray-shell.json';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
@@ -19,6 +20,7 @@ import { getNusIsbPlantedStopsForCampusPlace } from '../transit/nusIsbStopPlanti
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
+const COM3_XRAY_SOURCE_ID = 'phase4-com3-xray-shell';
 const CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID = 'mvp1-building-footprints';
 const CAMPUS_BUILDING_DETAIL_SOURCE_ID = 'mvp1-building-visual-detail';
 const CAMPUS_BUILDING_EXTRUSION_LAYER_ID = 'mvp1-building-extrusions';
@@ -29,6 +31,9 @@ const CAMPUS_BUILDING_LABEL_LAYER_ID = 'mvp1-building-labels';
 const COM3_EXTRUSION_LAYER_ID = 'prototype-com3-extrusion';
 const COM3_FLOOR_BANDS_LAYER_ID = 'prototype-com3-floor-bands';
 const COM3_ROOF_CAP_LAYER_ID = 'prototype-com3-roof-cap';
+const COM3_XRAY_SHELL_LAYER_ID = 'phase4-com3-xray-shell';
+const COM3_XRAY_FLOORS_LAYER_ID = 'phase4-com3-xray-floors';
+const COM3_XRAY_SELECTED_FLOOR_LAYER_ID = 'phase4-com3-xray-selected-floor';
 const COM3_OUTLINE_LAYER_ID = 'prototype-com3-outline';
 const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
 const CAMPUS_BUS_STOPS_SOURCE_ID = 'mvp1-campus-bus-stops';
@@ -60,6 +65,9 @@ const BUILDING_LAYER_IDS = [
   COM3_EXTRUSION_LAYER_ID,
   COM3_FLOOR_BANDS_LAYER_ID,
   COM3_ROOF_CAP_LAYER_ID,
+  COM3_XRAY_SHELL_LAYER_ID,
+  COM3_XRAY_FLOORS_LAYER_ID,
+  COM3_XRAY_SELECTED_FLOOR_LAYER_ID,
   COM3_OUTLINE_LAYER_ID,
   COM3_LABEL_LAYER_ID,
 ];
@@ -125,6 +133,8 @@ const initialNusModsModuleState: NusModsModuleUiState = {
   status: 'idle',
   message: 'Search a module code to inspect lesson venues.',
 };
+const com3XrayFloorLabels = com3XrayShell.floorSelectorLabels;
+const initialCom3XrayFloor = com3XrayFloorLabels[0] ?? 'L1';
 
 function getPublicBusStatusLabel(state: PublicBusArrivalUiState) {
   if (state.status === 'loading') {
@@ -234,6 +244,57 @@ function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.Fea
 }
 
 const com3VisualDetails = createCom3VisualDetails(com3Building);
+
+function createCom3XrayShell(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
+  const baseFeature = source.features[0];
+
+  if (!baseFeature || baseFeature.geometry.type !== 'Polygon') {
+    return { type: 'FeatureCollection', features: [] };
+  }
+
+  const floorHeight = com3XrayShell.floorHeightMeters;
+  const floorFeatures = com3XrayFloorLabels.map((label, index) => {
+    const baseHeight = index * floorHeight + 0.28;
+
+    return {
+      type: 'Feature' as const,
+      id: `com3_xray_floor_${label.toLowerCase()}`,
+      properties: {
+        name: 'COM3 xray floor plate',
+        building_id: 'com3',
+        floor_label: label,
+        floor_index: index + 1,
+        source_id: 'osm-overpass-com3',
+        xray_status: com3XrayShell.xrayStatus,
+        base_m: baseHeight,
+        height_m: baseHeight + 0.16,
+      },
+      geometry: baseFeature.geometry,
+    };
+  });
+
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        id: 'com3_xray_translucent_shell',
+        properties: {
+          name: 'COM3 xray shell',
+          building_id: 'com3',
+          source_id: 'osm-overpass-com3',
+          xray_status: com3XrayShell.xrayStatus,
+          base_m: 0,
+          height_m: com3XrayShell.heightMeters,
+        },
+        geometry: baseFeature.geometry,
+      },
+      ...floorFeatures,
+    ],
+  };
+}
+
+const com3XrayShellSource = createCom3XrayShell(com3Building);
 
 function createCampusBuildingVisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   const features = source.features.flatMap((feature) => {
@@ -376,6 +437,7 @@ export function CampusMap() {
   const [nusModsModuleState, setNusModsModuleState] = useState<NusModsModuleUiState>(
     initialNusModsModuleState,
   );
+  const [selectedCom3XrayFloor, setSelectedCom3XrayFloor] = useState(initialCom3XrayFloor);
   const stageStyle = {
     '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
   } as CSSProperties;
@@ -383,6 +445,7 @@ export function CampusMap() {
     ? getNusIsbPlantedStopsForCampusPlace(selectedBusStop.id)
     : [];
   const selectedNextbusRoutes = selectedBusStop?.nextbus?.routeNames ?? [];
+  const isCom3XrayActive = selectedPanel === 'building';
 
   const updateSheet = useCallback((panel: SelectedPanel, nextSheetState: SheetState = 'half') => {
     setSelectedPanel(panel);
@@ -619,6 +682,11 @@ export function CampusMap() {
         data: com3VisualDetails,
       });
 
+      map.addSource(COM3_XRAY_SOURCE_ID, {
+        type: 'geojson',
+        data: com3XrayShellSource,
+      });
+
       map.addSource(CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID, {
         type: 'geojson',
         data: campusBuildingFootprints,
@@ -797,6 +865,61 @@ export function CampusMap() {
           'fill-extrusion-height': ['get', 'height_m'],
           'fill-extrusion-base': ['get', 'base_m'],
           'fill-extrusion-opacity': 0.94,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: COM3_XRAY_SHELL_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'COM3 xray shell'],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#7bb7c9',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.28,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: COM3_XRAY_FLOORS_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'COM3 xray floor plate'],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#d9f0f4',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.54,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      }, firstSymbolLayerId);
+
+      map.addLayer({
+        id: COM3_XRAY_SELECTED_FLOOR_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: [
+          'all',
+          ['==', ['get', 'name'], 'COM3 xray floor plate'],
+          ['==', ['get', 'floor_label'], initialCom3XrayFloor],
+        ],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#e1b047',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.9,
           'fill-extrusion-vertical-gradient': false,
         },
       }, firstSymbolLayerId);
@@ -981,6 +1104,30 @@ export function CampusMap() {
     };
   }, [clearSelection, openSearchEntity, selectBusStop, setSelectedBuildingState, updateSheet]);
 
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    const visibility = isCom3XrayActive ? 'visible' : 'none';
+
+    [COM3_XRAY_SHELL_LAYER_ID, COM3_XRAY_FLOORS_LAYER_ID, COM3_XRAY_SELECTED_FLOOR_LAYER_ID].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility);
+      }
+    });
+
+    if (map.getLayer(COM3_XRAY_SELECTED_FLOOR_LAYER_ID)) {
+      map.setFilter(COM3_XRAY_SELECTED_FLOOR_LAYER_ID, [
+        'all',
+        ['==', ['get', 'name'], 'COM3 xray floor plate'],
+        ['==', ['get', 'floor_label'], selectedCom3XrayFloor],
+      ]);
+    }
+  }, [isCom3XrayActive, selectedCom3XrayFloor, mapState]);
+
   const selectedBuildingVisual = selectedSearchEntity?.type === 'building'
     ? buildingVisualMetadata.get(selectedSearchEntity.id) ?? null
     : null;
@@ -1153,12 +1300,42 @@ export function CampusMap() {
                 </div>
                 <div>
                   <dt>Detail</dt>
-                  <dd>Prototype facade bands</dd>
+                  <dd>Shell-only xray</dd>
+                </div>
+                <div>
+                  <dt>Xray</dt>
+                  <dd>{com3XrayShell.xrayStatus}</dd>
                 </div>
               </dl>
+              <div className="floorSelector" aria-label="COM3 shell-only floor selector">
+                <div>
+                  <strong>Floor selector</strong>
+                  <span>Generic labels from OSM level count</span>
+                </div>
+                <div className="floorSelectorButtons">
+                  {com3XrayFloorLabels.map((floorLabel) => (
+                    <button
+                      key={floorLabel}
+                      className="floorSelectorButton"
+                      type="button"
+                      data-active={selectedCom3XrayFloor === floorLabel}
+                      aria-pressed={selectedCom3XrayFloor === floorLabel}
+                      onClick={() => setSelectedCom3XrayFloor(floorLabel)}
+                    >
+                      {floorLabel}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <p className="truthNote">
-                Real footprint and levels. Height and facade bands are visual placeholders.
+                {com3XrayShell.detail} No rooms, corridors, entrances, or indoor POIs are shown.
               </p>
+              <div className="transitStatusCard" aria-label="COM3 xray source status">
+                <div>
+                  <strong>Source confidence</strong>
+                  <span>Footprint and level count from OSM; floor labels are generic.</span>
+                </div>
+              </div>
             </div>
           </>
         ) : selectedPanel === 'search' && selectedSearchEntity ? (

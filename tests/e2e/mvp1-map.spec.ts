@@ -148,6 +148,23 @@ test('desktop exposes 3D building detail source metadata', async ({ page }, test
   await expect(page.getByText('OSM-sourced building point derived from way geometry')).toBeVisible();
 });
 
+test('desktop exposes COM3 shell-only xray floor selector', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
+
+  await page.goto('/');
+  await page.getByPlaceholder('Search NUS').fill('COM3');
+  await page.getByRole('button', { name: 'COM3 Computing 3, 11 Research Link' }).click();
+
+  await expect(page.getByRole('heading', { name: 'COM3' })).toBeVisible();
+  await expect(page.getByLabel('COM3 shell-only floor selector')).toContainText('Floor selector');
+  await expect(page.getByLabel('COM3 shell-only floor selector')).toContainText('L6');
+  await expect(page.getByText('building shell only')).toBeVisible();
+  await expect(page.getByText('No rooms, corridors, entrances, or indoor POIs are shown.')).toBeVisible();
+
+  await page.getByRole('button', { name: 'L4' }).click();
+  await expect(page.getByRole('button', { name: 'L4' })).toHaveAttribute('aria-pressed', 'true');
+});
+
 test('desktop labels planted D1 stops without verifying coordinates', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
 

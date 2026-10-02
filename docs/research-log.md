@@ -115,6 +115,22 @@
 - Decision: keep the existing D1 display corridor as a hidden source-pending prototype route layer. Show the D1 stop sequence only as unverified prototype data, keep route color for UI testing, and keep live NUS shuttle arrivals blocked.
 - Confidence: medium for the prototype route UI boundary, low for route geometry and stop-position accuracy until official or permissioned source-confirmed geometry is available.
 
+## 2026-10-01 - Phase 2 D1 Stop-Label Planting
+
+- Task: continue verified bus stop planting without treating unverified marker coordinates as official boarding points.
+- Sources checked: NUS UCI Service D1 route-map image and the existing OSM Kent Ridge bus stop seed.
+- Finding: the NUS UCI route-map image provides an official manual reference for D1 stop labels and order, but it does not provide permitted machine-readable stop coordinates. Ten D1 stop labels can be matched to existing OSM seed markers; COM3, Opp YIH, and YIH remain unplanted because no verified or field-surveyed boarding-point coordinate is documented.
+- Decision: add `data/curated/phase2-nus-isb-stop-planting.json` with planted D1 labels/order only, keep all marker positions `manual-reference`, and disclose in the selected bus-stop sheet that route use is name/order reference only.
+- Confidence: medium for stop-label/order reference, low for stop-position accuracy until official/permitted coordinate data or a documented field-survey method exists.
+
+## 2026-10-01 - NUS NextBus Codelab API Research Snapshot
+
+- Task: attempt to extract static bus-stop inventory data from the Google Developers codelab-documented NUS NextBus endpoint after the user supplied/reminded the codelab credentials.
+- Sources checked: Google Developers codelab and `https://nnextbus.nus.edu.sg/` endpoints.
+- Finding: `/BusStops` returned 33 bus stops with coordinates. `/Announcements` returned four records. `/ShuttleService?busstopname=<stop.name>` returned parseable per-stop route/ETA payloads for all 33 bus stops. `/ShuttleService` without `busstopname` returned `Bus stop not found!`.
+- Decision: store raw JSON responses under `data/raw/nextbus-research/`, a processed static planning snapshot at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, and an app-facing 33-stop inventory at `data/curated/phase2-nus-isb-bus-stops.json`. Render the stops only as labelled `requires-permission` research markers with no live ETA/current-route claim.
+- Confidence: high for captured response shape on 2026-10-01, low for production/legal reusability until NUS/NextBus permission exists.
+
 ## 2026-10-01 - Phase 3 NUSMods Module Lookup
 
 - Task: implement the first NUSMods intelligence slice with module-code lookup, lesson venue summaries, confidence-labelled venue mapping, and nearest known bus stop suggestions.

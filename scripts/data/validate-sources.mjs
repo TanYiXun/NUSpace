@@ -6,6 +6,9 @@ const generatedBuildingsFile = new URL('../../data/generated/campus-buildings.ge
 const generatedManifestFile = new URL('../../data/generated/manifest.json', import.meta.url);
 const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', import.meta.url);
 const curatedBuildingFootprintsFile = new URL('../../data/curated/mvp1-building-footprints.geojson', import.meta.url);
+const isbStopPlantingFile = new URL('../../data/curated/phase2-nus-isb-stop-planting.json', import.meta.url);
+const isbBusStopsFile = new URL('../../data/curated/phase2-nus-isb-bus-stops.json', import.meta.url);
+const nextbusResearchSnapshotFile = new URL('../../data/processed/nextbus-research/nus-nextbus-static-snapshot.json', import.meta.url);
 
 const NUS_BOUNDS = {
   minLng: 103.76,
@@ -13,6 +16,8 @@ const NUS_BOUNDS = {
   minLat: 1.285,
   maxLat: 1.31,
 };
+
+const NEXTBUS_RESEARCH_EXTENDED_STOPS = new Set(['CG', 'OTH', 'BG-MRT']);
 
 const requiredFragments = [
   'id: openfreemap',
@@ -53,6 +58,28 @@ function assertPosition(position, context) {
   assert(typeof lat === 'number' && Number.isFinite(lat), `${context} latitude must be finite`);
   assert(lng >= NUS_BOUNDS.minLng && lng <= NUS_BOUNDS.maxLng, `${context} longitude is outside NUS bounds`);
   assert(lat >= NUS_BOUNDS.minLat && lat <= NUS_BOUNDS.maxLat, `${context} latitude is outside NUS bounds`);
+}
+
+function assertNextbusResearchPosition(stop) {
+  const [lng, lat] = stop.coordinates;
+  const inKentRidgeBounds = lng >= NUS_BOUNDS.minLng
+    && lng <= NUS_BOUNDS.maxLng
+    && lat >= NUS_BOUNDS.minLat
+    && lat <= NUS_BOUNDS.maxLat;
+
+  if (inKentRidgeBounds) {
+    assertPosition(stop.coordinates, `NextBus research stop ${stop.name} coordinates`);
+    return;
+  }
+
+  assert(
+    NEXTBUS_RESEARCH_EXTENDED_STOPS.has(stop.name),
+    `NextBus research stop ${stop.name} coordinates are outside Kent Ridge bounds and not whitelisted`,
+  );
+  assert(
+    stop.routeRefs.some((routeRef) => routeRef.routeName === 'P'),
+    `NextBus research stop ${stop.name} outside Kent Ridge bounds must be tied to Service P research data`,
+  );
 }
 
 function assertClosedRing(ring, context) {
@@ -141,10 +168,122 @@ function validateCuratedBuildingFootprint(feature, index) {
   });
 }
 
+function validateIsbStopPlantingRoute(route, index, campusPlaceIds) {
+  const context = `ISB stop planting route ${route.routeCode ?? index}`;
+
+  assert(typeof route.routeCode === 'string' && route.routeCode.length > 0, `${context} must have a routeCode`);
+  assert(typeof route.sourceLabel === 'string' && route.sourceLabel.length > 0, `${context} must have a sourceLabel`);
+  assert(route.stopNameStatus === 'manual-reference', `${context} stopNameStatus must stay manual-reference without permitted machine-readable stop data`);
+  assert(route.positionStatus === 'manual-reference', `${context} positionStatus must stay manual-reference without official or field-collected coordinates`);
+  assert(typeof route.detail === 'string' && route.detail.includes('coordinates reuse existing OSM seed markers'), `${context} must disclose coordinate reuse`);
+  assert(Array.isArray(route.plantedStops), `${context} plantedStops must be an array`);
+  assert(Array.isArray(route.unplantedStops), `${context} unplantedStops must be an array`);
+
+  const seenSequences = new Set();
+  const seenPlaceIds = new Set();
+
+  route.plantedStops.forEach((stop, stopIndex) => {
+    const stopContext = `${context} planted stop ${stop.officialName ?? stopIndex}`;
+
+    assert(Number.isInteger(stop.sequence) && stop.sequence > 0, `${stopContext} must have a positive sequence`);
+    assert(!seenSequences.has(stop.sequence), `${stopContext} sequence must be unique`);
+    seenSequences.add(stop.sequence);
+    assert(typeof stop.officialName === 'string' && stop.officialName.length > 0, `${stopContext} must have an officialName`);
+    assert(campusPlaceIds.has(stop.campusPlaceId), `${stopContext} campusPlaceId must exist in curated campus places`);
+    assert(!seenPlaceIds.has(stop.campusPlaceId), `${stopContext} campusPlaceId must be unique within the route`);
+    seenPlaceIds.add(stop.campusPlaceId);
+    assert(stop.positionSourceId === 'osm-api-nus-kent-ridge-map', `${stopContext} positionSourceId must stay on the OSM seed source`);
+    assert(stop.positionStatus === 'manual-reference', `${stopContext} positionStatus must not be verified`);
+    assert(stop.positionNote.includes('Not an official NUS ISB stop coordinate'), `${stopContext} must disclose unverified position`);
+  });
+
+  route.unplantedStops.forEach((stop, stopIndex) => {
+    const stopContext = `${context} unplanted stop ${stop.officialName ?? stopIndex}`;
+
+    assert(Number.isInteger(stop.sequence) && stop.sequence > 0, `${stopContext} must have a positive sequence`);
+    assert(!seenSequences.has(stop.sequence), `${stopContext} sequence must be unique across planted and unplanted stops`);
+    seenSequences.add(stop.sequence);
+    assert(typeof stop.officialName === 'string' && stop.officialName.length > 0, `${stopContext} must have an officialName`);
+    assert(typeof stop.reason === 'string' && stop.reason.includes('No verified or field-surveyed boarding-point coordinate'), `${stopContext} must explain missing coordinates`);
+  });
+}
+
+function validateNextbusResearchSnapshot(snapshot) {
+  assert(snapshot.schema === 'nextbus-research-static-snapshot-v1', 'NextBus research snapshot must use the expected schema');
+  assert(snapshot.sourceId === 'nus-nextbus-codelab-api', 'NextBus research snapshot must use the codelab source id');
+  assert(snapshot.sourceStatus === 'requires-permission', 'NextBus research snapshot must stay requires-permission');
+  assert(
+    typeof snapshot.warning === 'string' && snapshot.warning.includes('Do not treat as approved production data'),
+    'NextBus research snapshot must include a production-use warning',
+  );
+  assert(Array.isArray(snapshot.busStops), 'NextBus research snapshot must include busStops');
+  assert(snapshot.busStops.length > 0, 'NextBus research snapshot must include at least one bus stop');
+
+  snapshot.busStops.forEach((stop, index) => {
+    const context = `NextBus research stop ${stop.name ?? index}`;
+
+    assert(typeof stop.id === 'string' && stop.id.startsWith('nextbus_'), `${context} must have a nextbus_ id`);
+    assert(typeof stop.name === 'string' && stop.name.length > 0, `${context} must have a name`);
+    assert(stop.sourceId === 'nus-nextbus-codelab-api', `${context} must preserve sourceId`);
+    assert(stop.sourceStatus === 'requires-permission', `${context} must stay requires-permission`);
+    assertNextbusResearchPosition(stop);
+    assert(Array.isArray(stop.routeRefs), `${context} routeRefs must be an array`);
+
+    stop.routeRefs.forEach((routeRef, routeIndex) => {
+      const routeContext = `${context} routeRef ${routeIndex}`;
+
+      assert(typeof routeRef.routeName === 'string' && routeRef.routeName.length > 0, `${routeContext} must have a routeName`);
+      assert(typeof routeRef.busStopCode === 'string' && routeRef.busStopCode.length > 0, `${routeContext} must have a busStopCode`);
+      assert(routeRef.snapshotTimestamp, `${routeContext} must preserve snapshotTimestamp`);
+    });
+  });
+}
+
+function validateIsbBusStopInventory(inventory, snapshot) {
+  assert(inventory.schema === 'phase2-nus-isb-bus-stops-v1', 'NUS ISB bus stop inventory must use the expected schema');
+  assert(inventory.source_status === 'requires-permission', 'NUS ISB bus stop inventory must stay requires-permission');
+  assert(
+    typeof inventory.warning === 'string' && inventory.warning.includes('Do not mark verified'),
+    'NUS ISB bus stop inventory must include a verification warning',
+  );
+  assert(Array.isArray(inventory.source_ids), 'NUS ISB bus stop inventory must include source_ids');
+  assert(inventory.source_ids.includes('nus-nextbus-codelab-api'), 'NUS ISB bus stop inventory must reference the NextBus codelab source');
+  assert(Array.isArray(inventory.stops), 'NUS ISB bus stop inventory must include stops');
+  assert(inventory.stops.length === snapshot.busStops.length, 'NUS ISB bus stop inventory must include every NextBus snapshot stop');
+
+  const snapshotNames = new Set(snapshot.busStops.map((stop) => stop.name));
+  const seenStopIds = new Set();
+  const seenNextbusNames = new Set();
+
+  inventory.stops.forEach((stop, index) => {
+    const context = `NUS ISB bus stop ${stop.id ?? index}`;
+
+    assert(typeof stop.id === 'string' && stop.id.startsWith('nextbus-'), `${context} must have a nextbus id`);
+    assert(!seenStopIds.has(stop.id), `${context} id must be unique`);
+    seenStopIds.add(stop.id);
+    assert(typeof stop.name === 'string' && stop.name.length > 0, `${context} must have a display name`);
+    assert(Array.isArray(stop.aliases), `${context} aliases must be an array`);
+    assert(stop.type === 'bus_stop', `${context} must have type=bus_stop`);
+    assertNextbusResearchPosition({ name: stop.nextbus?.name, coordinates: stop.coordinates, routeRefs: stop.nextbus?.routeRefs ?? [] });
+    assert(stop.sourceId === 'nus-nextbus-codelab-api', `${context} must preserve sourceId`);
+    assert(stop.sourceStatus === 'requires-permission', `${context} must stay requires-permission`);
+    assert(typeof stop.sourceLabel === 'string' && stop.sourceLabel.startsWith('NextBus '), `${context} must preserve sourceLabel`);
+    assert(typeof stop.detail === 'string' && stop.detail.includes('require permission review'), `${context} must disclose permission review`);
+    assert(snapshotNames.has(stop.nextbus?.name), `${context} nextbus.name must exist in snapshot`);
+    assert(!seenNextbusNames.has(stop.nextbus.name), `${context} nextbus.name must be unique`);
+    seenNextbusNames.add(stop.nextbus.name);
+    assert(Array.isArray(stop.nextbus.routeNames) && stop.nextbus.routeNames.length > 0, `${context} must include routeNames`);
+    assert(Array.isArray(stop.nextbus.routeRefs), `${context} must include routeRefs`);
+  });
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
 const curatedBuildingFootprints = JSON.parse(await readFile(curatedBuildingFootprintsFile, 'utf8'));
+const isbStopPlanting = JSON.parse(await readFile(isbStopPlantingFile, 'utf8'));
+const isbBusStops = JSON.parse(await readFile(isbBusStopsFile, 'utf8'));
+const nextbusResearchSnapshot = JSON.parse(await readFile(nextbusResearchSnapshotFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
 assert(Array.isArray(generatedBuildings.features), 'generated buildings features must be an array');
@@ -179,6 +318,14 @@ assert((placeTypeCounts.bus_stop ?? 0) >= 8, 'curated places must seed at least 
 curatedBuildingFootprints.features.forEach(validateCuratedBuildingFootprint);
 assert(curatedBuildingFootprints.features.length >= 10, 'curated building footprints must include at least 10 visible buildings for MVP 1');
 
+assert(isbStopPlanting.schema === 'phase2-nus-isb-stop-planting-v1', 'ISB stop planting must use the Phase 2 schema');
+assert(Array.isArray(isbStopPlanting.source_ids), 'ISB stop planting must record source_ids');
+assert(isbStopPlanting.source_ids.every((sourceId) => contents.includes(`id: ${sourceId}`)), 'ISB stop planting source_ids must exist in data/sources.yml');
+assert(Array.isArray(isbStopPlanting.routes), 'ISB stop planting must include routes');
+isbStopPlanting.routes.forEach((route, index) => validateIsbStopPlantingRoute(route, index, seenPlaceIds));
+validateNextbusResearchSnapshot(nextbusResearchSnapshot);
+validateIsbBusStopInventory(isbBusStops, nextbusResearchSnapshot);
+
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
 assert(
@@ -186,4 +333,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, and MVP 1 building footprints contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, and NextBus research snapshot contain required metadata.');

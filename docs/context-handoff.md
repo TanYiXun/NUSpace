@@ -13,13 +13,26 @@ This file is a concise working-memory handoff for long conversations, compaction
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
-- Active uncommitted work: none.
+- Active uncommitted work: Phase 2 D1 stop-label planting slice. Files changed:
+  - `data/curated/phase2-nus-isb-stop-planting.json`
+  - `src/transit/nusIsbStopPlanting.ts`
+  - `src/transit/nusIsbStopPlanting.test.ts`
+  - `src/map/CampusMap.tsx`
+  - `scripts/data/validate-sources.mjs`
+  - `tests/e2e/mvp1-map.spec.ts`
+  - `data/sources.yml`
+  - `README.md`
+  - `docs/data-pipeline.md`
+  - `docs/research-log.md`
+  - `data/raw/nextbus-research/`
+  - `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`
+  - `docs/decisions/nextbus-research-snapshot.md`
 
 ## Current Phase
 
-- Active plan sections: `PLAN.md` section 11.2, section 13, section 13.1.1, and section 15.4.
-- Current slice: de-prototype map/transit/3D checkpoint is merged; next work should start from a fresh task.
-- Latest refinement: OSM bus stop points remain manual-reference seed markers with unverified-position UI wording; D1 prototype routing is no longer surfaced as normal route UI; terrain is shown only as blocked until source/license/alignment/performance are documented; OSM building footprints get procedural facade bands and roof caps for visual depth; `PLAN.md` now includes a one-building recognizable model and xray shell slice for NTU Map/Finute Maps style future work.
+- Active plan sections: `PLAN.md` section 7.1, section 11.2, and section 15.4.
+- Current slice: D1 stop-label planting plus NUS NextBus codelab API research extraction are in progress and uncommitted.
+- Latest refinement: OSM bus stop points remain manual-reference seed markers with unverified-position UI wording; selected planted D1 stops now show `D1 stop label` and `Route use: Name/order reference only`; COM3, Opp YIH, and YIH remain unplanted because no verified or field-surveyed boarding-point coordinate is documented. D1 prototype routing is still not surfaced as normal route UI. The NextBus codelab API research snapshot captured 33 stops and per-stop route refs; every derived record is `requires-permission` and now renders only as labelled NUS ISB research markers with no live/current/verified claim.
 - Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; PR #26 added a stricter post-review truth checkpoint in `docs/decisions/deprototype-map-transit-3d.md`. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5173/` from `npm run dev -- --host 127.0.0.1`.
 - The user has been reviewing the running local app. Local preview is expected at `http://127.0.0.1:5173/` from merged `main`.
@@ -207,6 +220,41 @@ Latest checks passed on 2026-10-01:
 - `npm run build`
 - `npm run test:e2e`
 
+Latest uncommitted D1 stop-label planting checks passed on 2026-10-01:
+
+- `npm run validate:data`
+- `npm run typecheck`
+- `npm run test` with 9 passed test files and 42 passed tests
+- `npm run lint`
+- `npm run build` with the known Vite chunk-size warning
+- `npm run test:e2e` with 6 passed and 6 skipped after adding the planted-stop selected-sheet smoke test
+
+Latest uncommitted NextBus research snapshot checks passed on 2026-10-01:
+
+- `npm run validate:data`
+- `npm run test` with 9 passed test files and 42 passed tests
+- `npm run lint`
+- `npm run build` with the known Vite chunk-size warning
+- `npm run test:e2e` with 7 passed and 7 skipped after adding the full NUS ISB research-stop smoke test
+
+NextBus extraction details:
+
+- Source id: `nus-nextbus-codelab-api`.
+- Raw responses: `data/raw/nextbus-research/`.
+- Processed snapshot: `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`.
+- Decision note: `docs/decisions/nextbus-research-snapshot.md`.
+- `/BusStops` returned 33 stops.
+- `/Announcements` returned four records.
+- `/ShuttleService?busstopname=<stop.name>` parsed for all 33 stops.
+- `/ShuttleService` without `busstopname` returned `Bus stop not found!`.
+- `CG`, `OTH`, and `BG-MRT` are outside the Kent Ridge bounds and are explicitly whitelisted only as Service P/Bukit Timah-context research records.
+- App-facing inventory: `data/curated/phase2-nus-isb-bus-stops.json`, exactly 33 stops.
+- UI screenshots:
+  - `docs/screenshots/nextbus-research-stops-overview.png`
+  - `docs/screenshots/nextbus-research-selected-stop.png`
+
+The first `npm run test:e2e` attempt failed in the sandbox with `listen EPERM: operation not permitted 127.0.0.1:5173`. The escalated rerun initially reused a stale Node listener on `5173` and saw live-key state instead of the expected missing-key state. That listener was stopped, and the clean rerun passed. After the clean run, no process was listening on `127.0.0.1:5173`.
+
 For the Phase 4 slice, `npm run test:e2e` passed with 5 passed and 5 skipped after adding the selected-building metadata smoke test. `npm run build` still reports the known Vite chunk-size warning.
 
 `npm run test:e2e` now runs Playwright desktop and mobile viewport smoke tests with `NUSPACE_SKIP_LOCAL_ENV=1` so local `.env.local` keys do not mask the missing-key state. On 2026-10-01, the first sandboxed run failed because Playwright could not bind `127.0.0.1:5173`; rerunning with localhost bind approval initially reused an old live-key server on `5173`, so that listener was stopped and the clean e2e run passed with 4 passed and 4 skipped project-specific tests. It may require `npx playwright install chromium` once on a fresh machine.
@@ -222,6 +270,9 @@ Known build warning:
 - Building footprint visual heights are OSM-level-derived estimates or prototype placeholders, not official architectural heights.
 - Do not treat the current route path as official NUS shuttle geometry.
 - Do not treat current stop points as verified bus stop locations.
+- D1 stop-label planting verifies label/order reference only; it does not verify exact boarding-point coordinates.
+- COM3, Opp YIH, and YIH remain unplanted in the D1 planting file until official/permitted coordinates or a documented field-survey method exists.
+- NextBus codelab API snapshot data is `requires-permission` research data only. It may render only with explicit research/permission-required labels. Do not mark it verified, show it as live/current shuttle truth, or treat it as redistributable official NUS data until permission and terms are documented.
 - Current UI should block NUS shuttle route display until permitted route geometry and verified stop positions exist.
 - No live NUS shuttle API, real-time arrivals, crowd level, or live vehicle positions are enabled.
 - uNivUS, ConnectX, or NUS live shuttle APIs must not be used in production unless official access is documented.

@@ -52,6 +52,8 @@ Phase 1 adds the first curated campus place seed:
 
 - `data/curated/mvp1-campus-places.json`
 - `data/curated/mvp1-building-footprints.geojson`
+- `data/curated/phase2-nus-isb-stop-planting.json`
+- `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`
 - Source id: `osm-api-nus-kent-ridge-map`
 - Source owner: OpenStreetMap contributors
 - Status: verified as OSM community map data, not official NUS data
@@ -66,18 +68,23 @@ The full raw XML extract is not committed. The curated place JSON preserves the 
 
 The building footprint GeoJSON uses the same documented OSM source family. The initial bounded map extract identified the selected OSM objects. Complete building rings for OSM ways were then checked through OSM API `way/{id}/full` responses so that footprints are not reconstructed from clipped geometry. COM3 continues to use the previously documented OSM relation source.
 
+Phase 2 adds `phase2-nus-isb-stop-planting.json` to attach official D1 route-map stop labels/order to existing OSM seed markers where the names can be matched. The NUS UCI route-map image is used only as a manual reference for stop labels and order. Coordinates still come from the existing OSM seed markers, remain `manual-reference`, and must not be treated as exact boarding-point positions.
+
+The NextBus codelab API research snapshot lives at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. The app derives `data/curated/phase2-nus-isb-bus-stops.json` from it so all 33 captured NUS ISB stops are searchable/selectable as labelled `requires-permission` research markers. It must not be marked verified, shown as live/current arrivals, or redistributed as official NUS data until permission and terms are documented. See `docs/decisions/nextbus-research-snapshot.md`.
+
 Validation:
 
 ```bash
 npm run validate:data
 ```
 
-Validation checks the curated place schema, building footprint schema, unique ids, allowed place types, WGS84 coordinate order, NUS-area bounds, source ids in `data/sources.yml`, OSM object provenance, polygon ring closure, height source status, and MVP 1 seed minimums:
+Validation checks the curated place schema, building footprint schema, D1 stop planting schema, NextBus research snapshot schema, unique ids, allowed place types, WGS84 coordinate order, NUS-area bounds, source ids in `data/sources.yml`, OSM object provenance, polygon ring closure, height source status, permission labels, and MVP 1 seed minimums:
 
 - at least 20 searchable places
 - at least 10 buildings
 - at least 8 bus stops
 - at least 10 visible building footprints
+- exactly 33 NextBus-derived NUS ISB research stops
 
 Known data quality issues:
 
@@ -85,4 +92,6 @@ Known data quality issues:
 - OSM building and bus stop data is community-maintained and not official NUS data.
 - Building heights are derived from available OSM `building:levels` where present or marked as prototype placeholders. They are not official architectural heights.
 - OSM bus stops do not provide live NUS shuttle arrivals, crowd levels, route membership, or official NUS ISB operating data.
+- D1 stop-label planting verifies neither exact boarding-point coordinates nor route geometry; COM3, Opp YIH, and YIH remain unplanted until official/permitted coordinate data or a documented field survey exists.
+- NextBus codelab API records are `requires-permission` research data. They may render only with explicit research/permission-required labels and are not approved production stop coordinates, route geometry, live arrivals, or redistributable official data.
 - The current D1 route remains a prototype simulation and is not generated from this dataset.

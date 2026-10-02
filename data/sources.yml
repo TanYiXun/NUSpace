@@ -79,7 +79,7 @@ sources:
     documentation_url: https://uci.nus.edu.sg/resources/faqs/campus-services-transport/
     terms_or_license_url: https://nus.edu.sg/legal-information-notices
     license: Public website reference; rights remain with NUS
-    allowed_use: Manual reference for NUS ISB route names, route availability notes, and static-route source-disclosure copy
+    allowed_use: Manual reference for NUS ISB route names, route availability notes, D1 stop labels/order, and static-route source-disclosure copy
     disallowed_use: Do not treat page images as machine-readable route geometry, live arrival data, live vehicle data, crowd level data, or production-ready stop coordinates
     attribution_text: NUS Internal Shuttle Bus information from NUS University Campus Infrastructure
     attribution_required: true
@@ -91,11 +91,13 @@ sources:
     source_status: manual-reference
     used_for:
       - Phase 2 NUS ISB route-list reference
+      - Phase 2 D1 stop-label planting reference
       - Phase 2 prototype route disclosure copy
     limitations:
       - Public page confirms route families and points users to uNivUS for up-to-the-minute schedules and live locations
       - Route maps are image-based and are not ingested as production geometry
-      - No public API access, machine-readable stop sequence, or live shuttle feed is granted by this source
+      - Route-map images are manually referenced only and do not provide permitted machine-readable stop coordinates
+      - No public API access or live shuttle feed is granted by this source
   - id: nus-campus-map-shuttle-routes
     name: NUS Campus Map shuttle routes page
     source_owner: National University of Singapore
@@ -119,6 +121,33 @@ sources:
     limitations:
       - Page lists route controls but does not expose a documented public route geometry API
       - Does not provide live NUS ISB arrivals, crowd level, or live vehicle positions
+  - id: nus-nextbus-codelab-api
+    name: NUS NextBus codelab API
+    source_owner: National University of Singapore; credentials and endpoint documented in Google Developers Codelab
+    source_url: https://nnextbus.nus.edu.sg/
+    documentation_url: https://codelabs.developers.google.com/build-nus-transit-hub-antigravity
+    terms_or_license_url: https://developers.google.com/site-policies
+    license: Codelab text is CC BY 4.0 and code samples are Apache 2.0; NUS API response reuse rights are not confirmed
+    allowed_use: Requires-permission research snapshot for labelled NUS ISB stop inventory display, route membership reference, internal planning, and future adapter shape
+    disallowed_use: Do not expose credentials in committed code; do not treat response data as production-approved NUS shuttle data, live arrivals, verified route geometry, verified stop positions, crowd level, or redistributable official data without NUS/NextBus permission
+    attribution_text: NUS NextBus endpoint referenced by Google Developers Codelab; response data rights require NUS permission review
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Keep snapshots under data/raw or data/processed research paths, label every derived record requires-permission, and render only with explicit research/permission-required UI labels until permission and terms are documented
+    date_checked: 2026-10-01
+    next_review_date: 2026-11-01
+    source_status: requires-permission
+    used_for:
+      - Research snapshot of NUS NextBus bus stop coordinates
+      - Research snapshot of route membership observed through per-stop ShuttleService responses
+      - Labelled NUS ISB research stop search and map markers
+      - Future NUS ISB adapter schema planning
+    limitations:
+      - Endpoint is documented by a learning codelab, not by a project-specific NUS data agreement
+      - Response timestamps indicate retired or stale NextBus-era data and must not be treated as live service state
+      - Snapshot may include old routes, vehicle plates, job ids, and ETA fields that are not suitable for app display
+      - Official permission is still required before production use or redistribution
   - id: nusmods-public-api
     name: NUSMods public API
     source_owner: NUSMods
@@ -164,6 +193,7 @@ sources:
     used_for:
       - MVP 1 searchable campus place seed
       - MVP 1 OSM-sourced bus stop marker seed
+      - Phase 2 D1 stop-label planting coordinate seed
       - MVP 1 OSM-sourced building search seed
       - MVP 1 OSM-sourced visible building footprint seed
     limitations:

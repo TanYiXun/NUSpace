@@ -7,7 +7,8 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
 
   await expect(page.getByText('Phase 4 3D campus detail', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
-  await expect(page.getByText('10 OSM seed markers')).toBeVisible();
+  await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
+  await expect(page.getByText('43 bus stop markers')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Heng Mui Keng Terrace')).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
@@ -147,6 +148,33 @@ test('desktop exposes 3D building detail source metadata', async ({ page }, test
   await expect(page.getByText('OSM-sourced building point derived from way geometry')).toBeVisible();
 });
 
+test('desktop labels planted D1 stops without verifying coordinates', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
+
+  await page.goto('/');
+  await page.getByPlaceholder('Search NUS').fill('UTown bus stop');
+  await page.getByRole('button', { name: 'University Town OSM bus stop seed, position unverified' }).click();
+
+  await expect(page.getByRole('heading', { name: 'University Town' })).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: '8. UTown' })).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: 'Name/order reference only' })).toBeVisible();
+  await expect(page.getByText('does not verify the marker as an exact boarding point')).toBeVisible();
+});
+
+test('desktop exposes full NUS ISB research stops without live claims', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium', 'desktop-only smoke test');
+
+  await page.goto('/');
+  await page.getByPlaceholder('Search NUS').fill('Botanic Gardens MRT');
+  await page.getByRole('button', { name: 'Botanic Gardens MRT (PUDO) NUS ISB stop research snapshot' }).click();
+
+  await expect(page.getByRole('heading', { name: 'Botanic Gardens MRT (PUDO)' })).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: 'requires-permission' })).toBeVisible();
+  await expect(page.locator('dd').filter({ hasText: /^P$/ })).toBeVisible();
+  await expect(page.getByLabel('NUS ISB research route rows')).toContainText('Requires permission');
+  await expect(page.getByLabel('NUS ISB research snapshot status')).toContainText('Research only');
+});
+
 test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile-chromium', 'mobile-only smoke test');
 
@@ -156,9 +184,9 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'Use current location' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'View shuttle routes' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
-  await expect(page.getByText('26 searchable')).toBeVisible();
+  await expect(page.getByText('59 searchable')).toBeVisible();
   await expect(page.getByText('Phase 4 3D campus detail')).toBeVisible();
-  await expect(page.getByText('10 OSM seed markers')).toBeVisible();
+  await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Missing server key' })).toBeVisible();
   await expect(page.getByText('Stop 16069')).toBeVisible();
 

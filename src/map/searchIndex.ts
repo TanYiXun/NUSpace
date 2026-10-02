@@ -1,8 +1,17 @@
 import type { LngLatLike } from 'maplibre-gl';
 import campusPlaces from '../../data/curated/mvp1-campus-places.json';
+import nusIsbBusStops from '../../data/curated/phase2-nus-isb-bus-stops.json';
 
 export type SearchEntityType = 'building' | 'bus_stop' | 'food' | 'facility' | 'route';
-export type SourceStatus = 'verified' | 'prototype-placeholder' | 'manual-reference';
+export type SourceStatus = 'verified' | 'prototype-placeholder' | 'manual-reference' | 'requires-permission';
+
+export type NextbusMetadata = {
+  name: string;
+  caption: string;
+  longName: string;
+  shortName: string;
+  routeNames: string[];
+};
 
 export type SearchEntity = {
   id: string;
@@ -18,6 +27,7 @@ export type SearchEntity = {
   sourceId: string;
   sourceLabel: string;
   detail: string;
+  nextbus?: NextbusMetadata;
 };
 
 type RawCampusPlace = {
@@ -34,10 +44,14 @@ type RawCampusPlace = {
   sourceId: string;
   sourceLabel: string;
   detail: string;
+  nextbus?: NextbusMetadata;
 };
 
 export const searchIndex: SearchEntity[] = [
-  ...(campusPlaces.places as unknown as RawCampusPlace[]).map((place) => ({
+  ...([
+    ...(campusPlaces.places as unknown as RawCampusPlace[]),
+    ...(nusIsbBusStops.stops as unknown as RawCampusPlace[]),
+  ]).map((place) => ({
     ...place,
     coordinates: place.coordinates as LngLatLike,
   })),
@@ -70,6 +84,22 @@ function scoreEntity(entity: SearchEntity, normalizedQuery: string) {
   return hasEveryPart ? 25 : 0;
 }
 
+function sourcePriority(status: SourceStatus) {
+  if (status === 'verified') {
+    return 4;
+  }
+
+  if (status === 'manual-reference') {
+    return 3;
+  }
+
+  if (status === 'requires-permission') {
+    return 2;
+  }
+
+  return 1;
+}
+
 export function searchEntities(query: string) {
   const normalizedQuery = normalizeSearchTerm(query);
 
@@ -83,6 +113,13 @@ export function searchEntities(query: string) {
     .sort((left, right) => {
       if (right.score !== left.score) {
         return right.score - left.score;
+      }
+
+      const rightSourcePriority = sourcePriority(right.entity.sourceStatus);
+      const leftSourcePriority = sourcePriority(left.entity.sourceStatus);
+
+      if (rightSourcePriority !== leftSourcePriority) {
+        return rightSourcePriority - leftSourcePriority;
       }
 
       return left.entity.name.localeCompare(right.entity.name);

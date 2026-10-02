@@ -1,0 +1,1866 @@
+{
+  "schema": "phase2-nus-isb-bus-stops-v1",
+  "name": "Phase 2 NUS ISB bus stop research inventory",
+  "date_checked": "2026-10-01",
+  "coordinate_reference_system": "WGS84 / EPSG:4326",
+  "coordinate_order": "[longitude, latitude]",
+  "source_ids": [
+    "nus-nextbus-codelab-api"
+  ],
+  "source_status": "requires-permission",
+  "warning": "Derived from the NUS NextBus codelab API research snapshot. Do not mark verified, render as live data, or treat as redistributable official NUS data until permission and terms are documented.",
+  "stops": [
+    {
+      "id": "nextbus-com3",
+      "name": "COM 3",
+      "aliases": [
+        "COM3",
+        "COM 3",
+        "COM 3 bus stop",
+        "D1 COM 3",
+        "D2 COM 3"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.775217,
+        1.294431
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, D1/D2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus COM3",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "COM3",
+        "caption": "COM 3",
+        "longName": "COM 3",
+        "shortName": "COM 3",
+        "routeNames": [
+          "D1",
+          "D2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "COM3-D2-S",
+            "snapshotTimestamp": "2026-05-30T02:59:39+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "COM3-D1-S",
+            "snapshotTimestamp": "2026-05-30T02:59:39+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "COM3-D1-E",
+            "snapshotTimestamp": "2026-05-30T02:59:39+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "COM3-D2-E",
+            "snapshotTimestamp": "2026-05-30T02:59:39+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-tcoms-opp",
+      "name": "Opp TCOMS",
+      "aliases": [
+        "TCOMS-OPP",
+        "Opp TCOMS",
+        "Opp TCOMS bus stop",
+        "A1 Opp TCOMS",
+        "D2 Opp TCOMS"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.776715,
+        1.293789
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus TCOMS-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "TCOMS-OPP",
+        "caption": "Opp TCOMS",
+        "longName": "Opp TCOMS",
+        "shortName": "Opp TCOMS",
+        "routeNames": [
+          "A1",
+          "D2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "TCOMS-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "TCOMS-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-pgp",
+      "name": "Prince George's Park",
+      "aliases": [
+        "PGP",
+        "Prince George's Park",
+        "Prince George's Park bus stop",
+        "A1 PGP",
+        "D2 PGP",
+        "K PGP",
+        "R1 PGP",
+        "R2 PGP"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.780419,
+        1.291765
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2/K/R1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus PGP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "PGP",
+        "caption": "Prince George's Park",
+        "longName": "Prince George's Park",
+        "shortName": "PGP",
+        "routeNames": [
+          "A1",
+          "D2",
+          "K",
+          "R1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "PGP",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "PGP",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "PGP",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "PGP",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "PGP",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-kr-mrt",
+      "name": "Kent Ridge MRT",
+      "aliases": [
+        "KR-MRT",
+        "Kent Ridge MRT",
+        "KR MRT",
+        "Kent Ridge MRT bus stop",
+        "A1 KR MRT",
+        "D2 KR MRT",
+        "K KR MRT",
+        "P KR MRT"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.784413,
+        1.29482
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2/K/P reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus KR-MRT",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "KR-MRT",
+        "caption": "Kent Ridge MRT",
+        "longName": "Kent Ridge MRT",
+        "shortName": "KR MRT",
+        "routeNames": [
+          "A1",
+          "D2",
+          "K",
+          "P"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "KR-MRT",
+            "snapshotTimestamp": "2026-05-30T02:59:26+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "KR-MRT",
+            "snapshotTimestamp": "2026-05-30T02:59:26+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "KR-MRT",
+            "snapshotTimestamp": "2026-05-30T02:59:26+08:00"
+          },
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "KR-MRT",
+            "snapshotTimestamp": "2026-05-30T02:59:26+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-lt27",
+      "name": "LT 27",
+      "aliases": [
+        "LT27",
+        "LT 27",
+        "LT 27 bus stop",
+        "A1 LT 27",
+        "D2 LT 27",
+        "K LT 27"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.780941,
+        1.297421
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus LT27",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "LT27",
+        "caption": "LT 27",
+        "longName": "LT 27",
+        "shortName": "LT 27",
+        "routeNames": [
+          "A1",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "LT27",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "LT27",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "LT27",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-uhall",
+      "name": "University Hall",
+      "aliases": [
+        "UHALL",
+        "University Hall",
+        "UHall",
+        "University Hall bus stop",
+        "A1 UHall",
+        "D2 UHall",
+        "K UHall"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.778822,
+        1.297127
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus UHALL",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "UHALL",
+        "caption": "University Hall",
+        "longName": "University Hall",
+        "shortName": "UHall",
+        "routeNames": [
+          "A1",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "UHALL",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "UHALL",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "UHALL",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-uhc-opp",
+      "name": "Opp University Health Centre",
+      "aliases": [
+        "UHC-OPP",
+        "Opp University Health Centre",
+        "Opp UHC",
+        "Opp University Health Centre bus stop",
+        "A1 Opp UHC",
+        "D2 Opp UHC",
+        "K Opp UHC",
+        "P Opp UHC"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.775612,
+        1.298788
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D2/K/P reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus UHC-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "UHC-OPP",
+        "caption": "Opp University Health Centre",
+        "longName": "Opp University Health Centre",
+        "shortName": "Opp UHC",
+        "routeNames": [
+          "A1",
+          "D2",
+          "K",
+          "P"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "UHC-OPP",
+            "snapshotTimestamp": "2026-05-30T03:00:00+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "UHC-OPP",
+            "snapshotTimestamp": "2026-05-30T03:00:00+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "UHC-OPP",
+            "snapshotTimestamp": "2026-05-30T03:00:00+08:00"
+          },
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "UHC-OPP",
+            "snapshotTimestamp": "2026-05-30T03:00:00+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-museum",
+      "name": "Museum",
+      "aliases": [
+        "MUSEUM",
+        "Museum",
+        "Museum bus stop",
+        "A2 Museum",
+        "D1 Museum",
+        "D2 Museum",
+        "K Museum",
+        "R1 Museum"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.77369,
+        1.301081
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/D2/K/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus MUSEUM",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "MUSEUM",
+        "caption": "Museum",
+        "longName": "Museum",
+        "shortName": "Museum",
+        "routeNames": [
+          "A2",
+          "D1",
+          "D2",
+          "K",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "MUSEUM",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "MUSEUM",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "MUSEUM",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "MUSEUM",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "MUSEUM",
+            "snapshotTimestamp": "2026-05-30T02:59:42+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-utown",
+      "name": "University Town",
+      "aliases": [
+        "UTOWN",
+        "University Town",
+        "UTown",
+        "University Town bus stop",
+        "D1 UTown",
+        "D2 UTown",
+        "P UTown",
+        "R1 UTown",
+        "R2 UTown"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.774621,
+        1.303876
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, D1/D2/P/R1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus UTOWN",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "UTOWN",
+        "caption": "University Town",
+        "longName": "University Town",
+        "shortName": "UTown",
+        "routeNames": [
+          "D1",
+          "D2",
+          "P",
+          "R1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "UTOWN",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "UTOWN",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "UTOWN",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "UTOWN",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "UTOWN",
+            "snapshotTimestamp": "2026-05-30T02:59:46+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-uhc",
+      "name": "University Health Centre",
+      "aliases": [
+        "UHC",
+        "University Health Centre",
+        "University Health Centre bus stop",
+        "A2 UHC",
+        "D2 UHC",
+        "K UHC"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.776103,
+        1.29891
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus UHC",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "UHC",
+        "caption": "University Health Centre",
+        "longName": "University Health Centre",
+        "shortName": "UHC",
+        "routeNames": [
+          "A2",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "UHC",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "UHC",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "UHC",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-uhall-opp",
+      "name": "Opp University Hall",
+      "aliases": [
+        "UHALL-OPP",
+        "Opp University Hall",
+        "Opp UHall",
+        "Opp University Hall bus stop",
+        "A2 Opp UHall",
+        "D2 Opp UHall",
+        "K Opp UHall"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.778088,
+        1.297574
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus UHALL-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "UHALL-OPP",
+        "caption": "Opp University Hall",
+        "longName": "Opp University Hall",
+        "shortName": "Opp UHall",
+        "routeNames": [
+          "A2",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "UHALL-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:58+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "UHALL-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:58+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "UHALL-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:58+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-s17",
+      "name": "S 17",
+      "aliases": [
+        "S17",
+        "S 17",
+        "S 17 bus stop",
+        "A2 S 17",
+        "D2 S 17",
+        "K S 17"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.78073,
+        1.297519
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus S17",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "S17",
+        "caption": "S 17",
+        "longName": "S 17",
+        "shortName": "S 17",
+        "routeNames": [
+          "A2",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "S17",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "S17",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "S17",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-kr-mrt-opp",
+      "name": "Opp Kent Ridge MRT",
+      "aliases": [
+        "KR-MRT-OPP",
+        "Opp Kent Ridge MRT",
+        "Opp KR MRT",
+        "Opp Kent Ridge MRT bus stop",
+        "A2 Opp KR MRT",
+        "D2 Opp KR MRT",
+        "K Opp KR MRT"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.784556,
+        1.294962
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus KR-MRT-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "KR-MRT-OPP",
+        "caption": "Opp Kent Ridge MRT",
+        "longName": "Opp Kent Ridge MRT",
+        "shortName": "Opp KR MRT",
+        "routeNames": [
+          "A2",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "KR-MRT-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "KR-MRT-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "KR-MRT-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:55+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-pgpr",
+      "name": "Prince George's Park Foyer",
+      "aliases": [
+        "PGPR",
+        "Prince George's Park Foyer",
+        "PGP Foyer",
+        "Prince George's Park Foyer bus stop",
+        "A2 PGP Foyer",
+        "D2 PGP Foyer",
+        "K PGP Foyer"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.781153,
+        1.290994
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2/K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus PGPR",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "PGPR",
+        "caption": "Prince George's Park Foyer",
+        "longName": "Prince George's Park Foyer",
+        "shortName": "PGP Foyer",
+        "routeNames": [
+          "A2",
+          "D2",
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "PGPR",
+            "snapshotTimestamp": "2026-05-30T02:59:48+08:00"
+          },
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "PGPR",
+            "snapshotTimestamp": "2026-05-30T02:59:48+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "PGPR",
+            "snapshotTimestamp": "2026-05-30T02:59:48+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-tcoms",
+      "name": "TCOMS",
+      "aliases": [
+        "TCOMS",
+        "TCOMS bus stop",
+        "A2 TCOMS",
+        "D2 TCOMS"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.776898,
+        1.293654
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus TCOMS",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "TCOMS",
+        "caption": "TCOMS",
+        "longName": "TCOMS",
+        "shortName": "TCOMS",
+        "routeNames": [
+          "A2",
+          "D2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "TCOMS",
+            "snapshotTimestamp": "2026-05-30T02:59:56+08:00"
+          },
+          {
+            "routeName": "D2",
+            "routeId": 90295,
+            "busStopCode": "TCOMS",
+            "snapshotTimestamp": "2026-05-30T02:59:56+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-hssml-opp",
+      "name": "Opp Hon Sui Sen Memorial Library",
+      "aliases": [
+        "HSSML-OPP",
+        "Opp HSSML",
+        "Opp Hon Sui Sen Memorial Library",
+        "Opp HSSML bus stop",
+        "Opp Hon Sui Sen Memorial Library bus stop",
+        "A2 Opp HSSML",
+        "D1 Opp HSSML",
+        "R2 Opp HSSML"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.774978,
+        1.292798
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus HSSML-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "HSSML-OPP",
+        "caption": "Opp HSSML",
+        "longName": "Opp Hon Sui Sen Memorial Library",
+        "shortName": "Opp HSSML",
+        "routeNames": [
+          "A2",
+          "D1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "HSSML-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "HSSML-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "HSSML-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-nuss-opp",
+      "name": "Opp NUSS",
+      "aliases": [
+        "NUSS-OPP",
+        "Opp NUSS",
+        "Opp NUSS bus stop",
+        "A2 Opp NUSS",
+        "D1 Opp NUSS",
+        "R2 Opp NUSS"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.772618,
+        1.293208
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus NUSS-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "NUSS-OPP",
+        "caption": "Opp NUSS",
+        "longName": "Opp NUSS",
+        "shortName": "Opp NUSS",
+        "routeNames": [
+          "A2",
+          "D1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "NUSS-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:59+08:00"
+          },
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "NUSS-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:59+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "NUSS-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:59+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-lt13-opp",
+      "name": "Ventus",
+      "aliases": [
+        "LT13-OPP",
+        "Ventus",
+        "Ventus bus stop",
+        "A2 Ventus",
+        "D1 Ventus",
+        "R2 Ventus"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.770617,
+        1.29534
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus LT13-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "LT13-OPP",
+        "caption": "Ventus",
+        "longName": "Ventus",
+        "shortName": "Ventus",
+        "routeNames": [
+          "A2",
+          "D1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "LT13-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:52+08:00"
+          },
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "LT13-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:52+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "LT13-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:52+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-it",
+      "name": "Information Technology",
+      "aliases": [
+        "IT",
+        "Information Technology",
+        "Information Technology bus stop",
+        "A2 IT",
+        "D1 IT",
+        "R2 IT"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.772688,
+        1.297204
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus IT",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "IT",
+        "caption": "Information Technology",
+        "longName": "Information Technology",
+        "shortName": "IT",
+        "routeNames": [
+          "A2",
+          "D1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "IT",
+            "snapshotTimestamp": "2026-05-30T02:59:51+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "IT",
+            "snapshotTimestamp": "2026-05-30T02:59:51+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "IT",
+            "snapshotTimestamp": "2026-05-30T02:59:51+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-yih-opp",
+      "name": "Opp Yusof Ishak House",
+      "aliases": [
+        "YIH-OPP",
+        "Opp Yusof Ishak House",
+        "Opp YIH",
+        "Opp Yusof Ishak House bus stop",
+        "A2 Opp YIH",
+        "D1 Opp YIH",
+        "R2 Opp YIH"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.774118,
+        1.298904
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A2/D1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus YIH-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "YIH-OPP",
+        "caption": "Opp Yusof Ishak House",
+        "longName": "Opp Yusof Ishak House",
+        "shortName": "Opp YIH",
+        "routeNames": [
+          "A2",
+          "D1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "YIH-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:31+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "YIH-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:31+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "YIH-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:31+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-yih",
+      "name": "Yusof Ishak House",
+      "aliases": [
+        "YIH",
+        "Yusof Ishak House",
+        "Yusof Ishak House bus stop",
+        "A1 YIH",
+        "D1 YIH",
+        "K YIH",
+        "R1 YIH"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.774377,
+        1.298885
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D1/K/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus YIH",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "YIH",
+        "caption": "Yusof Ishak House",
+        "longName": "Yusof Ishak House",
+        "shortName": "YIH",
+        "routeNames": [
+          "A1",
+          "D1",
+          "K",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "YIH",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "YIH",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "YIH",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "YIH",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-clb",
+      "name": "Central Library",
+      "aliases": [
+        "CLB",
+        "Central Library",
+        "Central Library bus stop",
+        "A1 CLB",
+        "D1 CLB",
+        "K CLB",
+        "R1 CLB"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.772569,
+        1.296544
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D1/K/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus CLB",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "CLB",
+        "caption": "Central Library",
+        "longName": "Central Library",
+        "shortName": "CLB",
+        "routeNames": [
+          "A1",
+          "D1",
+          "K",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "CLB",
+            "snapshotTimestamp": "2026-05-30T02:59:36+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "CLB",
+            "snapshotTimestamp": "2026-05-30T02:59:36+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "CLB",
+            "snapshotTimestamp": "2026-05-30T02:59:36+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "CLB",
+            "snapshotTimestamp": "2026-05-30T02:59:36+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-lt13",
+      "name": "LT 13",
+      "aliases": [
+        "LT13",
+        "LT 13",
+        "LT 13 bus stop",
+        "A1 LT 13",
+        "D1 LT 13",
+        "R1 LT 13"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.770635,
+        1.294552
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D1/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus LT13",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "LT13",
+        "caption": "LT 13",
+        "longName": "LT 13",
+        "shortName": "LT 13",
+        "routeNames": [
+          "A1",
+          "D1",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "LT13",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "LT13",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "LT13",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-as5",
+      "name": "AS 5",
+      "aliases": [
+        "AS5",
+        "AS 5",
+        "AS 5 bus stop",
+        "A1 AS 5",
+        "D1 AS 5",
+        "R1 AS 5"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.771475,
+        1.293619
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D1/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus AS5",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "AS5",
+        "caption": "AS 5",
+        "longName": "AS 5",
+        "shortName": "AS 5",
+        "routeNames": [
+          "A1",
+          "D1",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "AS5",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "AS5",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "AS5",
+            "snapshotTimestamp": "2026-05-30T02:59:34+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-biz2",
+      "name": "BIZ 2",
+      "aliases": [
+        "BIZ2",
+        "BIZ 2",
+        "BIZ 2 bus stop",
+        "A1 BIZ 2",
+        "D1 BIZ 2",
+        "R1 BIZ 2"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.775068,
+        1.293223
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/D1/R1 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus BIZ2",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "BIZ2",
+        "caption": "BIZ 2",
+        "longName": "BIZ 2",
+        "shortName": "BIZ 2",
+        "routeNames": [
+          "A1",
+          "D1",
+          "R1"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "BIZ2",
+            "snapshotTimestamp": "2026-05-30T02:59:44+08:00"
+          },
+          {
+            "routeName": "D1",
+            "routeId": 90294,
+            "busStopCode": "BIZ2",
+            "snapshotTimestamp": "2026-05-30T02:59:44+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "BIZ2",
+            "snapshotTimestamp": "2026-05-30T02:59:44+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-sde3-opp",
+      "name": "Opp SDE 3",
+      "aliases": [
+        "SDE3-OPP",
+        "Opp SDE 3",
+        "Opp SDE 3 bus stop",
+        "K Opp SDE 3"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.769603,
+        1.297799
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus SDE3-OPP",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "SDE3-OPP",
+        "caption": "Opp SDE 3",
+        "longName": "Opp SDE 3",
+        "shortName": "Opp SDE 3",
+        "routeNames": [
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "SDE3-OPP",
+            "snapshotTimestamp": "2026-05-30T02:59:38+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-jp-sch-16151",
+      "name": "The Japanese Primary School",
+      "aliases": [
+        "JP-SCH-16151",
+        "The Japanese Primary School",
+        "Jpn Pr Sch",
+        "The Japanese Primary School bus stop",
+        "K Jpn Pr Sch"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.769904,
+        1.30077
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, K reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus JP-SCH-16151",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "JP-SCH-16151",
+        "caption": "The Japanese Primary School",
+        "longName": "The Japanese Primary School",
+        "shortName": "Jpn Pr Sch",
+        "routeNames": [
+          "K"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "JP-SCH-16151",
+            "snapshotTimestamp": "2026-05-30T02:59:48+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-kv",
+      "name": "Kent Vale",
+      "aliases": [
+        "KV",
+        "Kent Vale",
+        "Kent Vale bus stop",
+        "K Kent Vale",
+        "P Kent Vale",
+        "R1 Kent Vale",
+        "R2 Kent Vale"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.769455,
+        1.301899
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, K/P/R1/R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus KV",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "KV",
+        "caption": "Kent Vale",
+        "longName": "Kent Vale",
+        "shortName": "Kent Vale",
+        "routeNames": [
+          "K",
+          "P",
+          "R1",
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "K",
+            "routeId": 90297,
+            "busStopCode": "KV",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "KV-P-E",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "KV",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "R1",
+            "routeId": 183492,
+            "busStopCode": "KV",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          },
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "KV",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-krb",
+      "name": "Kent Ridge Bus Terminal",
+      "aliases": [
+        "KRB",
+        "Kent Ridge Bus Terminal",
+        "KR Bus Ter",
+        "Kent Ridge Bus Terminal bus stop",
+        "A1 KR Bus Ter",
+        "A2 KR Bus Ter"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.77,
+        1.294536
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, A1/A2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus KRB",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "KRB",
+        "caption": "Kent Ridge Bus Terminal",
+        "longName": "Kent Ridge Bus Terminal",
+        "shortName": "KR Bus Ter",
+        "routeNames": [
+          "A1",
+          "A2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "KRB-A2-S",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "KRB-A1-S",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "A2",
+            "routeId": 90289,
+            "busStopCode": "KRB-A2-E",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          },
+          {
+            "routeName": "A1",
+            "routeId": 90287,
+            "busStopCode": "KRB-A1-E",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-raffles",
+      "name": "Raffles Hall",
+      "aliases": [
+        "RAFFLES",
+        "Raffles Hall",
+        "Raffles Hall bus stop",
+        "R2 Raffles Hall"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.772703,
+        1.300946
+      ],
+      "zoom": 17,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, R2 reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus RAFFLES",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "RAFFLES",
+        "caption": "Raffles Hall",
+        "longName": "Raffles Hall",
+        "shortName": "Raffles Hall",
+        "routeNames": [
+          "R2"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "R2",
+            "routeId": 183432,
+            "busStopCode": "RAFFLES",
+            "snapshotTimestamp": "2026-05-30T02:59:50+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-cg",
+      "name": "College Green",
+      "aliases": [
+        "CG",
+        "College Green",
+        "College Gr",
+        "College Green bus stop",
+        "P College Gr"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.816276,
+        1.323337
+      ],
+      "zoom": 16.5,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, P reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus CG",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "CG",
+        "caption": "College Green",
+        "longName": "College Green",
+        "shortName": "College Gr",
+        "routeNames": [
+          "P"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "CG",
+            "snapshotTimestamp": "2026-05-30T02:59:41+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-oth",
+      "name": "Oei Tiong Ham Building",
+      "aliases": [
+        "OTH",
+        "Oei Tiong Ham Building",
+        "OTH Bldg",
+        "Oei Tiong Ham Building bus stop",
+        "P OTH Bldg"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.817774,
+        1.319796
+      ],
+      "zoom": 16.5,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, P reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus OTH",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "OTH",
+        "caption": "Oei Tiong Ham Building",
+        "longName": "Oei Tiong Ham Building",
+        "shortName": "OTH Bldg",
+        "routeNames": [
+          "P"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "OTH",
+            "snapshotTimestamp": "2026-05-30T02:59:59+08:00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "nextbus-bg-mrt",
+      "name": "Botanic Gardens MRT (PUDO)",
+      "aliases": [
+        "BG-MRT",
+        "Botanic Gardens MRT (PUDO)",
+        "BG MRT",
+        "Botanic Gardens MRT (PUDO) bus stop",
+        "P BG MRT"
+      ],
+      "type": "bus_stop",
+      "coordinates": [
+        103.815914,
+        1.322614
+      ],
+      "zoom": 16.5,
+      "pitch": 58,
+      "bearing": -24,
+      "subtitle": "NUS ISB stop research snapshot, P reference",
+      "sourceStatus": "requires-permission",
+      "sourceId": "nus-nextbus-codelab-api",
+      "sourceLabel": "NextBus BG-MRT",
+      "detail": "NUS NextBus codelab API research snapshot. Stop name, coordinate, and route membership require permission review before production use and are not live arrivals or verified current shuttle operations.",
+      "nextbus": {
+        "name": "BG-MRT",
+        "caption": "Botanic Gardens MRT (PUDO)",
+        "longName": "Botanic Gardens MRT (PUDO)",
+        "shortName": "BG MRT",
+        "routeNames": [
+          "P"
+        ],
+        "routeRefs": [
+          {
+            "routeName": "P",
+            "routeId": 183488,
+            "busStopCode": "BG-MRT",
+            "snapshotTimestamp": "2026-05-30T02:59:49+08:00"
+          }
+        ]
+      }
+    }
+  ]
+}

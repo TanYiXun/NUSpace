@@ -15,6 +15,7 @@ import {
   fetchNusModsModuleUiState,
   type NusModsModuleUiState,
 } from '../nusmods/nusModsModuleLookup';
+import { getNusIsbPlantedStopsForCampusPlace } from '../transit/nusIsbStopPlanting';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
@@ -324,7 +325,7 @@ function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
   return {
     type: 'FeatureCollection',
     features: searchIndex
-      .filter((entity) => entity.type === 'bus_stop' && entity.sourceId === 'osm-api-nus-kent-ridge-map')
+      .filter((entity) => entity.type === 'bus_stop')
       .map((entity) => ({
         type: 'Feature' as const,
         id: entity.id,
@@ -333,6 +334,7 @@ function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
           name: entity.name,
           source_id: entity.sourceId,
           source_status: entity.sourceStatus,
+          routes: entity.nextbus?.routeNames.join(', ') ?? '',
           note: entity.detail,
         },
         geometry: {
@@ -346,6 +348,7 @@ function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
 const campusBusStops = createCampusBusStopsFeatureCollection();
 const campusPlaceCount = searchIndex.filter((entity) => entity.type !== 'route').length;
 const campusBusStopCount = searchIndex.filter((entity) => entity.type === 'bus_stop').length;
+const nextbusResearchStopCount = searchIndex.filter((entity) => entity.sourceId === 'nus-nextbus-codelab-api').length;
 const campusBuildingFootprintCount = mvp1BuildingFootprints.features.length;
 
 export function CampusMap() {
@@ -376,6 +379,10 @@ export function CampusMap() {
   const stageStyle = {
     '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
   } as CSSProperties;
+  const selectedPlantedIsbStops = selectedBusStop
+    ? getNusIsbPlantedStopsForCampusPlace(selectedBusStop.id)
+    : [];
+  const selectedNextbusRoutes = selectedBusStop?.nextbus?.routeNames ?? [];
 
   const updateSheet = useCallback((panel: SelectedPanel, nextSheetState: SheetState = 'half') => {
     setSelectedPanel(panel);
@@ -830,9 +837,19 @@ export function CampusMap() {
         source: CAMPUS_BUS_STOPS_SOURCE_ID,
         minzoom: 14.3,
         paint: {
-          'circle-color': '#ffffff',
+          'circle-color': [
+            'case',
+            ['==', ['get', 'source_id'], 'nus-nextbus-codelab-api'],
+            '#f8fbff',
+            '#ffffff',
+          ],
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 3, 18, 6],
-          'circle-stroke-color': '#2f80ed',
+          'circle-stroke-color': [
+            'case',
+            ['==', ['get', 'source_id'], 'nus-nextbus-codelab-api'],
+            '#596f89',
+            '#2f80ed',
+          ],
           'circle-stroke-width': 2,
           'circle-opacity': 0.96,
         },
@@ -1080,7 +1097,7 @@ export function CampusMap() {
           <button className="layerChoice" type="button" onClick={() => toggleLayer('busStops')}>
             <span className="choiceText">
               <strong>Bus stop seed</strong>
-              <small>OSM stop seeds, positions unverified</small>
+              <small>OSM seeds plus 33 NextBus research stops</small>
             </span>
             <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
           </button>
@@ -1217,42 +1234,72 @@ export function CampusMap() {
               </div>
             </div>
             <div className="sheetBody">
-              {selectedBusStop.sourceId === 'osm-api-nus-kent-ridge-map' ? (
-                <dl className="buildingFacts">
+              <dl className="buildingFacts">
+                <div>
+                  <dt>Source</dt>
+                  <dd>{selectedBusStop.sourceLabel}</dd>
+                </div>
+                <div>
+                  <dt>Position</dt>
+                  <dd>{selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? 'Research snapshot' : 'Unverified seed'}</dd>
+                </div>
+                <div>
+                  <dt>Source status</dt>
+                  <dd>{selectedBusStop.sourceStatus}</dd>
+                </div>
+                {selectedNextbusRoutes.length > 0 ? (
                   <div>
-                    <dt>Source</dt>
-                    <dd>{selectedBusStop.sourceLabel}</dd>
+                    <dt>NUS routes</dt>
+                    <dd>{selectedNextbusRoutes.join(', ')}</dd>
                   </div>
+                ) : null}
+                {selectedPlantedIsbStops.length > 0 ? (
+                  <>
+                    <div>
+                      <dt>D1 stop label</dt>
+                      <dd>
+                        {selectedPlantedIsbStops
+                          .map((stop) => `${stop.sequence}. ${stop.officialName}`)
+                          .join(', ')}
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Route use</dt>
+                      <dd>Name/order reference only</dd>
+                    </div>
+                  </>
+                ) : null}
+                <div>
+                  <dt>Arrivals</dt>
+                  <dd>Not enabled</dd>
+                </div>
+              </dl>
+              {selectedNextbusRoutes.length > 0 ? (
+                <div className="etaRows" aria-label="NUS ISB research route rows">
+                  {selectedNextbusRoutes.map((routeName) => (
+                    <div className="etaRow" key={routeName}>
+                      <span className="etaRoute">{routeName}</span>
+                      <span className="etaStatus">Requires permission</span>
+                      <span className="etaTime">No live ETA</span>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+              <p className="truthNote">
+                {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
+                  `${selectedBusStop.detail} This completes the current NUS ISB stop inventory from the snapshot, but it remains requires-permission planning data.`
+                ) : selectedPlantedIsbStops.length > 0 ? (
+                  `${selectedBusStop.detail} D1 stop label and order are manually referenced from the NUS UCI route-map image; this does not verify the marker as an exact boarding point or enable route geometry.`
+                ) : selectedBusStop.detail}
+              </p>
+              {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
+                <div className="transitStatusCard" aria-label="NUS ISB research snapshot status">
                   <div>
-                    <dt>Position</dt>
-                    <dd>Unverified seed</dd>
-                  </div>
-                  <div>
-                    <dt>Source status</dt>
-                    <dd>{selectedBusStop.sourceStatus}</dd>
-                  </div>
-                  <div>
-                    <dt>Arrivals</dt>
-                    <dd>Not enabled</dd>
-                  </div>
-                </dl>
-              ) : (
-                <div className="etaRows" aria-label="Prototype bus arrival rows">
-                  <div className="etaRow">
-                    <span className="etaRoute">D1</span>
-                    <span className="etaStatus">Simulated marker only</span>
-                    <span className="etaTime">No ETA</span>
-                  </div>
-                  <div className="etaRow">
-                    <span className="etaRoute">D2</span>
-                    <span className="etaStatus">Not enabled</span>
-                    <span className="etaTime">--</span>
+                    <strong>Research only</strong>
+                    <span>Not live, not approved for production use</span>
                   </div>
                 </div>
-              )}
-              <p className="truthNote">
-                {selectedBusStop.detail}
-              </p>
+              ) : null}
             </div>
           </>
         ) : selectedPanel === 'module' && nusModsModuleState.status === 'ok' ? (
@@ -1331,7 +1378,11 @@ export function CampusMap() {
               </div>
               <div>
                 <dt>Bus stops</dt>
-                <dd>{campusBusStopCount} OSM seed markers</dd>
+                <dd>{nextbusResearchStopCount} NUS ISB research stops</dd>
+              </div>
+              <div>
+                <dt>Markers</dt>
+                <dd>{campusBusStopCount} bus stop markers</dd>
               </div>
               <div>
                 <dt>Shuttles</dt>

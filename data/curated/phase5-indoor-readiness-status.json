@@ -1,0 +1,53 @@
+{
+  "schema": "phase5-indoor-readiness-status-v1",
+  "status": "blocked",
+  "sourceIds": [],
+  "dateChecked": "2026-10-04",
+  "nextReviewDate": "2026-11-04",
+  "decision": "Do not enable indoor navigation until legal floor-plan data, room and POI inventory, entrances, vertical connectors, inaccessible/private-area markings, confidence scores, and manual QA notes exist for at least one building.",
+  "uiLabel": "Indoor navigation unavailable",
+  "uiSummary": "Needs legal floor plans, rooms, entrances, connectors, access boundaries, confidence scores, and QA notes",
+  "layerStateLabel": "Blocked",
+  "targetBuildings": [
+    "COM3",
+    "Central Library",
+    "UTown",
+    "Yusof Ishak House"
+  ],
+  "requirements": {
+    "legalFloorPlanSource": "missing",
+    "floorList": "missing",
+    "roomPoiInventory": "missing",
+    "entrancesAndOutdoorConnections": "missing",
+    "verticalConnectors": "missing",
+    "inaccessiblePrivateAreas": "missing",
+    "confidenceScores": "missing",
+    "manualQaNotes": "missing"
+  },
+  "restrictions": [
+    "Do not include restricted, staff-only, security-sensitive, or private areas unless explicitly permitted.",
+    "Do not claim emergency evacuation routing.",
+    "Do not present indoor routes as safety instructions.",
+    "Do not infer accessible routes without validating lifts, ramps, and step-free paths.",
+    "Do not assume floor numbering is consistent across buildings."
+  ],
+  "qaRequirements": [
+    "visual floor check against the legal source",
+    "sample room-label verification",
+    "floor-transition connection verification",
+    "entrance alignment against the outdoor map",
+    "known missing corridor, room, and connector notes"
+  ],
+  "blockedArtifacts": [
+    "floor plans",
+    "room geometry",
+    "corridor graph",
+    "building entrances",
+    "lifts",
+    "stairs",
+    "ramps",
+    "escalators",
+    "accessible paths",
+    "indoor routing"
+  ]
+}

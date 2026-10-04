@@ -163,6 +163,14 @@
 - Decision: add `data/curated/phase2-nus-isb-stop-display-overrides.json` and use the matched OSM bus stop/platform nodes as manual-reference display/search coordinates only. Keep route membership and stop inventory from the NextBus research snapshot, keep the overall NUS ISB stop status `requires-permission`, and disclose that the OSM alignment is not official NUS verification.
 - Confidence: high for the exact OSM node matches in the checked extract, low for treating any aligned marker as an official current boarding point without NUS confirmation or documented field survey.
 
+## 2026-10-04 - Phase 5 Indoor Readiness Gate
+
+- Task: document the Phase 5 data-acquisition and QA gate before implementing indoor navigation.
+- Sources checked: no legal indoor floor-plan source is documented for this project.
+- Finding: the app has a COM3 shell-only xray, but it does not have legal floor plans, room/POI inventory, entrances, vertical connectors, inaccessible/private-area markings, confidence scores, manual QA notes, corridor graph, accessibility paths, or indoor routing data.
+- Decision: add `data/curated/phase5-indoor-readiness-status.json` as the data-backed blocked state and show indoor navigation as unavailable until the required artifacts exist for at least one building.
+- Confidence: high that indoor routing must remain blocked under `PLAN.md` section 14.0.
+
 ## 2026-10-02 - Phase 4 COM3 Xray Shell Slice
 
 - Task: implement the `PLAN.md` section 13.1.1 one-building recognizable model and xray slice without adding unsourced indoor detail.

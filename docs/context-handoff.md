@@ -8,25 +8,26 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `align-isb-stops-to-osm-platforms`.
-- Latest `main` commit: `d53ca88 Merge pull request #29 from TanYiXun/phase4-terrain-readiness-gate`.
+- Current branch: `phase5-indoor-readiness-gate`.
+- Latest `main` commit: `fc10095 Merge pull request #30 from TanYiXun/align-isb-stops-to-osm-platforms`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
 - PR #27 added the NUS ISB research stop inventory and was merged to `main`.
 - PR #28 added the COM3 shell-only xray slice, cleaned up app-facing NUS ISB research stops, added documented LTA public bus links for linked NUS ISB research stops, compacted the selected-stop bus services sheet, and merged to `main`.
 - PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
-- Latest local branch commit subject: `Expand ISB stop alignment to public map stops` on `align-isb-stops-to-osm-platforms`; run `git log -1 --oneline` for the exact current hash.
-- Active uncommitted work: none.
+- PR #30 added the NUS ISB public OSM stop/platform display-position alignment and merged to `main`.
+- Latest local branch commit subject: uncommitted Phase 5 indoor readiness gate work on `phase5-indoor-readiness-gate`; run `git status --short` for the exact file list.
+- Active uncommitted work: Phase 5 indoor readiness status artifact, validation, UI blocked-state copy, docs, tests, and screenshots.
 
 ## Current Phase
 
-- Active plan sections: `PLAN.md` 7.1 manual geometry rules, 11.2 NUS ISB static mode, and 15.4 truth labels.
-- Current slice: NUS ISB stop marker display-position alignment is in progress on top of the merged Phase 4 terrain readiness gate.
-- Latest refinement: Terrain status is now a curated data artifact, validated by `npm run validate:data`, and visible in the layer menu as `Terrain unavailable` with the missing gate requirements. No terrain tiles, DEM, hillshade, exaggeration, or terrain toggle is enabled.
-- Status: PR #28 completed and merged the COM3 shell-only xray slice. PR #29 completed and merged the terrain readiness gate. Terrain remains deferred by plan default because usefulness/source/license/alignment/performance/boundary treatment are unresolved. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
-- Current local preview: `http://127.0.0.1:5174/` from `npm run dev -- --host 127.0.0.1`. Port `5173` was in use, so Vite selected `5174`.
-- The user has been reviewing the running local app. Current branch is `align-isb-stops-to-osm-platforms`.
+- Active plan section: `PLAN.md` 14.0 indoor data acquisition and QA gate.
+- Current slice: Phase 5 indoor readiness gate on top of merged PR #30.
+- Latest refinement: `data/curated/phase5-indoor-readiness-status.json` records indoor navigation as `blocked`; validation checks the missing legal floor-plan source, floor list, room/POI inventory, entrances/outdoor connections, vertical connectors, inaccessible/private areas, confidence scores, manual QA notes, restrictions, QA requirements, and blocked indoor artifacts. The overview panel, layer menu, and COM3 shell-only selected-building sheet now show the blocked indoor state.
+- Status: PR #30 is merged. Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. No floor plans, room geometry, corridor graph, entrances, vertical connectors, accessibility paths, or indoor routes are enabled.
+- Current local preview: `http://127.0.0.1:5175/` from `npm run dev -- --host 127.0.0.1`. Ports `5173` and `5174` were in use, so Vite selected `5175`.
+- The user has been reviewing the running local app. Current branch is `phase5-indoor-readiness-gate`.
 
 ## Current Phase 1 Slice
 
@@ -207,6 +208,11 @@ Phase 4 COM3 xray shell screenshots are in `docs/screenshots/`:
 - `phase4-com3-xray-shell-desktop.png`
 - `phase4-com3-xray-shell-mobile.png`
 
+Phase 5 indoor readiness screenshots are in `docs/screenshots/`:
+
+- `phase5-indoor-readiness-overview.png`
+- `phase5-indoor-readiness-layers.png`
+
 ## Checks Last Run
 
 PR #27 NUS ISB research stop inventory was merged to `main` on 2026-10-02. Checks run before merge:
@@ -250,13 +256,14 @@ NextBus extraction details:
 
 Latest checks on 2026-10-04:
 
+- `npm run validate:data`: passed.
 - `npm run typecheck`: passed.
 - `npm run lint`: passed.
-- `npm run test`: passed, 45 tests.
-- `npm run test:e2e`: passed, 8 passed and 8 project-skipped.
+- `npm run test`: passed, 48 tests.
+- `npm run test:e2e`: passed with localhost approval, 8 passed and 8 project-skipped.
 - `npm run build`: passed with the existing Vite large-chunk warning.
 
-The previous `npm run test:e2e` localhost-bind/stale-server issue was resolved by stopping stale port `5173` listeners before clean runs. Current e2e passed cleanly with localhost approval.
+An initial sandboxed `npm run test:e2e` attempt failed with `listen EPERM` on `127.0.0.1:5173`; rerunning with localhost approval passed. Two stale-copy/flaky-wait test adjustments were made for the new Phase 5 overview label and blocked-state ambiguity.
 
 Known build warning:
 

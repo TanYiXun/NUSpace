@@ -12,6 +12,7 @@ const isbStopDisplayOverridesFile = new URL('../../data/curated/phase2-nus-isb-s
 const isbPublicBusLinksFile = new URL('../../data/curated/phase2-nus-isb-public-bus-links.json', import.meta.url);
 const com3XrayShellFile = new URL('../../data/curated/phase4-com3-xray-shell.json', import.meta.url);
 const terrainStatusFile = new URL('../../data/curated/phase4-terrain-status.json', import.meta.url);
+const indoorReadinessStatusFile = new URL('../../data/curated/phase5-indoor-readiness-status.json', import.meta.url);
 const nextbusResearchSnapshotFile = new URL('../../data/processed/nextbus-research/nus-nextbus-static-snapshot.json', import.meta.url);
 
 const NUS_BOUNDS = {
@@ -420,6 +421,36 @@ function validateTerrainStatus(status) {
   assert(status.blockedArtifacts.includes('terrain tiles'), 'terrain status must keep terrain tiles blocked');
 }
 
+function validateIndoorReadinessStatus(status) {
+  assert(status.schema === 'phase5-indoor-readiness-status-v1', 'indoor readiness status must use the Phase 5 schema');
+  assert(status.status === 'blocked', 'indoor navigation must stay blocked until the Phase 5 data acquisition and QA gate passes');
+  assert(Array.isArray(status.sourceIds), 'indoor readiness status must include sourceIds');
+  assert(status.sourceIds.length === 0, 'indoor blocked state must not reference floor-plan sources');
+  assert(typeof status.dateChecked === 'string' && status.dateChecked.length > 0, 'indoor readiness status must include dateChecked');
+  assert(typeof status.nextReviewDate === 'string' && status.nextReviewDate.length > 0, 'indoor readiness status must include nextReviewDate');
+  assert(typeof status.decision === 'string' && status.decision.includes('Do not enable indoor navigation'), 'indoor readiness status must document the blocked decision');
+  assert(typeof status.uiLabel === 'string' && status.uiLabel.includes('Indoor'), 'indoor readiness status must include a UI label');
+  assert(typeof status.uiSummary === 'string' && status.uiSummary.includes('legal floor plans'), 'indoor readiness status must expose the missing floor-plan requirement');
+  assert(status.layerStateLabel === 'Blocked', 'indoor blocked state must show as Blocked');
+  assert(Array.isArray(status.targetBuildings) && status.targetBuildings.includes('COM3'), 'indoor readiness status must list initial target buildings');
+  assert(status.requirements?.legalFloorPlanSource === 'missing', 'indoor readiness status must keep legal floor-plan source missing');
+  assert(status.requirements?.floorList === 'missing', 'indoor readiness status must keep floor list missing');
+  assert(status.requirements?.roomPoiInventory === 'missing', 'indoor readiness status must keep room/POI inventory missing');
+  assert(status.requirements?.entrancesAndOutdoorConnections === 'missing', 'indoor readiness status must keep entrances and outdoor connections missing');
+  assert(status.requirements?.verticalConnectors === 'missing', 'indoor readiness status must keep vertical connectors missing');
+  assert(status.requirements?.inaccessiblePrivateAreas === 'missing', 'indoor readiness status must keep inaccessible/private area markings missing');
+  assert(status.requirements?.confidenceScores === 'missing', 'indoor readiness status must keep confidence scores missing');
+  assert(status.requirements?.manualQaNotes === 'missing', 'indoor readiness status must keep manual QA notes missing');
+  assert(Array.isArray(status.restrictions), 'indoor readiness status must include restrictions');
+  assert(status.restrictions.some((restriction) => restriction.includes('emergency evacuation')), 'indoor readiness status must block emergency evacuation claims');
+  assert(status.restrictions.some((restriction) => restriction.includes('accessible routes')), 'indoor readiness status must block inferred accessible routes');
+  assert(Array.isArray(status.qaRequirements), 'indoor readiness status must include QA requirements');
+  assert(status.qaRequirements.some((requirement) => requirement.includes('entrance alignment')), 'indoor readiness status must require entrance alignment QA');
+  assert(Array.isArray(status.blockedArtifacts), 'indoor readiness status must include blockedArtifacts');
+  assert(status.blockedArtifacts.includes('indoor routing'), 'indoor readiness status must keep indoor routing blocked');
+  assert(status.blockedArtifacts.includes('corridor graph'), 'indoor readiness status must keep corridor graph blocked');
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
@@ -430,6 +461,7 @@ const isbStopDisplayOverrides = JSON.parse(await readFile(isbStopDisplayOverride
 const isbPublicBusLinks = JSON.parse(await readFile(isbPublicBusLinksFile, 'utf8'));
 const com3XrayShell = JSON.parse(await readFile(com3XrayShellFile, 'utf8'));
 const terrainStatus = JSON.parse(await readFile(terrainStatusFile, 'utf8'));
+const indoorReadinessStatus = JSON.parse(await readFile(indoorReadinessStatusFile, 'utf8'));
 const nextbusResearchSnapshot = JSON.parse(await readFile(nextbusResearchSnapshotFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
@@ -477,6 +509,7 @@ validateIsbStopDisplayOverrides(isbStopDisplayOverrides, isbBusStops.stops);
 validateIsbPublicBusLinks(isbPublicBusLinks, isbStopIds);
 validateCom3XrayShell(com3XrayShell);
 validateTerrainStatus(terrainStatus);
+validateIndoorReadinessStatus(indoorReadinessStatus);
 
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
@@ -485,4 +518,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB display-position overrides, NUS ISB public bus links, NextBus research snapshot, COM3 xray shell, and terrain status contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB display-position overrides, NUS ISB public bus links, NextBus research snapshot, COM3 xray shell, terrain status, and indoor readiness status contain required metadata.');

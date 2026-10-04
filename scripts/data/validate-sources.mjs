@@ -346,7 +346,12 @@ function validateIsbStopDisplayOverrides(displayOverrides, isbStops) {
     assert(override.osm?.type === 'node', `${context} must preserve an OSM node reference`);
     assert(Number.isInteger(override.osm?.id), `${context} must preserve an OSM node id`);
     assert(typeof override.osm?.name === 'string' && override.osm.name.length > 0, `${context} must preserve the OSM name`);
-    assert(typeof override.osm?.network === 'string' && override.osm.network.includes('NUS Internal Shuttle Bus Services'), `${context} must preserve the NUS ISB OSM network tag`);
+    if (override.osm.network !== undefined) {
+      assert(typeof override.osm.network === 'string' && override.osm.network.length > 0, `${context} OSM network tag must be a non-empty string when present`);
+    }
+    if (override.osm.ref !== undefined) {
+      assert(/^\d{5}$/.test(override.osm.ref), `${context} OSM public bus stop ref must be a five-digit code when present`);
+    }
     assert(Number.isInteger(override.distanceFromNextbusMeters) && override.distanceFromNextbusMeters >= 0, `${context} must include distance from the NextBus coordinate`);
     assert(override.reviewStatus === 'reviewed', `${context} must be reviewed before being used for display`);
     assert(override.shipAllowed === false, `${context} must not be marked production ship allowed without official verification`);

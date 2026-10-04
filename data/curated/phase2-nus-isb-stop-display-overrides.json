@@ -9,8 +9,8 @@
     "nus-nextbus-codelab-api"
   ],
   "source_status": "manual-reference",
-  "match_method": "Exact normalized stop-name match between the NUS NextBus research stop inventory and current OpenStreetMap nodes tagged as NUS Internal Shuttle Bus Services platforms or bus stops in the bounded Kent Ridge extract. These overrides only change app display/search coordinates; route membership remains from the NextBus research snapshot.",
-  "warning": "OpenStreetMap platform nodes are public community-maintained map references, not official NUS-verified current boarding-point coordinates. Do not mark these display positions verified without official data or documented field survey.",
+  "match_method": "Exact normalized stop-name match between the NUS NextBus research stop inventory and current OpenStreetMap nodes tagged as public bus stops or public-transport platforms in the bounded Kent Ridge extract. Prefer NUS Internal Shuttle Bus Services network nodes when duplicate exact-name candidates exist; otherwise use the exact-name public map bus stop/platform node. These overrides only change app display/search coordinates; route membership remains from the NextBus research snapshot.",
+  "warning": "OpenStreetMap bus stop and platform nodes are public community-maintained map references, not official NUS-verified current boarding-point coordinates. Do not mark these display positions verified without official data or documented field survey.",
   "overrides": [
     {
       "nextbusStopId": "nextbus-as5",
@@ -30,7 +30,7 @@
       "distanceFromNextbusMeters": 41,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node shown on the basemap; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-biz2",
@@ -44,12 +44,34 @@
         "type": "node",
         "id": 1738410356,
         "name": "BIZ2",
+        "altName": "BIZ 2",
         "network": "NUS Internal Shuttle Bus Services"
       },
       "distanceFromNextbusMeters": 2,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-clb",
+      "coordinates": [
+        103.7722053,
+        1.2962752
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 2429952048,
+        "name": "Central Library",
+        "network": "Land Transport Authority",
+        "ref": "16181",
+        "routeRef": "95;151"
+      },
+      "distanceFromNextbusMeters": 50,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-com3",
@@ -63,12 +85,13 @@
         "type": "node",
         "id": 9849950852,
         "name": "COM3",
+        "altName": "COM 3",
         "network": "NUS Internal Shuttle Bus Services"
       },
       "distanceFromNextbusMeters": 59,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node shown on the basemap; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-hssml-opp",
@@ -87,7 +110,65 @@
       "distanceFromNextbusMeters": 23,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-it",
+      "coordinates": [
+        103.7727143,
+        1.2972207
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 10723919312,
+        "name": "Information Technology",
+        "ref": "16189",
+        "routeRef": "95;95B;96;96A;96B;151"
+      },
+      "distanceFromNextbusMeters": 3,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-jp-sch-16151",
+      "coordinates": [
+        103.7699037,
+        1.3007697
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 410463715,
+        "name": "The Japanese Primary School",
+        "ref": "16151",
+        "routeRef": "33;33A;183;188"
+      },
+      "distanceFromNextbusMeters": 0,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-kv",
+      "coordinates": [
+        103.7696131,
+        1.3018332
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 4416554225,
+        "name": "Kent Vale"
+      },
+      "distanceFromNextbusMeters": 19,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-lt13",
@@ -101,12 +182,13 @@
         "type": "node",
         "id": 1554938663,
         "name": "LT 13",
+        "altName": "LT13",
         "network": "NUS Internal Shuttle Bus Services"
       },
       "distanceFromNextbusMeters": 22,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-lt13-opp",
@@ -125,7 +207,7 @@
       "distanceFromNextbusMeters": 6,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-nuss-opp",
@@ -144,7 +226,7 @@
       "distanceFromNextbusMeters": 20,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-pgpr",
@@ -163,7 +245,7 @@
       "distanceFromNextbusMeters": 11,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-tcoms",
@@ -182,7 +264,7 @@
       "distanceFromNextbusMeters": 19,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     },
     {
       "nextbusStopId": "nextbus-tcoms-opp",
@@ -201,19 +283,133 @@
       "distanceFromNextbusMeters": 34,
       "reviewStatus": "reviewed",
       "shipAllowed": false,
-      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-uhall-opp",
+      "coordinates": [
+        103.7780877,
+        1.2975739
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738421866,
+        "name": "Opp University Hall",
+        "ref": "18319",
+        "routeRef": "95;95B"
+      },
+      "distanceFromNextbusMeters": 0,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-uhc",
+      "coordinates": [
+        103.7760594,
+        1.2989593
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 410467187,
+        "name": "University Health Centre",
+        "ref": "18329",
+        "routeRef": "95;95B"
+      },
+      "distanceFromNextbusMeters": 7,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-uhc-opp",
+      "coordinates": [
+        103.7756587,
+        1.2987422
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 410467183,
+        "name": "Opposite University Health Centre",
+        "ref": "18321",
+        "routeRef": "95"
+      },
+      "distanceFromNextbusMeters": 7,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-utown",
+      "coordinates": [
+        103.7744314,
+        1.3035354
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1388190869,
+        "name": "University Town"
+      },
+      "distanceFromNextbusMeters": 43,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-yih",
+      "coordinates": [
+        103.7743214,
+        1.2988628
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 410466861,
+        "name": "Yusof Ishak Hse",
+        "ref": "16171",
+        "routeRef": "95;151"
+      },
+      "distanceFromNextbusMeters": 7,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-yih-opp",
+      "coordinates": [
+        103.7740478,
+        1.2989244
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 410466860,
+        "name": "Opp Yusof Ishak Hse",
+        "ref": "16179",
+        "routeRef": "95;95B;96;96A;96B;151"
+      },
+      "distanceFromNextbusMeters": 8,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to an exact-name public OpenStreetMap bus stop/platform node; original NextBus research coordinate remains permission-required planning data."
     }
   ],
   "unmatchedStopIds": [
     "nextbus-bg-mrt",
     "nextbus-cg",
-    "nextbus-clb",
-    "nextbus-it",
-    "nextbus-jp-sch-16151",
     "nextbus-kr-mrt",
     "nextbus-kr-mrt-opp",
     "nextbus-krb",
-    "nextbus-kv",
     "nextbus-lt27",
     "nextbus-museum",
     "nextbus-oth",
@@ -221,12 +417,6 @@
     "nextbus-raffles",
     "nextbus-s17",
     "nextbus-sde3-opp",
-    "nextbus-uhall",
-    "nextbus-uhall-opp",
-    "nextbus-uhc",
-    "nextbus-uhc-opp",
-    "nextbus-utown",
-    "nextbus-yih",
-    "nextbus-yih-opp"
+    "nextbus-uhall"
   ]
 }

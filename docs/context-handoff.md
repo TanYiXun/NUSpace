@@ -16,7 +16,8 @@ This file is a concise working-memory handoff for long conversations, compaction
 - PR #27 added the NUS ISB research stop inventory and was merged to `main`.
 - PR #28 added the COM3 shell-only xray slice, cleaned up app-facing NUS ISB research stops, added documented LTA public bus links for linked NUS ISB research stops, compacted the selected-stop bus services sheet, and merged to `main`.
 - PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
-- Active uncommitted work: NUS ISB display-position alignment to exact matched OSM platform nodes.
+- Latest local branch commit subject: `Expand ISB stop alignment to public map stops` on `align-isb-stops-to-osm-platforms`; run `git log -1 --oneline` for the exact current hash.
+- Active uncommitted work: none.
 
 ## Current Phase
 
@@ -25,7 +26,7 @@ This file is a concise working-memory handoff for long conversations, compaction
 - Latest refinement: Terrain status is now a curated data artifact, validated by `npm run validate:data`, and visible in the layer menu as `Terrain unavailable` with the missing gate requirements. No terrain tiles, DEM, hillshade, exaggeration, or terrain toggle is enabled.
 - Status: PR #28 completed and merged the COM3 shell-only xray slice. PR #29 completed and merged the terrain readiness gate. Terrain remains deferred by plan default because usefulness/source/license/alignment/performance/boundary treatment are unresolved. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5174/` from `npm run dev -- --host 127.0.0.1`. Port `5173` was in use, so Vite selected `5174`.
-- The user has been reviewing the running local app. Current branch is `main`.
+- The user has been reviewing the running local app. Current branch is `align-isb-stops-to-osm-platforms`.
 
 ## Current Phase 1 Slice
 
@@ -193,6 +194,7 @@ Bus stop and route truth checkpoint screenshots are in `docs/screenshots/`:
 - `bus-stop-coordinate-truth-mobile-selected.png`
 - `prototype-route-truth-desktop.png`
 - `phase2-isb-osm-platform-as5-alignment.png`
+- `phase2-isb-osm-platform-utown-alignment.png`
 
 De-prototype map/transit/3D checkpoint screenshots are in `docs/screenshots/`:
 
@@ -244,7 +246,7 @@ NextBus extraction details:
 - 2026-10-04 cleanup: these screenshots were refreshed after cutting app-facing bus stops over to the 33 NextBus research stops only. Overview shows `49 searchable`, `33 NUS ISB research stops`, and `33 bus stop markers`; selected Information Technology shows `NextBus IT`, `requires-permission`, D1 label `5. IT`, and no live ETA.
 - Follow-up on 2026-10-04 linked 21 of the 33 NextBus research stops to official LTA DataMall public bus stop codes where the nearest official BusStops coordinate is within 100 m. The remaining 12 stops are explicitly unlinked. Selected Information Technology now shows internal A2/D1/R2 rows with `--` and linked LTA stop `16189` public arrivals when the server-side LTA key is available.
 - 2026-10-04 selected-stop UI compaction: the default overview no longer shows example ETA prototype rows; selected bus stops show one combined `Bus services` card with compact NUS route chips plus linked LTA public timings. The selected bus-stop half sheet uses a taller mobile height and a one-line trust summary so timing rows are visible instead of running out of screen.
-- 2026-10-04 OSM display-position alignment: `data/curated/phase2-nus-isb-stop-display-overrides.json` now aligns 10 exact matched NUS ISB research stops to current OSM nodes tagged as `NUS Internal Shuttle Bus Services` platforms or bus stops. AS5 moves to OSM node `1738410355` at `[103.7718183, 1.2934927]`, 41 m from the NextBus snapshot coordinate; COM3 moves to OSM node `9849950852` at `[103.7750111, 1.2949196]`, 59 m from the NextBus snapshot coordinate. These are manual-reference display positions only, not official NUS-verified current boarding points.
+- 2026-10-04 OSM display-position alignment: `data/curated/phase2-nus-isb-stop-display-overrides.json` now aligns 20 exact matched NUS ISB research stops to current OSM nodes tagged as public bus stops or public-transport platforms. AS5 moves to OSM node `1738410355` at `[103.7718183, 1.2934927]`, 41 m from the NextBus snapshot coordinate; COM3 moves to OSM node `9849950852` at `[103.7750111, 1.2949196]`, 59 m from the NextBus snapshot coordinate; University Town moves to OSM node `1388190869` at `[103.7744314, 1.3035354]`, 43 m from the NextBus snapshot coordinate. These are manual-reference display positions only, not official NUS-verified current boarding points.
 
 Latest checks on 2026-10-04:
 

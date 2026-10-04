@@ -182,7 +182,7 @@ sources:
     documentation_url: https://wiki.openstreetmap.org/wiki/API_v0.6
     terms_or_license_url: https://www.openstreetmap.org/copyright
     license: Open Database License
-    allowed_use: MVP 1 seed dataset for searchable NUS-area buildings, historical bus stop seed records, building footprints, and manual-reference NUS ISB display-position alignment with OpenStreetMap attribution
+    allowed_use: MVP 1 seed dataset for searchable NUS-area buildings, historical bus stop seed records, building footprints, and manual-reference NUS ISB display-position alignment to exact public OpenStreetMap bus stop/platform nodes with attribution
     disallowed_use: Do not treat as official NUS building inventory, official NUS shuttle stop list, live shuttle data, indoor map data, accessibility routing data, or exact campus operations data
     attribution_text: © OpenStreetMap contributors
     attribution_required: true
@@ -195,7 +195,7 @@ sources:
     used_for:
       - MVP 1 searchable campus place seed
       - Historical MVP 1 OSM-sourced bus stop seed records retained for provenance
-      - Phase 2 manual-reference display-position overrides for exact matched NUS ISB platform nodes
+      - Phase 2 manual-reference display-position overrides for exact matched public bus stop/platform nodes
       - MVP 1 OSM-sourced building search seed
       - MVP 1 OSM-sourced visible building footprint seed
     limitations:

@@ -1676,7 +1676,7 @@ export function CampusMap() {
                 <p>
                   {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
                     selectedBusStop.displayPosition ? (
-                      `NextBus research snapshot supplies stop names and route membership. The marker is displayed at an exact-name OpenStreetMap NUS ISB platform node ${selectedBusStop.displayPosition.distanceFromNextbusMeters} m from the NextBus coordinate. This OSM alignment is manual-reference only, not an official NUS-verified current boarding point.`
+                      `NextBus research snapshot supplies stop names and route membership. The marker is displayed at an exact-name public OpenStreetMap bus stop/platform node ${selectedBusStop.displayPosition.distanceFromNextbusMeters} m from the NextBus coordinate. This OSM alignment is manual-reference only, not an official NUS-verified current boarding point.`
                     ) : (
                       'NextBus research snapshot. Stop names, coordinates, and route membership remain permission-required planning data, not live or verified current shuttle operations.'
                     )

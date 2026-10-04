@@ -100,12 +100,12 @@ function applyDisplayPositionOverride(place: RawCampusPlace): SearchEntity {
   return {
     ...place,
     coordinates: override.coordinates as LngLatLike,
-    subtitle: `${place.subtitle} · OSM platform display point`,
-    detail: `${place.detail} Display marker is aligned to an exact-name OpenStreetMap NUS ISB platform node as a manual-reference display position; this does not verify current NUS shuttle operations or official boarding-point coordinates.`,
+    subtitle: `${place.subtitle} · OSM stop/platform display point`,
+    detail: `${place.detail} Display marker is aligned to an exact-name public OpenStreetMap bus stop/platform node as a manual-reference display position; this does not verify current NUS shuttle operations or official boarding-point coordinates.`,
     displayPosition: {
       sourceId: override.sourceId,
       sourceStatus: override.sourceStatus,
-      sourceLabel: `OSM ${override.osm?.name ?? place.name} platform`,
+      sourceLabel: `OSM ${override.osm?.name ?? place.name} stop/platform`,
       distanceFromNextbusMeters: override.distanceFromNextbusMeters,
       note: override.note,
       osm: override.osm,

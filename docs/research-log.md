@@ -155,6 +155,14 @@
 - Decision: add `data/curated/phase4-terrain-status.json` and keep terrain unavailable in the layer menu. Do not add terrain tiles, DEM sources, hillshade, exaggeration, or user-facing terrain toggles yet.
 - Confidence: high that this matches the plan gate; terrain usefulness remains unresolved.
 
+## 2026-10-04 - Phase 4 Terrain Prototype
+
+- Task: reopen Phase 4 terrain work after the user requested NUS terrain and 3D buildings.
+- Sources checked: MapLibre raster-dem support and AWS Open Data Terrain Tiles / Mapzen Terrarium tile documentation.
+- Finding: MapLibre can render Terrarium `raster-dem` sources, and AWS Open Data Terrain Tiles provide global bare-earth terrain tiles suitable for a prototype hillshade/terrain layer. The DEM is not campus-specific enough to support NUS accessibility, stair, ramp, entrance, or route-weighting claims.
+- Decision: document `aws-open-data-terrain-tiles` in `data/sources.yml`, move `phase4-terrain-status.json` to `prototype`, and render a bounded terrain/hillshade layer with restrained exaggeration and explicit prototype truth copy.
+- Confidence: medium for visual slope context, low for campus-level routing or accessibility decisions until field or official data exists.
+
 ## 2026-10-04 - NUS ISB OSM Platform Display Alignment
 
 - Task: check whether visible NUS ISB markers such as AS5 and COM3 were using correct point positions after comparing them against the basemap's bus-stop platform icons.

@@ -397,28 +397,43 @@ function validateCom3XrayShell(shell) {
 function validateTerrainStatus(status) {
   assert(status.schema === 'phase4-terrain-status-v1', 'terrain status must use the Phase 4 schema');
   assert(['unavailable', 'prototype', 'supported', 'disabled-for-performance'].includes(status.status), 'terrain status has unsupported status');
-  assert(status.status === 'unavailable', 'terrain must stay unavailable until the Phase 4 terrain gate is resolved');
+  assert(status.status === 'prototype', 'terrain must stay prototype until alignment, readability, and mobile performance review pass');
   assert(Array.isArray(status.sourceIds), 'terrain status must include sourceIds');
-  assert(status.sourceIds.length === 0, 'terrain unavailable state must not reference an elevation source');
+  assert(status.sourceIds.includes('aws-open-data-terrain-tiles'), 'terrain prototype must reference the AWS Open Data Terrain Tiles source');
+  assert(status.sourceIds.every((sourceId) => contents.includes(`id: ${sourceId}`)), 'terrain status sourceIds must exist in data/sources.yml');
   assert(typeof status.dateChecked === 'string' && status.dateChecked.length > 0, 'terrain status must include dateChecked');
   assert(typeof status.nextReviewDate === 'string' && status.nextReviewDate.length > 0, 'terrain status must include nextReviewDate');
-  assert(typeof status.decision === 'string' && status.decision.includes('Do not enable terrain'), 'terrain status must document the blocked decision');
+  assert(typeof status.decision === 'string' && status.decision.includes('Phase 4 prototype terrain'), 'terrain status must document the prototype decision');
   assert(typeof status.uiLabel === 'string' && status.uiLabel.includes('Terrain'), 'terrain status must include a UI label');
-  assert(typeof status.uiSummary === 'string' && status.uiSummary.includes('elevation source'), 'terrain status must expose the missing elevation-source requirement');
-  assert(status.layerStateLabel === 'Blocked', 'terrain unavailable state must show as Blocked');
-  assert(status.requirements?.elevationSource === 'missing', 'terrain status must keep elevation source missing');
-  assert(status.requirements?.license === 'missing', 'terrain status must keep license missing');
-  assert(status.requirements?.campusAlignment === 'missing', 'terrain status must keep alignment missing');
-  assert(status.requirements?.mobilePerformance === 'missing', 'terrain status must keep mobile performance missing');
-  assert(status.requirements?.labelAndOverlayReadability === 'missing', 'terrain status must keep readability missing');
-  assert(status.requirements?.boundaryTreatment === 'missing', 'terrain status must keep boundary treatment missing');
-  assert(status.coverage?.extentStatus === 'not-defined', 'terrain unavailable state must not define coverage');
+  assert(typeof status.uiSummary === 'string' && status.uiSummary.includes('Open DEM'), 'terrain status must expose the DEM prototype source boundary');
+  assert(status.layerStateLabel === 'Prototype', 'terrain prototype state must show as Prototype');
+  assert(status.truthLabel === 'Prototype', 'terrain prototype must use the exact truth label');
+  assert(typeof status.tileUrlTemplate === 'string' && status.tileUrlTemplate.includes('{z}/{x}/{y}.png'), 'terrain prototype must document the tile URL template');
+  assert(status.encoding === 'terrarium', 'terrain prototype must use Terrarium encoding');
+  assert(status.tileSize === 256, 'terrain prototype tileSize must be 256');
+  assert(status.maxzoom === 15, 'terrain prototype maxzoom must be 15 for Mapzen terrain tiles');
+  assert(typeof status.exaggeration === 'number' && status.exaggeration >= 1 && status.exaggeration <= 1.5, 'terrain exaggeration must stay restrained');
+  assert(status.requirements?.elevationSource === 'documented', 'terrain status must document elevation source');
+  assert(status.requirements?.license === 'documented', 'terrain status must document license');
+  assert(status.requirements?.campusAlignment === 'prototype-review-required', 'terrain status must require campus alignment review');
+  assert(status.requirements?.mobilePerformance === 'prototype-review-required', 'terrain status must require mobile performance review');
+  assert(status.requirements?.labelAndOverlayReadability === 'prototype-review-required', 'terrain status must require readability review');
+  assert(status.requirements?.boundaryTreatment === 'prototype-bounds-defined', 'terrain status must define prototype boundary treatment');
+  assert(status.coverage?.extentStatus === 'prototype-bounds', 'terrain prototype must define coverage bounds');
+  assert(Array.isArray(status.coverage?.bounds), 'terrain prototype must include bounds');
+  assert(status.coverage.bounds.length === 4, 'terrain prototype bounds must be [west, south, east, north]');
+  assert(status.coverage.bounds[0] <= NUS_BOUNDS.minLng && status.coverage.bounds[2] >= NUS_BOUNDS.maxLng, 'terrain prototype bounds must cover the NUS longitude review area');
+  assert(status.coverage.bounds[1] <= NUS_BOUNDS.minLat && status.coverage.bounds[3] >= NUS_BOUNDS.maxLat, 'terrain prototype bounds must cover the NUS latitude review area');
   assert(
     typeof status.coverage?.boundaryPolicy === 'string' && status.coverage.boundaryPolicy.includes('unfinished square'),
     'terrain status must document user-facing boundary policy',
   );
+  assert(Array.isArray(status.enabledArtifacts), 'terrain prototype must include enabledArtifacts');
+  assert(status.enabledArtifacts.includes('DEM raster source'), 'terrain prototype must enable a DEM raster source');
+  assert(status.enabledArtifacts.includes('hillshade layer'), 'terrain prototype must enable a hillshade layer');
   assert(Array.isArray(status.blockedArtifacts), 'terrain status must include blockedArtifacts');
-  assert(status.blockedArtifacts.includes('terrain tiles'), 'terrain status must keep terrain tiles blocked');
+  assert(status.blockedArtifacts.includes('accessibility route weighting'), 'terrain prototype must not enable accessibility route weighting');
+  assert(status.blockedArtifacts.includes('production terrain status'), 'terrain prototype must not claim production terrain support');
 }
 
 function validateIndoorReadinessStatus(status) {

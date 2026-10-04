@@ -1,6 +1,6 @@
 # Phase 4 Terrain Readiness Gate
 
-Status: deferred.
+Status: superseded by `docs/decisions/phase-4-terrain-prototype.md`.
 
 Plan section targeted:
 
@@ -9,6 +9,8 @@ Plan section targeted:
 ## Decision
 
 Do not implement terrain yet.
+
+This decision recorded the blocked state before an elevation source was selected. It was superseded on 2026-10-04 by the Phase 4 terrain prototype decision, which documents AWS Open Data Terrain Tiles as a prototype source and keeps terrain labelled as non-production visual slope context.
 
 The current app should keep terrain as a blocked layer note because the project does not yet have:
 

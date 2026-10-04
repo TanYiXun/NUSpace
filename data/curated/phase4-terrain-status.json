@@ -1,30 +1,50 @@
 {
   "schema": "phase4-terrain-status-v1",
-  "status": "unavailable",
-  "sourceIds": [],
+  "status": "prototype",
+  "sourceIds": [
+    "aws-open-data-terrain-tiles"
+  ],
   "dateChecked": "2026-10-04",
   "nextReviewDate": "2026-11-04",
-  "decision": "Do not enable terrain until an elevation source, license, campus alignment, mobile performance, and boundary treatment are documented.",
-  "uiLabel": "Terrain unavailable",
-  "uiSummary": "Needs elevation source, license, alignment, mobile performance, and boundary treatment",
-  "layerStateLabel": "Blocked",
+  "decision": "Enable a Phase 4 prototype terrain and hillshade layer from AWS Open Data Mapzen Terrarium DEM tiles while keeping the surface labelled as prototype until alignment, readability, mobile performance, and boundary treatment pass review.",
+  "uiLabel": "Terrain prototype",
+  "uiSummary": "Open DEM hillshade and 3D terrain for visual slope context only",
+  "layerStateLabel": "Prototype",
+  "truthLabel": "Prototype",
+  "tileUrlTemplate": "https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png",
+  "encoding": "terrarium",
+  "tileSize": 256,
+  "maxzoom": 15,
+  "exaggeration": 1.25,
   "requirements": {
-    "elevationSource": "missing",
-    "license": "missing",
-    "campusAlignment": "missing",
-    "mobilePerformance": "missing",
-    "labelAndOverlayReadability": "missing",
-    "boundaryTreatment": "missing"
+    "elevationSource": "documented",
+    "license": "documented",
+    "campusAlignment": "prototype-review-required",
+    "mobilePerformance": "prototype-review-required",
+    "labelAndOverlayReadability": "prototype-review-required",
+    "boundaryTreatment": "prototype-bounds-defined"
   },
   "coverage": {
-    "extentStatus": "not-defined",
-    "boundaryPolicy": "Terrain extent must be data-driven and must not show an unfinished square in user-facing map states."
+    "extentStatus": "prototype-bounds",
+    "bounds": [
+      103.76,
+      1.285,
+      103.79,
+      1.31
+    ],
+    "boundaryPolicy": "Prototype terrain requests are bounded to the NUS campus review area. Before production, visual QA must confirm no obvious unfinished square appears in map-first user states."
   },
-  "blockedArtifacts": [
-    "terrain tiles",
+  "enabledArtifacts": [
     "DEM raster source",
-    "hillshade source",
+    "hillshade layer",
     "terrain exaggeration",
     "user-facing terrain toggle"
+  ],
+  "blockedArtifacts": [
+    "official NUS slope data",
+    "accessibility route weighting",
+    "stair, ramp, or lift elevation inference",
+    "indoor floor elevation transitions",
+    "production terrain status"
   ]
 }

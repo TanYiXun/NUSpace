@@ -204,6 +204,30 @@ sources:
       - OSM bus stop coordinates do not provide live NUS ISB arrivals, crowd levels, official shuttle route membership, or official stop locations
       - Bounded extract was curated into `data/curated/mvp1-campus-places.json`; selected OSM way/full responses were curated into `data/curated/mvp1-building-footprints.geojson`; the full raw OSM XML dumps are not committed
       - Some OSM objects inside the query bounds may be outside NUS-controlled campus areas and must be curated before display
+  - id: aws-open-data-terrain-tiles
+    name: AWS Open Data Terrain Tiles
+    source_owner: Mapzen / Tilezen; hosted through the AWS Open Data Registry
+    source_url: https://elevation-tiles-prod.s3.amazonaws.com/terrarium/{z}/{x}/{y}.png
+    documentation_url: https://registry.opendata.aws/terrain-tiles/
+    terms_or_license_url: https://github.com/tilezen/joerd/blob/master/docs/attribution.md
+    license: Source-dependent attribution; Mapzen Terrain Tiles attribution required
+    allowed_use: Phase 4 prototype terrain and hillshade rendering with MapLibre raster-dem Terrarium tiles over the NUS campus area
+    disallowed_use: Do not treat as official NUS slope, accessibility, staircase, ramp, entrance, or safety-routing data
+    attribution_text: Elevation tiles from Mapzen Terrain Tiles on AWS Open Data
+    attribution_required: true
+    commercial_use_allowed: unknown
+    redistribution_allowed: unknown
+    derived_data_rules: Preserve attribution; keep terrain marked as prototype until alignment, readability, and mobile performance review pass
+    date_checked: 2026-10-04
+    next_review_date: 2026-11-04
+    source_status: verified
+    used_for:
+      - Phase 4 terrain prototype raster-dem source
+      - Phase 4 terrain prototype hillshade layer
+    limitations:
+      - Global bare-earth DEM tiles may be too coarse for campus-level stairs, ramps, entrances, or accessibility decisions
+      - Tile availability and upstream hosting are external dependencies
+      - Does not provide NUS-verified campus slopes, indoor elevation transitions, accessible paths, or route guidance
   - id: lta-datamall-dynamic-apis
     name: LTA DataMall Dynamic APIs
     source_owner: Land Transport Authority Singapore

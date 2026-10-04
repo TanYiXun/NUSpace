@@ -8,8 +8,8 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `main`.
-- Latest `main` commit: `b55f7dd Merge pull request #31 from TanYiXun/phase5-indoor-readiness-gate`.
+- Current branch: `phase4-terrain-prototype`.
+- Latest `main` commit: `dbfad4d Update handoff after indoor readiness gate`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
@@ -18,17 +18,17 @@ This file is a concise working-memory handoff for long conversations, compaction
 - PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
 - PR #30 added the NUS ISB public OSM stop/platform display-position alignment and merged to `main`.
 - PR #31 added the Phase 5 indoor readiness gate and merged to `main`.
-- Latest local commit subject: `Merge pull request #31 from TanYiXun/phase5-indoor-readiness-gate`; run `git log -1 --oneline` for the exact current hash.
-- Active uncommitted work: this handoff refresh only until committed.
+- Latest local commit subject: `Update handoff after indoor readiness gate`; run `git log -1 --oneline` for the exact current hash.
+- Active uncommitted work: Phase 4 terrain prototype, AWS Open Data Terrain Tiles source metadata, validation, UI toggle, docs, tests, and screenshots.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` 14.0 indoor data acquisition and QA gate.
-- Current slice: Phase 5 indoor readiness gate completed and merged in PR #31.
-- Latest refinement: `data/curated/phase5-indoor-readiness-status.json` records indoor navigation as `blocked`; validation checks the missing legal floor-plan source, floor list, room/POI inventory, entrances/outdoor connections, vertical connectors, inaccessible/private areas, confidence scores, manual QA notes, restrictions, QA requirements, and blocked indoor artifacts. The overview panel, layer menu, and COM3 shell-only selected-building sheet now show the blocked indoor state.
-- Status: PR #31 is merged. Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. No floor plans, room geometry, corridor graph, entrances, vertical connectors, accessibility paths, or indoor routes are enabled.
-- Current local preview: stopped. During screenshot capture, `npm run dev -- --host 127.0.0.1` used `http://127.0.0.1:5175/` because ports `5173` and `5174` were already in use.
-- The user has been reviewing the running local app. Current branch is `main`.
+- Active plan section: `PLAN.md` 13.2 terrain guidance, with section 13 3D campus detail constraints.
+- Current slice: Phase 4 terrain prototype on top of merged PR #31 and handoff refresh commit `dbfad4d`.
+- Latest refinement: `data/curated/phase4-terrain-status.json` now records terrain as `prototype`; `data/sources.yml` documents AWS Open Data Terrain Tiles / Mapzen Terrarium tiles; MapLibre renders a bounded `raster-dem` terrain source, subtle hillshade, restrained exaggeration, and a layer-menu terrain toggle. The overview copy says terrain is visual slope context only and not NUS-verified slope, accessibility, or routing data.
+- Status: Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. Terrain is prototype only, pending alignment, mobile performance, label readability, and boundary review.
+- Current local preview: `http://127.0.0.1:5175/` from `npm run dev -- --host 127.0.0.1`. Ports `5173` and `5174` were in use, so Vite selected `5175`.
+- The user has been reviewing the running local app. Current branch is `phase4-terrain-prototype`.
 
 ## Current Phase 1 Slice
 
@@ -186,6 +186,9 @@ Phase 4 3D detail screenshots are in `docs/screenshots/`:
 - `phase4-3d-detail-desktop-selected-building.png`
 - `phase4-3d-detail-mobile-overview.png`
 - `phase4-3d-detail-mobile-selected-building.png`
+- `phase4-terrain-prototype-overview.png`
+- `phase4-terrain-prototype-layers.png`
+- `phase4-terrain-prototype-mobile-overview.png`
 
 Phase 4 review is documented in:
 

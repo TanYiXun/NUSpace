@@ -65,7 +65,7 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
 
   await page.goto('/');
 
-  await expect(page.getByText('Phase 5 indoor readiness gate', { exact: false })).toBeVisible();
+  await expect(page.getByText('Phase 4 terrain and 3D prototype', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
   await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
   await expect(page.getByText('33 bus stop markers')).toBeVisible();
@@ -76,8 +76,8 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /NUS ISB stops/ })).toContainText('On');
   await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
-  await expect(page.getByText('Terrain unavailable')).toBeVisible();
-  await expect(page.getByText('Needs elevation source, license, alignment, mobile performance, and boundary treatment')).toBeVisible();
+  await expect(page.getByRole('button', { name: /Terrain prototype/ })).toContainText('On');
+  await expect(page.getByText('Open DEM hillshade and 3D terrain for visual slope context only')).toBeVisible();
   await expect(page.getByText('Indoor navigation unavailable')).toBeVisible();
   await expect(page.getByText('Needs legal floor plans, rooms, entrances, connectors, access boundaries, confidence scores, and QA notes')).toBeVisible();
   await page.getByRole('button', { name: 'Close map layers' }).click();
@@ -234,8 +234,9 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'View shuttle routes' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('49 searchable')).toBeVisible();
-  await expect(page.getByText('Phase 5 indoor readiness gate')).toBeVisible();
+  await expect(page.getByText('Phase 4 terrain and 3D prototype')).toBeVisible();
   await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
+  await expect(page.getByRole('definition').filter({ hasText: 'Prototype' })).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Select a bus stop' })).toBeVisible();
   await expect(page.getByText('Heng Mui Keng Terrace')).toBeHidden();
 

@@ -499,25 +499,30 @@ Visual constraints:
 - The xray shell is an interaction and recognizability test, not an official architectural model.
 - Do not add rooms, corridors, lifts, toilets, labs, public entrances, or indoor routes until the Phase 5 data gate passes.
 
-## Phase 4 Terrain Readiness
+## Phase 4 Terrain Prototype
 
-Terrain remains unavailable. The layer menu reads the blocked state from `data/curated/phase4-terrain-status.json` and does not expose a terrain toggle.
+Terrain is enabled as a prototype visual layer. The layer menu reads the state from `data/curated/phase4-terrain-status.json` and exposes a terrain toggle.
 
 Accepted behavior:
 
-- Terrain appears as a blocked layer note.
-- The note names the missing elevation source, license, alignment, mobile performance, and boundary-treatment requirements.
-- No terrain tiles, hillshade, DEM source, terrain exaggeration, or map pitch behavior changes are enabled.
+- Terrain appears as a toggleable prototype layer.
+- The map uses a bounded MapLibre `raster-dem` source, hillshade, and restrained terrain exaggeration.
+- The overview sheet states that terrain is visual slope context only, not NUS-verified slope, accessibility, or routing data.
+- Existing OSM building extrusions remain visible and readable over the terrain surface.
 
 Accepted visual checkpoint:
 
 - [Phase 4 terrain readiness layer menu](screenshots/phase4-terrain-readiness-layer-menu.png).
+- [Phase 4 terrain prototype overview](screenshots/phase4-terrain-prototype-overview.png).
+- [Phase 4 terrain prototype layers](screenshots/phase4-terrain-prototype-layers.png).
+- [Phase 4 terrain prototype mobile overview](screenshots/phase4-terrain-prototype-mobile-overview.png).
 
 Design constraints:
 
 - Do not add terrain for visual flair.
 - Do not show a visible square terrain boundary in user-facing states.
-- Terrain can restart only after a source and license are documented and a small prototype proves labels, routes, buildings, and controls remain readable.
+- Do not use DEM terrain to infer stairs, ramps, entrances, accessibility, or shuttle/walking route weights.
+- Terrain can move beyond prototype only after visual alignment, mobile performance, label readability, and boundary treatment are accepted.
 
 ## Phase 5 Indoor Readiness
 

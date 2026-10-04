@@ -8,8 +8,8 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase5-indoor-readiness-gate`.
-- Latest `main` commit: `fc10095 Merge pull request #30 from TanYiXun/align-isb-stops-to-osm-platforms`.
+- Current branch: `main`.
+- Latest `main` commit: `b55f7dd Merge pull request #31 from TanYiXun/phase5-indoor-readiness-gate`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
@@ -17,17 +17,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 - PR #28 added the COM3 shell-only xray slice, cleaned up app-facing NUS ISB research stops, added documented LTA public bus links for linked NUS ISB research stops, compacted the selected-stop bus services sheet, and merged to `main`.
 - PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
 - PR #30 added the NUS ISB public OSM stop/platform display-position alignment and merged to `main`.
-- Latest local branch commit subject: uncommitted Phase 5 indoor readiness gate work on `phase5-indoor-readiness-gate`; run `git status --short` for the exact file list.
-- Active uncommitted work: Phase 5 indoor readiness status artifact, validation, UI blocked-state copy, docs, tests, and screenshots.
+- PR #31 added the Phase 5 indoor readiness gate and merged to `main`.
+- Latest local commit subject: `Merge pull request #31 from TanYiXun/phase5-indoor-readiness-gate`; run `git log -1 --oneline` for the exact current hash.
+- Active uncommitted work: this handoff refresh only until committed.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` 14.0 indoor data acquisition and QA gate.
-- Current slice: Phase 5 indoor readiness gate on top of merged PR #30.
+- Current slice: Phase 5 indoor readiness gate completed and merged in PR #31.
 - Latest refinement: `data/curated/phase5-indoor-readiness-status.json` records indoor navigation as `blocked`; validation checks the missing legal floor-plan source, floor list, room/POI inventory, entrances/outdoor connections, vertical connectors, inaccessible/private areas, confidence scores, manual QA notes, restrictions, QA requirements, and blocked indoor artifacts. The overview panel, layer menu, and COM3 shell-only selected-building sheet now show the blocked indoor state.
-- Status: PR #30 is merged. Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. No floor plans, room geometry, corridor graph, entrances, vertical connectors, accessibility paths, or indoor routes are enabled.
-- Current local preview: `http://127.0.0.1:5175/` from `npm run dev -- --host 127.0.0.1`. Ports `5173` and `5174` were in use, so Vite selected `5175`.
-- The user has been reviewing the running local app. Current branch is `phase5-indoor-readiness-gate`.
+- Status: PR #31 is merged. Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. No floor plans, room geometry, corridor graph, entrances, vertical connectors, accessibility paths, or indoor routes are enabled.
+- Current local preview: stopped. During screenshot capture, `npm run dev -- --host 127.0.0.1` used `http://127.0.0.1:5175/` because ports `5173` and `5174` were already in use.
+- The user has been reviewing the running local app. Current branch is `main`.
 
 ## Current Phase 1 Slice
 
@@ -337,7 +338,15 @@ Known build warning:
   - `npm run test`: passed, 45 tests.
   - `npm run test:e2e`: passed, 8 passed and 8 project-skipped.
   - `npm run build`: passed with the existing Vite large-chunk warning.
+- PR #30 was pushed, opened with screenshots, and merged to `main`. It added the NUS ISB public OSM stop/platform display-position alignment.
+- PR #31 was pushed, opened with screenshots `docs/screenshots/phase5-indoor-readiness-overview.png` and `docs/screenshots/phase5-indoor-readiness-layers.png`, and merged to `main`. It added the Phase 5 indoor readiness gate. Latest checks from that branch:
+  - `npm run validate:data`: passed.
+  - `npm run typecheck`: passed.
+  - `npm run lint`: passed.
+  - `npm run test`: passed, 48 tests.
+  - `npm run test:e2e`: passed with localhost approval, 8 passed and 8 project-skipped.
+  - `npm run build`: passed with the existing Vite large-chunk warning.
 
 ## Next Recommended Action
 
-Do not start Phase 5 indoor navigation until legal indoor data and QA artifacts exist for at least one building. If terrain is revisited, first document a candidate elevation source, license, alignment plan, mobile performance target, readability review, and boundary treatment.
+Do not start Phase 5 indoor navigation implementation until legal indoor data and QA artifacts exist for at least one building. If terrain is revisited, first document a candidate elevation source, license, alignment plan, mobile performance target, readability review, and boundary treatment.

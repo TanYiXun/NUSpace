@@ -77,6 +77,8 @@ The NextBus codelab API research snapshot lives at `data/processed/nextbus-resea
 
 Phase 4 adds `phase4-com3-xray-shell.json` for the COM3 selected-building shell-only xray. It uses the sourced OSM COM3 footprint and OSM `building:levels=6` to generate six generic floor-slice labels. It does not include verified public entrances, outdoor connection points, floor plans, rooms, corridors, indoor POIs, or official floor names.
 
+Phase 4 terrain readiness is tracked in `phase4-terrain-status.json`. The current status is `unavailable`; validation requires the missing elevation source, license, alignment, mobile performance, readability, and boundary-treatment gates to remain explicit before any terrain source or renderer is enabled.
+
 Validation:
 
 ```bash

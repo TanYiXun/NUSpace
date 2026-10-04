@@ -3,6 +3,7 @@ import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import com3XrayShell from '../../data/curated/phase4-com3-xray-shell.json';
+import terrainStatus from '../../data/curated/phase4-terrain-status.json';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
@@ -1443,10 +1444,10 @@ export function CampusMap() {
           </button>
           <div className="layerChoice layerChoiceUnavailable" role="note">
             <span className="choiceText">
-              <strong>Terrain</strong>
-              <small>Needs elevation source, license, alignment, and mobile performance check</small>
+              <strong>{terrainStatus.uiLabel}</strong>
+              <small>{terrainStatus.uiSummary}</small>
             </span>
-            <span className="layerState">Blocked</span>
+            <span className="layerState">{terrainStatus.layerStateLabel}</span>
           </div>
         </div>
       ) : null}

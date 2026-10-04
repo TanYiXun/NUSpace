@@ -499,6 +499,26 @@ Visual constraints:
 - The xray shell is an interaction and recognizability test, not an official architectural model.
 - Do not add rooms, corridors, lifts, toilets, labs, public entrances, or indoor routes until the Phase 5 data gate passes.
 
+## Phase 4 Terrain Readiness
+
+Terrain remains unavailable. The layer menu reads the blocked state from `data/curated/phase4-terrain-status.json` and does not expose a terrain toggle.
+
+Accepted behavior:
+
+- Terrain appears as a blocked layer note.
+- The note names the missing elevation source, license, alignment, mobile performance, and boundary-treatment requirements.
+- No terrain tiles, hillshade, DEM source, terrain exaggeration, or map pitch behavior changes are enabled.
+
+Accepted visual checkpoint:
+
+- [Phase 4 terrain readiness layer menu](screenshots/phase4-terrain-readiness-layer-menu.png).
+
+Design constraints:
+
+- Do not add terrain for visual flair.
+- Do not show a visible square terrain boundary in user-facing states.
+- Terrain can restart only after a source and license are documented and a small prototype proves labels, routes, buildings, and controls remain readable.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

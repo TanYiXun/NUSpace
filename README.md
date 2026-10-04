@@ -13,7 +13,7 @@ Phase 0 Prototypes A through F are complete and merged:
 - Prototype E: repeatable data pipeline for app-ready COM3 GeoJSON.
 - Prototype F: visual map UI controls, bottom-sheet states, and design direction.
 
-Current work: the app is de-prototyping map, transit, and 3D surfaces before the next phase. NUS shuttle routes are not shown as usable route layers until permitted route geometry and verified stop positions exist. 3D buildings use sourced OSM footprints with procedural facade and roof depth; they are not official building models, terrain, indoor geometry, or NTU Map-quality custom meshes. The next 3D target is a one-building recognizable model and xray shell slice in `PLAN.md` section 13.1.1. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data. Phase 5 indoor navigation remains blocked at the data-acquisition and QA gate until legal floor-plan data, room/POI inventory, entrances, connectors, inaccessible/private areas, and QA notes exist for at least one building.
+Current work: the app is de-prototyping map, transit, and 3D surfaces before the next phase. NUS shuttle routes are not shown as usable route layers until permitted route geometry and verified stop positions exist. 3D buildings use sourced OSM footprints with procedural facade and roof depth; they are not official building models, terrain, indoor geometry, or NTU Map-quality custom meshes. Phase 4 includes a COM3 shell-only xray slice from the sourced OSM footprint and level count. Terrain remains unavailable until an elevation source, license, alignment review, mobile performance result, readability review, and boundary treatment are documented. NUSMods venue mappings remain building-level where verified aliases exist and must not be treated as room-level indoor data. Phase 5 indoor navigation remains blocked at the data-acquisition and QA gate until legal floor-plan data, room/POI inventory, entrances, connectors, inaccessible/private areas, and QA notes exist for at least one building.
 
 ## Commands
 
@@ -51,6 +51,8 @@ No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import,
 NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Successful searches open a selected-module sheet with confidence-labelled venue mappings against the curated campus place seed and do not imply room-level geometry or indoor navigation.
 
 Phase 4 now includes a COM3 shell-only xray slice. Selecting COM3 shows a translucent building shell and six generic floor slices derived from the sourced OSM footprint and `building:levels=6`; it does not include official floor names, entrances, rooms, corridors, indoor POIs, or indoor routing.
+
+Phase 4 terrain is explicitly gated by `data/curated/phase4-terrain-status.json`. The current status is `unavailable`, so the layer menu shows terrain as blocked and no terrain tiles, DEM source, hillshade, or terrain exaggeration is enabled.
 
 ## Transit Adapter Notes
 

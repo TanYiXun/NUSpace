@@ -54,6 +54,7 @@ Phase 1 adds the first curated campus place seed:
 - `data/curated/mvp1-building-footprints.geojson`
 - `data/curated/phase2-nus-isb-stop-planting.json`
 - `data/curated/phase4-com3-xray-shell.json`
+- `data/curated/phase5-indoor-readiness-status.json`
 - `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`
 - Source id: `osm-api-nus-kent-ridge-map`
 - Source owner: OpenStreetMap contributors
@@ -81,6 +82,8 @@ Phase 4 adds `phase4-com3-xray-shell.json` for the COM3 selected-building shell-
 
 Phase 4 terrain readiness is tracked in `phase4-terrain-status.json`. The current status is `unavailable`; validation requires the missing elevation source, license, alignment, mobile performance, readability, and boundary-treatment gates to remain explicit before any terrain source or renderer is enabled.
 
+Phase 5 indoor readiness is tracked in `phase5-indoor-readiness-status.json`. The current status is `blocked`; validation requires the legal floor-plan source, floor list, room/POI inventory, entrances and outdoor connections, vertical connectors, inaccessible/private-area markings, confidence scores, and manual QA notes to remain explicit before any indoor source, corridor graph, accessibility path, or indoor routing surface is enabled.
+
 Validation:
 
 ```bash
@@ -97,6 +100,7 @@ Validation checks the curated place schema, building footprint schema, D1 stop p
 - exactly 20 manual-reference OSM display-position overrides for exact matched public bus stop/platform nodes and 13 explicitly unmatched NUS ISB stops
 - exactly 21 documented NUS ISB to LTA public bus stop links, with every unlinked NUS ISB stop explicitly accounted for
 - exactly six COM3 shell-only floor selector labels
+- blocked Phase 5 indoor readiness requirements and blocked indoor artifacts
 
 Known data quality issues:
 
@@ -109,4 +113,5 @@ Known data quality issues:
 - NextBus codelab API records are `requires-permission` research data. They may render only with explicit research/permission-required labels and are not approved production stop coordinates, route geometry, live arrivals, or redistributable official data.
 - LTA public bus links are not NUS ISB live data. They may show public bus timings only where a documented LTA stop-code link exists; NUS internal shuttle timings remain unavailable.
 - COM3 xray shell floor labels are generic labels derived from OSM level count, not official NUS floor names or indoor maps.
+- Indoor navigation remains blocked. There are no legal floor plans, room/POI inventories, entrances, connectors, inaccessible/private-area markings, confidence scores, manual QA notes, corridor graphs, accessibility paths, or indoor routes in the app.
 - The current D1 route remains a prototype simulation and is not generated from this dataset.

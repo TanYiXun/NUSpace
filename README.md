@@ -55,6 +55,8 @@ Phase 4 now includes a COM3 shell-only xray slice. Selecting COM3 shows a transl
 
 Phase 4 terrain is explicitly gated by `data/curated/phase4-terrain-status.json`. The current status is `unavailable`, so the layer menu shows terrain as blocked and no terrain tiles, DEM source, hillshade, or terrain exaggeration is enabled.
 
+Phase 5 indoor navigation is explicitly gated by `data/curated/phase5-indoor-readiness-status.json`. The current status is `blocked`, so the app shows indoor navigation as unavailable and no floor plans, room geometry, corridor graph, entrances, vertical connectors, accessibility paths, or indoor routes are enabled.
+
 ## Transit Adapter Notes
 
 The development server exposes:

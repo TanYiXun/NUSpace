@@ -519,6 +519,28 @@ Design constraints:
 - Do not show a visible square terrain boundary in user-facing states.
 - Terrain can restart only after a source and license are documented and a small prototype proves labels, routes, buildings, and controls remain readable.
 
+## Phase 5 Indoor Readiness
+
+Indoor navigation remains blocked. The layer menu and overview sheet read the blocked state from `data/curated/phase5-indoor-readiness-status.json`.
+
+Accepted behavior:
+
+- The overview sheet states that indoor navigation is blocked until legal floor plans, room inventory, entrances, connectors, access boundaries, confidence scores, and QA notes exist.
+- The layer menu shows indoor navigation as unavailable and blocked.
+- The COM3 shell-only xray sheet keeps rooms, corridors, entrances, indoor POIs, accessibility paths, and indoor routing unavailable.
+- No floor-plan, room, corridor, connector, entrance, or route geometry is introduced.
+
+Accepted visual checkpoints:
+
+- [Phase 5 indoor readiness overview](screenshots/phase5-indoor-readiness-overview.png).
+- [Phase 5 indoor readiness layers](screenshots/phase5-indoor-readiness-layers.png).
+
+Design constraints:
+
+- Do not use the shell-only COM3 xray as indoor navigation data.
+- Do not infer accessible paths, emergency routes, staff-only areas, or floor numbering.
+- Indoor work can restart only after the Phase 5 data-acquisition and QA gate passes for at least one building.
+
 ## Phase 1 MVP Layout Polish
 
 This checkpoint tightens the mobile sheet and floating menu layout after the transit truth slice. It does not add new data or change route truth status.

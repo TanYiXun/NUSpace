@@ -65,7 +65,7 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
 
   await page.goto('/');
 
-  await expect(page.getByText('Phase 4 3D campus detail', { exact: false })).toBeVisible();
+  await expect(page.getByText('Phase 5 indoor readiness gate', { exact: false })).toBeVisible();
   await expect(page.getByText('13 visible footprints')).toBeVisible();
   await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
   await expect(page.getByText('33 bus stop markers')).toBeVisible();
@@ -78,12 +78,14 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
   await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
   await expect(page.getByText('Terrain unavailable')).toBeVisible();
   await expect(page.getByText('Needs elevation source, license, alignment, mobile performance, and boundary treatment')).toBeVisible();
+  await expect(page.getByText('Indoor navigation unavailable')).toBeVisible();
+  await expect(page.getByText('Needs legal floor plans, rooms, entrances, connectors, access boundaries, confidence scores, and QA notes')).toBeVisible();
   await page.getByRole('button', { name: 'Close map layers' }).click();
 
   await page.getByRole('button', { name: 'View shuttle routes' }).click();
   await expect(page.getByText('NUS shuttle routes unavailable')).toBeVisible();
   await expect(page.getByText('Needs permitted route geometry and verified stop positions before display')).toBeVisible();
-  await expect(page.getByText('Blocked')).toBeVisible();
+  await expect(page.getByRole('note').filter({ hasText: 'NUS shuttle routes unavailable' })).toContainText('Blocked');
 });
 
 test('desktop renders combined bus services after selecting a linked stop', async ({ page }, testInfo) => {
@@ -163,7 +165,8 @@ test('desktop exposes COM3 shell-only xray floor selector', async ({ page }, tes
   await expect(page.getByLabel('COM3 shell-only floor selector')).toContainText('Floor selector');
   await expect(page.getByLabel('COM3 shell-only floor selector')).toContainText('L6');
   await expect(page.getByText('building shell only')).toBeVisible();
-  await expect(page.getByText('No rooms, corridors, entrances, or indoor POIs are shown.')).toBeVisible();
+  await expect(page.getByText('Indoor navigation unavailable: no rooms, corridors, entrances, or indoor POIs are shown.')).toBeVisible();
+  await expect(page.getByLabel('Indoor navigation readiness')).toContainText('Needs legal floor plans');
 
   await page.getByRole('button', { name: 'L5' }).click();
   await expect(page.getByRole('button', { name: 'L5' })).toHaveAttribute('aria-pressed', 'true');
@@ -180,7 +183,7 @@ test('desktop exposes COM3 shell-only xray floor selector', async ({ page }, tes
       break;
     }
 
-    await page.getByRole('button', { name: 'Close details' }).click().catch(() => {});
+    await page.getByRole('button', { name: 'Close details' }).click({ timeout: 500 }).catch(() => {});
   }
 
   await expect(page.getByRole('heading', { name: 'COM3' })).toBeVisible();
@@ -231,7 +234,7 @@ test('mobile keeps map-first overview readable', async ({ page }, testInfo) => {
   await expect(page.getByRole('button', { name: 'View shuttle routes' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Change map layers' })).toBeVisible();
   await expect(page.getByText('49 searchable')).toBeVisible();
-  await expect(page.getByText('Phase 4 3D campus detail')).toBeVisible();
+  await expect(page.getByText('Phase 5 indoor readiness gate')).toBeVisible();
   await expect(page.getByText('33 NUS ISB research stops')).toBeVisible();
   await expect(page.getByRole('definition').filter({ hasText: 'Select a bus stop' })).toBeVisible();
   await expect(page.getByText('Heng Mui Keng Terrace')).toBeHidden();

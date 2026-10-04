@@ -4,6 +4,7 @@ import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprin
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
 import com3XrayShell from '../../data/curated/phase4-com3-xray-shell.json';
 import terrainStatus from '../../data/curated/phase4-terrain-status.json';
+import indoorReadinessStatus from '../../data/curated/phase5-indoor-readiness-status.json';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
@@ -1451,6 +1452,13 @@ export function CampusMap() {
             </span>
             <span className="layerState">{terrainStatus.layerStateLabel}</span>
           </div>
+          <div className="layerChoice layerChoiceUnavailable" role="note">
+            <span className="choiceText">
+              <strong>{indoorReadinessStatus.uiLabel}</strong>
+              <small>{indoorReadinessStatus.uiSummary}</small>
+            </span>
+            <span className="layerState">{indoorReadinessStatus.layerStateLabel}</span>
+          </div>
         </div>
       ) : null}
       <div className="statusPanel" data-state={mapState} data-sheet={sheetState} data-panel={selectedPanel}>
@@ -1524,12 +1532,18 @@ export function CampusMap() {
                 </div>
               </div>
               <p className="truthNote">
-                {com3XrayShell.detail} No rooms, corridors, entrances, or indoor POIs are shown.
+                {com3XrayShell.detail} {indoorReadinessStatus.uiLabel}: no rooms, corridors, entrances, or indoor POIs are shown.
               </p>
               <div className="transitStatusCard" aria-label="COM3 xray source status">
                 <div>
                   <strong>Source confidence</strong>
                   <span>Footprint and level count from OSM; floor labels are generic.</span>
+                </div>
+              </div>
+              <div className="transitStatusCard" aria-label="Indoor navigation readiness">
+                <div>
+                  <strong>Indoor readiness</strong>
+                  <span>{indoorReadinessStatus.uiSummary}</span>
                 </div>
               </div>
             </div>
@@ -1747,10 +1761,10 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 4 3D campus detail</p>
+            <p className="eyebrow">Phase 5 indoor readiness gate</p>
             <h1>NUSpace</h1>
             <p>
-              OSM building footprints now have selected highlights and procedural visual depth. Shuttle routes stay unavailable until route geometry and stop positions are verified.
+              Indoor navigation is blocked until legal floor plans, room inventory, entrances, connectors, access boundaries, confidence scores, and QA notes exist for at least one building.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1772,6 +1786,10 @@ export function CampusMap() {
               <div>
                 <dt>Shuttles</dt>
                 <dd>Source required</dd>
+              </div>
+              <div>
+                <dt>Indoor</dt>
+                <dd>{indoorReadinessStatus.layerStateLabel}</dd>
               </div>
               <div>
                 <dt>Arrivals</dt>

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, type CSSProperties, type Form
 import maplibregl from 'maplibre-gl';
 import mvp1BuildingFootprintsRaw from '../../data/curated/mvp1-building-footprints.geojson?raw';
 import com3BuildingRaw from '../../data/prototype/com3-building.geojson?raw';
+import com3XrayShell from '../../data/curated/phase4-com3-xray-shell.json';
 import { BASE_MAP_STYLE_URL, INITIAL_CAMERA } from './mapConfig';
 import { searchEntities, searchIndex, type SearchEntity } from './searchIndex';
 import {
@@ -10,15 +11,16 @@ import {
   isPublicBusWheelchairAccessible,
   type PublicBusArrivalUiState,
 } from '../transit/publicBusArrivals';
-import { defaultPublicBusStop } from '../transit/publicBusStops';
 import {
   fetchNusModsModuleUiState,
   type NusModsModuleUiState,
 } from '../nusmods/nusModsModuleLookup';
 import { getNusIsbPlantedStopsForCampusPlace } from '../transit/nusIsbStopPlanting';
+import { getNusIsbPublicBusLink } from '../transit/nusIsbPublicBusLinks';
 
 const COM3_SOURCE_ID = 'prototype-com3-building';
 const COM3_DETAIL_SOURCE_ID = 'prototype-com3-visual-detail';
+const COM3_XRAY_SOURCE_ID = 'phase4-com3-xray-shell';
 const CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID = 'mvp1-building-footprints';
 const CAMPUS_BUILDING_DETAIL_SOURCE_ID = 'mvp1-building-visual-detail';
 const CAMPUS_BUILDING_EXTRUSION_LAYER_ID = 'mvp1-building-extrusions';
@@ -27,11 +29,16 @@ const CAMPUS_BUILDING_ROOF_CAPS_LAYER_ID = 'mvp1-building-roof-caps';
 const CAMPUS_BUILDING_OUTLINE_LAYER_ID = 'mvp1-building-outlines';
 const CAMPUS_BUILDING_LABEL_LAYER_ID = 'mvp1-building-labels';
 const COM3_EXTRUSION_LAYER_ID = 'prototype-com3-extrusion';
+const COM3_HIT_LAYER_ID = 'prototype-com3-hit-target';
 const COM3_FLOOR_BANDS_LAYER_ID = 'prototype-com3-floor-bands';
 const COM3_ROOF_CAP_LAYER_ID = 'prototype-com3-roof-cap';
+const COM3_XRAY_SHELL_LAYER_ID = 'phase4-com3-xray-shell';
+const COM3_XRAY_FLOORS_LAYER_ID = 'phase4-com3-xray-floors';
+const COM3_XRAY_SELECTED_FLOOR_LAYER_ID = 'phase4-com3-xray-selected-floor';
 const COM3_OUTLINE_LAYER_ID = 'prototype-com3-outline';
 const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
 const CAMPUS_BUS_STOPS_SOURCE_ID = 'mvp1-campus-bus-stops';
+const CAMPUS_BUS_STOP_HIT_LAYER_ID = 'mvp1-campus-bus-stop-hit-targets';
 const USER_LOCATION_SOURCE_ID = 'user-location';
 const CAMPUS_BUS_STOP_CIRCLES_LAYER_ID = 'mvp1-campus-bus-stop-circles';
 const CAMPUS_BUS_STOP_LABELS_LAYER_ID = 'mvp1-campus-bus-stop-labels';
@@ -57,13 +64,18 @@ const BUILDING_LAYER_IDS = [
   CAMPUS_BUILDING_ROOF_CAPS_LAYER_ID,
   CAMPUS_BUILDING_OUTLINE_LAYER_ID,
   CAMPUS_BUILDING_LABEL_LAYER_ID,
+  COM3_HIT_LAYER_ID,
   COM3_EXTRUSION_LAYER_ID,
   COM3_FLOOR_BANDS_LAYER_ID,
   COM3_ROOF_CAP_LAYER_ID,
+  COM3_XRAY_SHELL_LAYER_ID,
+  COM3_XRAY_FLOORS_LAYER_ID,
+  COM3_XRAY_SELECTED_FLOOR_LAYER_ID,
   COM3_OUTLINE_LAYER_ID,
   COM3_LABEL_LAYER_ID,
 ];
 const BUS_STOP_LAYER_IDS = [
+  CAMPUS_BUS_STOP_HIT_LAYER_ID,
   CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
   CAMPUS_BUS_STOP_LABELS_LAYER_ID,
 ];
@@ -111,36 +123,21 @@ const buildingVisualMetadata = new Map(
     })
     .filter((entry): entry is readonly [string, BuildingVisualMetadata] => entry !== null),
 );
-const initialPublicBusArrivalState: PublicBusArrivalUiState = {
+const initialSelectedPublicBusArrivalState: PublicBusArrivalUiState = {
   status: 'loading',
   sourceLabel: 'LTA DataMall public bus data',
-  busStopCode: defaultPublicBusStop.busStopCode,
   arrivalCount: 0,
   cacheHit: false,
   cacheTtlSeconds: 0,
   arrivals: [],
-  message: 'Checking the NUSpace public bus endpoint.',
+  message: 'Select a linked public bus stop to load LTA arrivals.',
 };
 const initialNusModsModuleState: NusModsModuleUiState = {
   status: 'idle',
   message: 'Search a module code to inspect lesson venues.',
 };
-
-function getPublicBusStatusLabel(state: PublicBusArrivalUiState) {
-  if (state.status === 'loading') {
-    return 'Checking endpoint';
-  }
-
-  if (state.status === 'ok') {
-    return `${state.arrivalCount} services`;
-  }
-
-  if (state.status === 'missing_key') {
-    return 'Missing server key';
-  }
-
-  return 'Unavailable';
-}
+const com3XrayFloorLabels = com3XrayShell.floorSelectorLabels;
+const initialCom3XrayFloor = com3XrayFloorLabels[3] ?? com3XrayFloorLabels[0] ?? 'L1';
 
 function formatArrivalDisplay(minutes: number | null) {
   if (minutes === null) {
@@ -186,6 +183,47 @@ function getPublicBusEstimateLabel(bus: PublicBusArrivalUiState['arrivals'][numb
   const accessibilityLabel = isPublicBusWheelchairAccessible(bus.feature) ? 'wheelchair-accessible bus' : null;
 
   return [timeLabel, accessibilityLabel, vehicleTypeLabel].filter(Boolean).join(', ');
+}
+
+function PublicBusArrivalRows({
+  state,
+  limit = 4,
+}: {
+  state: PublicBusArrivalUiState;
+  limit?: number;
+}) {
+  return (
+    <div className="publicBusRows" aria-label="Live public bus arrivals from LTA DataMall">
+      {state.arrivals.slice(0, limit).map((service) => (
+        <div className="publicBusRow" key={service.serviceNo}>
+          <span className="publicBusService">{service.serviceNo}</span>
+          <span className="publicBusTimes">
+            {service.nextBuses.map((bus) => (
+              <span
+                className="publicBusEstimate"
+                aria-label={getPublicBusEstimateLabel(bus)}
+                key={`${service.serviceNo}-${bus.sequence}`}
+              >
+                <span className="publicBusTimeLine">
+                  {isPublicBusWheelchairAccessible(bus.feature) ? (
+                    <span className="material-symbols-outlined publicBusWheelchairIcon" aria-hidden="true">accessible</span>
+                  ) : null}
+                  <span className="publicBusTime" data-stale={bus.isStale}>
+                    {formatArrivalDisplay(bus.estimatedArrivalMinutes)}
+                  </span>
+                </span>
+                {getPublicBusVehicleTypeLabel(bus.type) ? (
+                  <span className="publicBusDeck">{getPublicBusVehicleTypeLabel(bus.type)}</span>
+                ) : (
+                  <span className="publicBusDeck" aria-hidden="true">--</span>
+                )}
+              </span>
+            ))}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
@@ -234,6 +272,57 @@ function createCom3VisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.Fea
 }
 
 const com3VisualDetails = createCom3VisualDetails(com3Building);
+
+function createCom3XrayShell(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
+  const baseFeature = source.features[0];
+
+  if (!baseFeature || baseFeature.geometry.type !== 'Polygon') {
+    return { type: 'FeatureCollection', features: [] };
+  }
+
+  const floorHeight = com3XrayShell.floorHeightMeters;
+  const floorFeatures = com3XrayFloorLabels.map((label, index) => {
+    const baseHeight = index * floorHeight + 0.36;
+
+    return {
+      type: 'Feature' as const,
+      id: `com3_xray_floor_${label.toLowerCase()}`,
+      properties: {
+        name: 'COM3 xray floor plate',
+        building_id: 'com3',
+        floor_label: label,
+        floor_index: index + 1,
+        source_id: 'osm-overpass-com3',
+        xray_status: com3XrayShell.xrayStatus,
+        base_m: baseHeight,
+        height_m: baseHeight + 1.05,
+      },
+      geometry: baseFeature.geometry,
+    };
+  });
+
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        id: 'com3_xray_translucent_shell',
+        properties: {
+          name: 'COM3 xray shell',
+          building_id: 'com3',
+          source_id: 'osm-overpass-com3',
+          xray_status: com3XrayShell.xrayStatus,
+          base_m: 0,
+          height_m: com3XrayShell.heightMeters,
+        },
+        geometry: baseFeature.geometry,
+      },
+      ...floorFeatures,
+    ],
+  };
+}
+
+const com3XrayShellSource = createCom3XrayShell(com3Building);
 
 function createCampusBuildingVisualDetails(source: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   const features = source.features.flatMap((feature) => {
@@ -369,13 +458,14 @@ export function CampusMap() {
     busStops: true,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
-  const [publicBusArrivalState, setPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
-    initialPublicBusArrivalState,
+  const [selectedPublicBusArrivalState, setSelectedPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
+    initialSelectedPublicBusArrivalState,
   );
   const [moduleQuery, setModuleQuery] = useState('CS1010S');
   const [nusModsModuleState, setNusModsModuleState] = useState<NusModsModuleUiState>(
     initialNusModsModuleState,
   );
+  const [selectedCom3XrayFloor, setSelectedCom3XrayFloor] = useState(initialCom3XrayFloor);
   const stageStyle = {
     '--sheet-clearance': sheetState === 'collapsed' ? '96px' : sheetState === 'expanded' ? '78vh' : '44vh',
   } as CSSProperties;
@@ -383,6 +473,8 @@ export function CampusMap() {
     ? getNusIsbPlantedStopsForCampusPlace(selectedBusStop.id)
     : [];
   const selectedNextbusRoutes = selectedBusStop?.nextbus?.routeNames ?? [];
+  const selectedPublicBusLink = selectedBusStop ? getNusIsbPublicBusLink(selectedBusStop.id) : null;
+  const isCom3XrayActive = selectedPanel === 'building';
 
   const updateSheet = useCallback((panel: SelectedPanel, nextSheetState: SheetState = 'half') => {
     setSelectedPanel(panel);
@@ -539,6 +631,30 @@ export function CampusMap() {
     updateSheet('busStop', 'half');
   }, [setSelectedBuildingState, updateSheet]);
 
+  const selectCom3Building = useCallback(() => {
+    const map = mapRef.current;
+    const com3Entity = searchIndex.find((entity) => entity.id === 'com3');
+
+    setSelectedSearchEntity(null);
+    setSelectedBusStop(null);
+    setSearchResults([]);
+    setLayerMenuOpen(false);
+    setRouteMenuOpen(false);
+    updateSheet('building');
+    setSelectedBuildingState('com3');
+
+    if (map && com3Entity) {
+      map.easeTo({
+        center: com3Entity.coordinates,
+        zoom: Math.max(map.getZoom(), com3Entity.zoom),
+        pitch: com3Entity.pitch,
+        bearing: com3Entity.bearing,
+        offset: window.innerWidth > 700 ? [-260, 0] : [0, -80],
+        duration: 700,
+      });
+    }
+  }, [setSelectedBuildingState, updateSheet]);
+
   const openSearchEntity = useCallback((entity: SearchEntity) => {
     const map = mapRef.current;
 
@@ -556,6 +672,9 @@ export function CampusMap() {
         zoom: entity.zoom,
         pitch: entity.pitch,
         bearing: entity.bearing,
+        offset: entity.id === 'com3'
+          ? (window.innerWidth > 700 ? [-260, 0] : [0, -80])
+          : [0, 0],
         duration: 900,
       });
 
@@ -564,24 +683,34 @@ export function CampusMap() {
   }, [setSelectedBuildingState, updateSheet]);
 
   useEffect(() => {
+    if (!selectedPublicBusLink) {
+      setSelectedPublicBusArrivalState(initialSelectedPublicBusArrivalState);
+      return undefined;
+    }
+
     let isCurrent = true;
 
-    const refreshPublicBusArrivals = () => {
-      fetchPublicBusArrivalUiState(defaultPublicBusStop.busStopCode).then((result) => {
+    const loadSelectedPublicBusArrivals = () => {
+      setSelectedPublicBusArrivalState({
+        ...initialSelectedPublicBusArrivalState,
+        busStopCode: selectedPublicBusLink.ltaBusStopCode,
+        message: `Checking LTA public bus arrivals for ${selectedPublicBusLink.ltaDescription}.`,
+      });
+      fetchPublicBusArrivalUiState(selectedPublicBusLink.ltaBusStopCode).then((result) => {
         if (isCurrent) {
-          setPublicBusArrivalState(result);
+          setSelectedPublicBusArrivalState(result);
         }
       });
     };
 
-    refreshPublicBusArrivals();
-    const intervalId = window.setInterval(refreshPublicBusArrivals, PUBLIC_BUS_REFRESH_MS);
+    loadSelectedPublicBusArrivals();
+    const intervalId = window.setInterval(loadSelectedPublicBusArrivals, PUBLIC_BUS_REFRESH_MS);
 
     return () => {
       isCurrent = false;
       window.clearInterval(intervalId);
     };
-  }, []);
+  }, [selectedPublicBusLink]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) {
@@ -617,6 +746,11 @@ export function CampusMap() {
       map.addSource(COM3_DETAIL_SOURCE_ID, {
         type: 'geojson',
         data: com3VisualDetails,
+      });
+
+      map.addSource(COM3_XRAY_SOURCE_ID, {
+        type: 'geojson',
+        data: com3XrayShellSource,
       });
 
       map.addSource(CAMPUS_BUILDING_FOOTPRINTS_SOURCE_ID, {
@@ -751,6 +885,16 @@ export function CampusMap() {
       });
 
       map.addLayer({
+        id: COM3_HIT_LAYER_ID,
+        type: 'fill',
+        source: COM3_SOURCE_ID,
+        paint: {
+          'fill-color': '#000000',
+          'fill-opacity': 0.01,
+        },
+      });
+
+      map.addLayer({
         id: COM3_EXTRUSION_LAYER_ID,
         type: 'fill-extrusion',
         source: COM3_SOURCE_ID,
@@ -758,7 +902,7 @@ export function CampusMap() {
           'fill-extrusion-color': [
             'case',
             ['boolean', ['feature-state', 'selected'], false],
-            '#5f6a70',
+            '#91bccc',
             '#777f82',
           ],
           'fill-extrusion-height': ['get', 'height_m'],
@@ -766,12 +910,12 @@ export function CampusMap() {
           'fill-extrusion-opacity': [
             'case',
             ['boolean', ['feature-state', 'selected'], false],
-            0.92,
+            0.24,
             0.86,
           ],
           'fill-extrusion-vertical-gradient': true,
         },
-      }, firstSymbolLayerId);
+      });
 
       map.addLayer({
         id: COM3_FLOOR_BANDS_LAYER_ID,
@@ -785,7 +929,7 @@ export function CampusMap() {
           'fill-extrusion-opacity': 0.92,
           'fill-extrusion-vertical-gradient': false,
         },
-      }, firstSymbolLayerId);
+      });
 
       map.addLayer({
         id: COM3_ROOF_CAP_LAYER_ID,
@@ -799,7 +943,62 @@ export function CampusMap() {
           'fill-extrusion-opacity': 0.94,
           'fill-extrusion-vertical-gradient': false,
         },
-      }, firstSymbolLayerId);
+      });
+
+      map.addLayer({
+        id: COM3_XRAY_SHELL_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'COM3 xray shell'],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#7bb7c9',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.28,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      });
+
+      map.addLayer({
+        id: COM3_XRAY_FLOORS_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: ['==', ['get', 'name'], 'COM3 xray floor plate'],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#d9f0f4',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.54,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      });
+
+      map.addLayer({
+        id: COM3_XRAY_SELECTED_FLOOR_LAYER_ID,
+        type: 'fill-extrusion',
+        source: COM3_XRAY_SOURCE_ID,
+        filter: [
+          'all',
+          ['==', ['get', 'name'], 'COM3 xray floor plate'],
+          ['==', ['get', 'floor_label'], initialCom3XrayFloor],
+        ],
+        layout: {
+          visibility: 'none',
+        },
+        paint: {
+          'fill-extrusion-color': '#f0a21a',
+          'fill-extrusion-height': ['get', 'height_m'],
+          'fill-extrusion-base': ['get', 'base_m'],
+          'fill-extrusion-opacity': 0.96,
+          'fill-extrusion-vertical-gradient': false,
+        },
+      });
 
       map.addLayer({
         id: COM3_OUTLINE_LAYER_ID,
@@ -810,7 +1009,7 @@ export function CampusMap() {
           'line-width': ['interpolate', ['linear'], ['zoom'], 15, 1.2, 18, 2],
           'line-opacity': 0.82,
         },
-      }, firstSymbolLayerId);
+      });
 
       map.addLayer({
         id: COM3_LABEL_LAYER_ID,
@@ -828,6 +1027,18 @@ export function CampusMap() {
           'text-color': '#24333f',
           'text-halo-color': '#ffffff',
           'text-halo-width': 1.7,
+        },
+      });
+
+      map.addLayer({
+        id: CAMPUS_BUS_STOP_HIT_LAYER_ID,
+        type: 'circle',
+        source: CAMPUS_BUS_STOPS_SOURCE_ID,
+        minzoom: 14.3,
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 14, 22, 18, 30],
+          'circle-color': '#ffffff',
+          'circle-opacity': 0.01,
         },
       });
 
@@ -910,19 +1121,19 @@ export function CampusMap() {
         },
       });
 
-      map.on('mouseenter', COM3_EXTRUSION_LAYER_ID, () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
+      [COM3_HIT_LAYER_ID, COM3_EXTRUSION_LAYER_ID].forEach((layerId) => {
+        map.on('mouseenter', layerId, () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
 
-      map.on('mouseleave', COM3_EXTRUSION_LAYER_ID, () => {
-        map.getCanvas().style.cursor = '';
-      });
+        map.on('mouseleave', layerId, () => {
+          map.getCanvas().style.cursor = '';
+        });
 
-      map.on('click', COM3_EXTRUSION_LAYER_ID, () => {
-        updateSheet('building');
-        setSelectedSearchEntity(null);
-        setSelectedBusStop(null);
-        setSelectedBuildingState('com3');
+        map.on('click', layerId, (event) => {
+          selectCom3Building();
+          event.preventDefault();
+        });
       });
 
       map.on('mouseenter', CAMPUS_BUILDING_EXTRUSION_LAYER_ID, () => {
@@ -940,29 +1151,128 @@ export function CampusMap() {
         }
       });
 
-      map.on('mouseenter', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, () => {
-        map.getCanvas().style.cursor = 'pointer';
-      });
-      map.on('mouseleave', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, () => {
-        map.getCanvas().style.cursor = '';
-      });
-      map.on('click', CAMPUS_BUS_STOP_CIRCLES_LAYER_ID, (event) => {
-        const stopId = event.features?.[0]?.properties?.entity_id as string | undefined;
-        const stopEntity = searchIndex.find((entity) => entity.id === stopId && entity.type === 'bus_stop');
+      const selectNearestBusStopFeature = (
+        features: maplibregl.MapGeoJSONFeature[] | undefined,
+        point: maplibregl.Point,
+      ) => {
+        const stopEntities = (features ?? [])
+          .map((feature) => feature.properties?.entity_id as string | undefined)
+          .filter((stopId, index, stopIds): stopId is string => (
+            typeof stopId === 'string' && stopIds.indexOf(stopId) === index
+          ))
+          .map((stopId) => searchIndex.find((entity) => entity.id === stopId && entity.type === 'bus_stop'))
+          .filter((entity): entity is SearchEntity => Boolean(entity));
 
-        if (stopEntity) {
-          selectBusStop(stopEntity);
+        if (stopEntities.length === 0) {
+          return false;
         }
+
+        const nearestStop = stopEntities
+          .map((entity) => {
+            const projectedPoint = map.project(entity.coordinates);
+
+            return {
+              entity,
+              distance: Math.hypot(projectedPoint.x - point.x, projectedPoint.y - point.y),
+            };
+          })
+          .sort((left, right) => left.distance - right.distance)[0]?.entity;
+
+        if (!nearestStop) {
+          return false;
+        }
+
+        selectBusStop(nearestStop);
+        return true;
+      };
+
+      const selectNearestBusStopByPoint = (point: maplibregl.Point) => {
+        const nearestStop = searchIndex
+          .filter((entity) => entity.type === 'bus_stop')
+          .map((entity) => {
+            const projectedPoint = map.project(entity.coordinates);
+
+            return {
+              entity,
+              distance: Math.hypot(projectedPoint.x - point.x, projectedPoint.y - point.y),
+            };
+          })
+          .sort((left, right) => left.distance - right.distance)[0];
+
+        if (!nearestStop || nearestStop.distance > 34) {
+          return false;
+        }
+
+        selectBusStop(nearestStop.entity);
+        return true;
+      };
+
+      const handleBusStopClick = (event: maplibregl.MapLayerMouseEvent) => {
+        if (selectNearestBusStopFeature(event.features, event.point)) {
+          event.preventDefault();
+        }
+      };
+
+      BUS_STOP_LAYER_IDS.forEach((layerId) => {
+        map.on('mouseenter', layerId, () => {
+          map.getCanvas().style.cursor = 'pointer';
+        });
+        map.on('mouseleave', layerId, () => {
+          map.getCanvas().style.cursor = '';
+        });
+        map.on('click', layerId, handleBusStopClick);
       });
 
       map.on('click', (event) => {
         const selectedFeatures = map.queryRenderedFeatures(event.point, {
           layers: [
+            ...BUS_STOP_LAYER_IDS,
+            COM3_HIT_LAYER_ID,
             COM3_EXTRUSION_LAYER_ID,
             CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
-            CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
-          ],
+          ].filter((layerId) => map.getLayer(layerId)),
         });
+
+        const directBusStopFeatures = selectedFeatures.filter((feature) => (
+          typeof feature.layer?.id === 'string' && BUS_STOP_LAYER_IDS.includes(feature.layer.id)
+        ));
+
+        if (selectNearestBusStopFeature(directBusStopFeatures, event.point)) {
+          return;
+        }
+
+        if (selectedFeatures.some((feature) => (
+          feature.layer?.id === COM3_HIT_LAYER_ID || feature.layer?.id === COM3_EXTRUSION_LAYER_ID
+        ))) {
+          selectCom3Building();
+          return;
+        }
+
+        const campusBuildingFeature = selectedFeatures.find((feature) => feature.layer?.id === CAMPUS_BUILDING_EXTRUSION_LAYER_ID);
+        const campusBuildingId = campusBuildingFeature?.id as string | undefined;
+        const campusBuildingEntity = campusBuildingId
+          ? searchIndex.find((entity) => entity.id === campusBuildingId && entity.type === 'building')
+          : null;
+
+        if (campusBuildingEntity) {
+          openSearchEntity(campusBuildingEntity);
+          return;
+        }
+
+        const busStopHitFeatures = map.queryRenderedFeatures([
+          [event.point.x - 28, event.point.y - 28],
+          [event.point.x + 28, event.point.y + 28],
+        ], {
+          layers: BUS_STOP_LAYER_IDS,
+        });
+
+        if (selectNearestBusStopFeature(busStopHitFeatures, event.point)) {
+          return;
+        }
+
+        if (selectNearestBusStopByPoint(event.point)) {
+          return;
+        }
 
         if (selectedFeatures.length === 0) {
           clearSelection();
@@ -979,7 +1289,37 @@ export function CampusMap() {
       map.remove();
       mapRef.current = null;
     };
-  }, [clearSelection, openSearchEntity, selectBusStop, setSelectedBuildingState, updateSheet]);
+  }, [clearSelection, openSearchEntity, selectBusStop, selectCom3Building, setSelectedBuildingState, updateSheet]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    const visibility = isCom3XrayActive ? 'visible' : 'none';
+
+    [COM3_XRAY_SHELL_LAYER_ID, COM3_XRAY_FLOORS_LAYER_ID, COM3_XRAY_SELECTED_FLOOR_LAYER_ID].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', visibility);
+      }
+    });
+
+    [COM3_FLOOR_BANDS_LAYER_ID, COM3_ROOF_CAP_LAYER_ID].forEach((layerId) => {
+      if (map.getLayer(layerId)) {
+        map.setLayoutProperty(layerId, 'visibility', isCom3XrayActive ? 'none' : 'visible');
+      }
+    });
+
+    if (map.getLayer(COM3_XRAY_SELECTED_FLOOR_LAYER_ID)) {
+      map.setFilter(COM3_XRAY_SELECTED_FLOOR_LAYER_ID, [
+        'all',
+        ['==', ['get', 'name'], 'COM3 xray floor plate'],
+        ['==', ['get', 'floor_label'], selectedCom3XrayFloor],
+      ]);
+    }
+  }, [isCom3XrayActive, selectedCom3XrayFloor, mapState]);
 
   const selectedBuildingVisual = selectedSearchEntity?.type === 'building'
     ? buildingVisualMetadata.get(selectedSearchEntity.id) ?? null
@@ -1096,8 +1436,8 @@ export function CampusMap() {
           </button>
           <button className="layerChoice" type="button" onClick={() => toggleLayer('busStops')}>
             <span className="choiceText">
-              <strong>Bus stop seed</strong>
-              <small>OSM seeds plus 33 NextBus research stops</small>
+              <strong>NUS ISB stops</strong>
+              <small>33 NextBus research stops</small>
             </span>
             <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
           </button>
@@ -1110,7 +1450,7 @@ export function CampusMap() {
           </div>
         </div>
       ) : null}
-      <div className="statusPanel" data-state={mapState} data-sheet={sheetState}>
+      <div className="statusPanel" data-state={mapState} data-sheet={sheetState} data-panel={selectedPanel}>
         <button
           className="sheetHandle"
           type="button"
@@ -1153,12 +1493,42 @@ export function CampusMap() {
                 </div>
                 <div>
                   <dt>Detail</dt>
-                  <dd>Prototype facade bands</dd>
+                  <dd>Shell-only xray</dd>
+                </div>
+                <div>
+                  <dt>Xray</dt>
+                  <dd>{com3XrayShell.xrayStatus}</dd>
                 </div>
               </dl>
+              <div className="floorSelector" aria-label="COM3 shell-only floor selector">
+                <div>
+                  <strong>Floor selector</strong>
+                  <span>Generic labels from OSM level count</span>
+                </div>
+                <div className="floorSelectorButtons">
+                  {com3XrayFloorLabels.map((floorLabel) => (
+                    <button
+                      key={floorLabel}
+                      className="floorSelectorButton"
+                      type="button"
+                      data-active={selectedCom3XrayFloor === floorLabel}
+                      aria-pressed={selectedCom3XrayFloor === floorLabel}
+                      onClick={() => setSelectedCom3XrayFloor(floorLabel)}
+                    >
+                      {floorLabel}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <p className="truthNote">
-                Real footprint and levels. Height and facade bands are visual placeholders.
+                {com3XrayShell.detail} No rooms, corridors, entrances, or indoor POIs are shown.
               </p>
+              <div className="transitStatusCard" aria-label="COM3 xray source status">
+                <div>
+                  <strong>Source confidence</strong>
+                  <span>Footprint and level count from OSM; floor labels are generic.</span>
+                </div>
+              </div>
             </div>
           </>
         ) : selectedPanel === 'search' && selectedSearchEntity ? (
@@ -1234,72 +1604,77 @@ export function CampusMap() {
               </div>
             </div>
             <div className="sheetBody">
-              <dl className="buildingFacts">
-                <div>
-                  <dt>Source</dt>
-                  <dd>{selectedBusStop.sourceLabel}</dd>
-                </div>
-                <div>
-                  <dt>Position</dt>
-                  <dd>{selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? 'Research snapshot' : 'Unverified seed'}</dd>
-                </div>
-                <div>
-                  <dt>Source status</dt>
-                  <dd>{selectedBusStop.sourceStatus}</dd>
+              <p className="busStopTrustLine">
+                {selectedBusStop.sourceStatus === 'requires-permission' ? 'Permission required' : selectedBusStop.sourceStatus}
+                {selectedNextbusRoutes.length > 0 ? ` · NUS ${selectedNextbusRoutes.join(', ')}` : ''}
+                {selectedPlantedIsbStops.length > 0
+                  ? ` · D1 ${selectedPlantedIsbStops.map((stop) => `${stop.sequence}. ${stop.officialName}`).join(', ')}`
+                  : ''}
+              </p>
+              <div className="busServicesCard" aria-label="Combined bus services for selected stop">
+                <div className="busServicesHeader">
+                  <div>
+                    <strong>Bus services</strong>
+                    <span>Internal shuttle routes plus linked public arrivals</span>
+                  </div>
+                  <span className="transitStatusPill">{selectedNextbusRoutes.length + selectedPublicBusArrivalState.arrivalCount} routes</span>
                 </div>
                 {selectedNextbusRoutes.length > 0 ? (
-                  <div>
-                    <dt>NUS routes</dt>
-                    <dd>{selectedNextbusRoutes.join(', ')}</dd>
+                  <div className="busServiceSection" aria-label="NUS ISB research route rows">
+                    <div className="busServiceSectionHeader">
+                      <strong>NUS internal shuttle</strong>
+                      <span>Snapshot route membership · no live ETA</span>
+                    </div>
+                    <div className="internalRoutePills">
+                      {selectedNextbusRoutes.map((routeName) => (
+                        <div className="internalRoutePill" key={routeName}>
+                          <span className="etaRoute">{routeName}</span>
+                          <span className="etaTime">--</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : null}
-                {selectedPlantedIsbStops.length > 0 ? (
-                  <>
-                    <div>
-                      <dt>D1 stop label</dt>
-                      <dd>
-                        {selectedPlantedIsbStops
-                          .map((stop) => `${stop.sequence}. ${stop.officialName}`)
-                          .join(', ')}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt>Route use</dt>
-                      <dd>Name/order reference only</dd>
-                    </div>
-                  </>
-                ) : null}
-                <div>
-                  <dt>Arrivals</dt>
-                  <dd>Not enabled</dd>
-                </div>
-              </dl>
-              {selectedNextbusRoutes.length > 0 ? (
-                <div className="etaRows" aria-label="NUS ISB research route rows">
-                  {selectedNextbusRoutes.map((routeName) => (
-                    <div className="etaRow" key={routeName}>
-                      <span className="etaRoute">{routeName}</span>
-                      <span className="etaStatus">Requires permission</span>
-                      <span className="etaTime">No live ETA</span>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-              <p className="truthNote">
-                {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
-                  `${selectedBusStop.detail} This completes the current NUS ISB stop inventory from the snapshot, but it remains requires-permission planning data.`
-                ) : selectedPlantedIsbStops.length > 0 ? (
-                  `${selectedBusStop.detail} D1 stop label and order are manually referenced from the NUS UCI route-map image; this does not verify the marker as an exact boarding point or enable route geometry.`
-                ) : selectedBusStop.detail}
-              </p>
-              {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
-                <div className="transitStatusCard" aria-label="NUS ISB research snapshot status">
-                  <div>
-                    <strong>Research only</strong>
-                    <span>Not live, not approved for production use</span>
+                <div className="busServiceSection" aria-label="Linked LTA public bus arrivals">
+                  <div className="busServiceSectionHeader">
+                    <strong>{selectedPublicBusLink ? 'LTA public buses' : 'No linked LTA public stop'}</strong>
+                    <span>
+                      {selectedPublicBusLink
+                        ? `${selectedPublicBusLink.ltaDescription} · Stop ${selectedPublicBusLink.ltaBusStopCode} · ${selectedPublicBusLink.distanceMeters} m ${selectedPublicBusLink.matchStatus === 'coordinate-match' ? 'match' : 'nearby'}`
+                        : 'No official LTA stop-code match is documented within the current threshold.'}
+                    </span>
                   </div>
+                  {selectedPublicBusLink ? (
+                    selectedPublicBusArrivalState.status === 'ok' ? (
+                      <>
+                        <PublicBusArrivalRows state={selectedPublicBusArrivalState} limit={2} />
+                        <p>
+                          Live public bus arrivals from {selectedPublicBusArrivalState.sourceLabel}. Last fetched {formatFetchedAt(selectedPublicBusArrivalState.fetchedAt)}.
+                        </p>
+                      </>
+                    ) : (
+                      <p>{selectedPublicBusArrivalState.message}</p>
+                    )
+                  ) : (
+                    <p>
+                      Public bus timing is not shown because no documented LTA stop-code link exists for this NUS ISB research stop.
+                    </p>
+                  )}
                 </div>
-              ) : null}
+                <p className="busServicesFootnote">
+                  NUS shuttle ETAs are not live. Public timings use documented LTA stop-code links.
+                </p>
+              </div>
+              <details className="sourceDisclosure">
+                <summary>Data status</summary>
+                <p>
+                  {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
+                    'NextBus research snapshot. Stop names, coordinates, and route membership remain permission-required planning data, not live or verified current shuttle operations.'
+                  ) : selectedPlantedIsbStops.length > 0 ? (
+                    `${selectedBusStop.detail} D1 stop label and order are manually referenced from the NUS UCI route-map image; this does not verify the marker as an exact boarding point or enable route geometry.`
+                  ) : selectedBusStop.detail}
+                </p>
+              </details>
             </div>
           </>
         ) : selectedPanel === 'module' && nusModsModuleState.status === 'ok' ? (
@@ -1349,7 +1724,7 @@ export function CampusMap() {
                       {venue.lessonCount} lesson{venue.lessonCount === 1 ? '' : 's'} · {venue.mapping.place?.name ?? 'Unmapped venue'}
                     </small>
                     <small>
-                      {venue.mapping.nearestBusStop ? `Nearest OSM seed stop: ${venue.mapping.nearestBusStop.name}` : venue.mapping.note}
+                      {venue.mapping.nearestBusStop ? `Nearest NUS ISB research stop: ${venue.mapping.nearestBusStop.name}` : venue.mapping.note}
                     </small>
                   </span>
                   <em data-confidence={venue.mapping.confidence}>{venue.mapping.confidence}</em>
@@ -1389,59 +1764,10 @@ export function CampusMap() {
                 <dd>Source required</dd>
               </div>
               <div>
-                <dt>Public bus</dt>
-                <dd>{getPublicBusStatusLabel(publicBusArrivalState)}</dd>
+                <dt>Arrivals</dt>
+                <dd>Select a bus stop</dd>
               </div>
             </dl>
-            <div className="transitStatusCard" aria-label="Public bus arrival endpoint state">
-              <div className="transitStatusHeader">
-                <div>
-                  <strong>{defaultPublicBusStop.name}</strong>
-                  <span>{defaultPublicBusStop.roadName} · Stop {defaultPublicBusStop.busStopCode}</span>
-                </div>
-                <span className="transitStatusPill">{getPublicBusStatusLabel(publicBusArrivalState)}</span>
-              </div>
-              {publicBusArrivalState.status === 'ok' ? (
-                <>
-                  <div className="publicBusRows" aria-label="Live public bus arrivals from LTA DataMall">
-                    {publicBusArrivalState.arrivals.slice(0, 4).map((service) => (
-                      <div className="publicBusRow" key={service.serviceNo}>
-                        <span className="publicBusService">{service.serviceNo}</span>
-                        <span className="publicBusTimes">
-                          {service.nextBuses.map((bus) => (
-                            <span
-                              className="publicBusEstimate"
-                              aria-label={getPublicBusEstimateLabel(bus)}
-                              key={`${service.serviceNo}-${bus.sequence}`}
-                            >
-                              <span className="publicBusTimeLine">
-                                {isPublicBusWheelchairAccessible(bus.feature) ? (
-                                  <span className="material-symbols-outlined publicBusWheelchairIcon" aria-hidden="true">accessible</span>
-                                ) : null}
-                                <span className="publicBusTime" data-stale={bus.isStale}>
-                                  {formatArrivalDisplay(bus.estimatedArrivalMinutes)}
-                                </span>
-                              </span>
-                              {getPublicBusVehicleTypeLabel(bus.type) ? (
-                                <span className="publicBusDeck">{getPublicBusVehicleTypeLabel(bus.type)}</span>
-                              ) : (
-                                <span className="publicBusDeck" aria-hidden="true">--</span>
-                              )}
-                            </span>
-                          ))}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  <p>
-                    Live public bus arrivals from {publicBusArrivalState.sourceLabel}. Last fetched {formatFetchedAt(publicBusArrivalState.fetchedAt)}.
-                    Auto-refreshes every {PUBLIC_BUS_REFRESH_MS / 1000}s. Server cache: {publicBusArrivalState.cacheTtlSeconds}s.
-                  </p>
-                </>
-              ) : (
-                <p>{publicBusArrivalState.message}</p>
-              )}
-            </div>
             <form className="moduleLookupCard" aria-label="NUSMods module venue lookup" onSubmit={lookupNusModsModule}>
               <div className="moduleLookupHeader">
                 <div>

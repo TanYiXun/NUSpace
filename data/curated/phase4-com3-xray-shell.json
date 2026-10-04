@@ -1,0 +1,37 @@
+{
+  "schema": "phase4-building-xray-shell-v1",
+  "buildingId": "com3",
+  "name": "COM3 shell-only xray",
+  "sourceIds": [
+    "osm-overpass-com3"
+  ],
+  "sourceStatus": "manual-reference",
+  "geometrySourceStatus": "verified",
+  "floorCountSourceStatus": "verified",
+  "floorLabelSourceStatus": "manual-reference",
+  "xrayStatus": "building shell only",
+  "dateChecked": "2026-10-02",
+  "heightMeters": 24,
+  "heightSourceStatus": "prototype-placeholder",
+  "floorHeightMeters": 4,
+  "floorSelectorLabels": [
+    "L1",
+    "L2",
+    "L3",
+    "L4",
+    "L5",
+    "L6"
+  ],
+  "reference": {
+    "footprint": "OpenStreetMap relation 15780831",
+    "floorCount": "OpenStreetMap building:levels=6",
+    "visibleMassing": "Procedural shell generated from the sourced OSM COM3 footprint",
+    "floorNaming": "Generic Level 1-6 selector labels derived from the verified level count, not official NUS floor names"
+  },
+  "blockedArtifacts": {
+    "publicEntrances": "Not enabled. No verified public entrance coordinates or outdoor connection points are documented for this slice.",
+    "indoorDetail": "Not enabled. No legal floor plans, rooms, corridors, toilets, lifts, labs, indoor POIs, or accessibility paths are available.",
+    "officialModel": "Not enabled. No permissioned GLTF, BIM, or architectural model is available."
+  },
+  "detail": "COM3 shell-only xray uses the sourced OSM footprint and verified OSM level count. It shows translucent floor slices for orientation only and must not be treated as official indoor detail."
+}

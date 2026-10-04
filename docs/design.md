@@ -445,9 +445,9 @@ Accepted visual checkpoints:
 
 Accepted behavior:
 
-- OSM bus stop markers are labelled as seed positions.
-- Selected bus stop sheets show `Position: Unverified seed` and `Source status: manual-reference`.
-- NUSMods nearest-stop helper copy says `Nearest OSM seed stop`.
+- This checkpoint is superseded for app-facing NUS ISB stop markers by the NextBus research inventory cutover.
+- Selected NUS ISB bus stop sheets show `Position: Research snapshot` and `Source status: requires-permission`.
+- NUSMods nearest-stop helper copy says `Nearest NUS ISB research stop`.
 - The D1 route layer is labelled `Prototype route`, not `Static route`.
 - The D1 route detail sheet states that the displayed line and stop sequence are not official NUS shuttle geometry and have no verified stop positions.
 
@@ -476,6 +476,28 @@ Visual constraints:
 - Do not compare the current slab-derived footprint render as complete against NTU Map. NTU Map-like quality requires building-specific modelling, reviewed sources, and a separate checkpoint.
 - The next NTU Map/Finute Maps style target is a one-building recognizable model and xray shell with floor selector, tracked in `PLAN.md` section 13.1.1.
 - No shuttle route line, stop sequence, live vehicle marker, or route ETA may be shown as a current feature until the data gate passes.
+
+## Phase 4 COM3 Xray Shell
+
+This checkpoint implements the first one-building xray slice from `PLAN.md` section 13.1.1. It uses the sourced COM3 OSM footprint and OSM `building:levels=6` to render a selected-building shell with six generic floor slices.
+
+Accepted behavior:
+
+- Selecting COM3 shows a translucent shell and floor slices on the map.
+- The COM3 detail sheet includes a compact floor selector labelled `L1` through `L6`.
+- The selected floor is highlighted in the xray shell.
+- Copy states `building shell only` and says no rooms, corridors, entrances, or indoor POIs are shown.
+
+Accepted visual checkpoints:
+
+- [Phase 4 COM3 xray shell desktop](screenshots/phase4-com3-xray-shell-desktop.png).
+- [Phase 4 COM3 xray shell mobile](screenshots/phase4-com3-xray-shell-mobile.png).
+
+Visual constraints:
+
+- Floor labels are generic selector labels, not official NUS floor names.
+- The xray shell is an interaction and recognizability test, not an official architectural model.
+- Do not add rooms, corridors, lifts, toilets, labs, public entrances, or indoor routes until the Phase 5 data gate passes.
 
 ## Phase 1 MVP Layout Polish
 

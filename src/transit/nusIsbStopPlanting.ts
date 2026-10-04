@@ -5,7 +5,7 @@ export type NusIsbPlantedStop = {
   sequence: number;
   officialName: string;
   campusPlaceId: string;
-  positionStatus: 'manual-reference';
+  positionStatus: 'requires-permission';
   positionNote: string;
   routeSourceLabel: string;
   routeDetail: string;
@@ -15,7 +15,7 @@ type RawPlantedStop = {
   sequence: number;
   officialName: string;
   campusPlaceId: string;
-  positionStatus: 'manual-reference';
+  positionStatus: 'requires-permission';
   positionNote: string;
 };
 

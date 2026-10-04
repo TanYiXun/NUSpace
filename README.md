@@ -41,13 +41,16 @@ The current prototype includes only source-labelled NUS-area data:
 - MVP 1 Kent Ridge place seed from a bounded OpenStreetMap API extract, curated into `data/curated/mvp1-campus-places.json`.
 - MVP 1 Kent Ridge building footprints from OpenStreetMap way/full responses and the COM3 relation, curated into `data/curated/mvp1-building-footprints.geojson`.
 - Historical manually curated D1-style route and stop files remain prototype fixtures only. They are not surfaced as normal map route UI because they are not source-confirmed MVP route geometry or verified stop positions.
-- OSM-sourced bus stop seed markers for selectable map/search testing. Their positions are unverified manual-reference points, not official NUS ISB stop records or exact boarding points.
-- Phase 2 D1 stop-label planting from the official NUS UCI route-map image, matched only to existing OSM seed markers in `data/curated/phase2-nus-isb-stop-planting.json`. This verifies neither route geometry nor exact boarding-point coordinates.
-- NUS NextBus codelab API research snapshot in `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. Its 33 stops are rendered as labelled `requires-permission` NUS ISB research markers, not as live, current, verified, or approved production shuttle data.
+- Historical OSM-sourced bus stop seed records remain in `data/curated/mvp1-campus-places.json` for provenance, but they are no longer app-facing NUS ISB bus stop markers or D1 coordinate references.
+- NUS NextBus codelab API research snapshot in `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. Its 33 stops are the only app-facing NUS ISB bus stop markers and are rendered as labelled `requires-permission` research data, not as live, current, verified, or approved production shuttle data.
+- Phase 2 D1 stop-label planting from the official NUS UCI route-map image, attached to matching NextBus research stop IDs in `data/curated/phase2-nus-isb-stop-planting.json`. This completes the visible D1 stop-label sequence but verifies neither route geometry nor exact current boarding-point coordinates.
+- Official LTA DataMall BusStops matching in `data/curated/phase2-nus-isb-public-bus-links.json` links 21 NUS ISB research stops to nearby public bus stop codes for live LTA arrival display. The remaining 12 NUS ISB research stops are explicitly unlinked rather than assigned guessed public stop codes.
 
-No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and one public bus stop UI state. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment, refresh every 20 seconds while the app is open, and show per-arrival single/double-deck and wheelchair-accessible indicators when LTA provides them. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
+No live NUS shuttle API, uNivUS/ConnectX integration, personal timetable import, or indoor routing data has been added. LTA DataMall public bus arrivals now have a server-side adapter boundary and selected bus stops can show live public bus rows when a documented LTA stop-code link exists. Live public bus rows appear only when `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment, refresh every 20 seconds while the app is open, and show per-arrival single/double-deck and wheelchair-accessible indicators when LTA provides them. NUS ISB static mode is source-labelled and does not include live ETAs, live vehicle positions, or crowd levels.
 
 NUSMods module lookup uses the public NUSMods API for module timetable venue codes. Successful searches open a selected-module sheet with confidence-labelled venue mappings against the curated campus place seed and do not imply room-level geometry or indoor navigation.
+
+Phase 4 now includes a COM3 shell-only xray slice. Selecting COM3 shows a translucent building shell and six generic floor slices derived from the sourced OSM footprint and `building:levels=6`; it does not include official floor names, entrances, rooms, corridors, indoor POIs, or indoor routing.
 
 ## Transit Adapter Notes
 
@@ -59,7 +62,7 @@ GET /api/transit/public-bus-arrivals?busStopCode=16069
 
 The endpoint is server-side only. It returns a `missing_key` unavailable response until `LTA_DATAMALL_ACCOUNT_KEY` is configured in the server environment. Do not put the AccountKey in frontend code, committed files, screenshots, logs, or pull request text.
 
-The overview sheet queries the endpoint for the manually referenced public bus stop `Heng Mui Keng Terrace` (`16069`) and shows live LTA public bus rows when the server returns them. The frontend refreshes this visible state every 20 seconds; the server also keeps a 20-second in-memory cache so browser refreshes do not always become new DataMall calls. This public bus stop reference is separate from the OSM-sourced NUS campus bus-stop markers and from NUS ISB shuttle data.
+The overview sheet queries the endpoint for the manually referenced public bus stop `Heng Mui Keng Terrace` (`16069`) and shows live LTA public bus rows when the server returns them. The frontend refreshes this visible state every 20 seconds; the server also keeps a 20-second in-memory cache so browser refreshes do not always become new DataMall calls. This public bus stop reference is separate from the NextBus-derived NUS ISB research markers and from any live NUS ISB shuttle data.
 
 For local live testing, copy `.env.example` to `.env.local` and set `LTA_DATAMALL_ACCOUNT_KEY` there. `.env.local` is ignored by git through the `*.local` rule. Restart the Vite dev server after changing `.env.local`.
 

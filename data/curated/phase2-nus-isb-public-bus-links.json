@@ -1,0 +1,48 @@
+{
+  "schema": "phase2-nus-isb-public-bus-links-v1",
+  "name": "Phase 2 NUS ISB to LTA public bus stop links",
+  "date_checked": "2026-10-04",
+  "source_ids": [
+    "nus-nextbus-codelab-api",
+    "lta-datamall-dynamic-apis"
+  ],
+  "match_method": "Nearest official LTA DataMall BusStops coordinate to each NextBus research stop coordinate. Links are included only when the nearest official LTA stop is within 100 m and the stop name or campus context is suitable for public-bus arrival display.",
+  "warning": "These links provide public LTA bus arrival lookups near NUS ISB research stops. They do not verify NUS ISB boarding-point coordinates, route geometry, internal shuttle ETAs, or NUS live shuttle service state.",
+  "links": [
+    { "nextbusStopId": "nextbus-kr-mrt", "ltaBusStopCode": "18331", "ltaDescription": "Kent Ridge Stn Exit A/NUH", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 5, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-lt27", "ltaBusStopCode": "18301", "ltaDescription": "Lim Seng Tjoe Bldg (LT 27)", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 4, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-uhall", "ltaBusStopCode": "18319", "ltaDescription": "Opp University Hall", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 89, "matchStatus": "nearby-public-stop" },
+    { "nextbusStopId": "nextbus-uhc-opp", "ltaBusStopCode": "18321", "ltaDescription": "Opp University Health Ctr", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 1, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-museum", "ltaBusStopCode": "16161", "ltaDescription": "NUS Museums", "roadName": "Kent Ridge Cres", "distanceMeters": 1, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-uhc", "ltaBusStopCode": "18329", "ltaDescription": "University Health Ctr", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 2, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-uhall-opp", "ltaBusStopCode": "18319", "ltaDescription": "Opp University Hall", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 7, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-s17", "ltaBusStopCode": "18301", "ltaDescription": "Lim Seng Tjoe Bldg (LT 27)", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 26, "matchStatus": "nearby-public-stop" },
+    { "nextbusStopId": "nextbus-kr-mrt-opp", "ltaBusStopCode": "18339", "ltaDescription": "Opp Kent Ridge Stn Exit A", "roadName": "Lower Kent Ridge Rd", "distanceMeters": 11, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-lt13-opp", "ltaBusStopCode": "16191", "ltaDescription": "Aft Kent Ridge Dr", "roadName": "Kent Ridge Cres", "distanceMeters": 93, "matchStatus": "nearby-public-stop" },
+    { "nextbusStopId": "nextbus-it", "ltaBusStopCode": "16189", "ltaDescription": "Information Technology", "roadName": "Kent Ridge Cres", "distanceMeters": 8, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-yih-opp", "ltaBusStopCode": "16179", "ltaDescription": "Opp Yusof Ishak Hse", "roadName": "Kent Ridge Cres", "distanceMeters": 11, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-yih", "ltaBusStopCode": "16171", "ltaDescription": "Yusof Ishak Hse", "roadName": "Kent Ridge Cres", "distanceMeters": 2, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-clb", "ltaBusStopCode": "16181", "ltaDescription": "Ctrl Lib", "roadName": "Kent Ridge Cres", "distanceMeters": 4, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-lt13", "ltaBusStopCode": "16009", "ltaDescription": "Kent Ridge Ter", "roadName": "Clementi Rd", "distanceMeters": 90, "matchStatus": "nearby-public-stop" },
+    { "nextbusStopId": "nextbus-sde3-opp", "ltaBusStopCode": "16141", "ltaDescription": "Tentera Diraja Mque", "roadName": "Clementi Rd", "distanceMeters": 8, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-jp-sch-16151", "ltaBusStopCode": "16151", "ltaDescription": "The Japanese Pr Sch", "roadName": "Clementi Rd", "distanceMeters": 4, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-krb", "ltaBusStopCode": "16009", "ltaDescription": "Kent Ridge Ter", "roadName": "Clementi Rd", "distanceMeters": 34, "matchStatus": "nearby-public-stop" },
+    { "nextbusStopId": "nextbus-raffles", "ltaBusStopCode": "16169", "ltaDescription": "NUS Raffles Hall", "roadName": "Kent Ridge Cres", "distanceMeters": 4, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-cg", "ltaBusStopCode": "41029", "ltaDescription": "Opp Botanic Gdns Stn", "roadName": "Dunearn Rd", "distanceMeters": 3, "matchStatus": "coordinate-match" },
+    { "nextbusStopId": "nextbus-bg-mrt", "ltaBusStopCode": "41021", "ltaDescription": "Botanic Gdns Stn", "roadName": "Bt Timah Rd", "distanceMeters": 42, "matchStatus": "coordinate-match" }
+  ],
+  "unlinkedStopIds": [
+    "nextbus-com3",
+    "nextbus-tcoms-opp",
+    "nextbus-pgp",
+    "nextbus-utown",
+    "nextbus-pgpr",
+    "nextbus-tcoms",
+    "nextbus-hssml-opp",
+    "nextbus-nuss-opp",
+    "nextbus-as5",
+    "nextbus-biz2",
+    "nextbus-kv",
+    "nextbus-oth"
+  ]
+}

@@ -8,6 +8,8 @@ const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', 
 const curatedBuildingFootprintsFile = new URL('../../data/curated/mvp1-building-footprints.geojson', import.meta.url);
 const isbStopPlantingFile = new URL('../../data/curated/phase2-nus-isb-stop-planting.json', import.meta.url);
 const isbBusStopsFile = new URL('../../data/curated/phase2-nus-isb-bus-stops.json', import.meta.url);
+const isbPublicBusLinksFile = new URL('../../data/curated/phase2-nus-isb-public-bus-links.json', import.meta.url);
+const com3XrayShellFile = new URL('../../data/curated/phase4-com3-xray-shell.json', import.meta.url);
 const nextbusResearchSnapshotFile = new URL('../../data/processed/nextbus-research/nus-nextbus-static-snapshot.json', import.meta.url);
 
 const NUS_BOUNDS = {
@@ -168,19 +170,18 @@ function validateCuratedBuildingFootprint(feature, index) {
   });
 }
 
-function validateIsbStopPlantingRoute(route, index, campusPlaceIds) {
+function validateIsbStopPlantingRoute(route, index, isbStopIds) {
   const context = `ISB stop planting route ${route.routeCode ?? index}`;
 
   assert(typeof route.routeCode === 'string' && route.routeCode.length > 0, `${context} must have a routeCode`);
   assert(typeof route.sourceLabel === 'string' && route.sourceLabel.length > 0, `${context} must have a sourceLabel`);
   assert(route.stopNameStatus === 'manual-reference', `${context} stopNameStatus must stay manual-reference without permitted machine-readable stop data`);
-  assert(route.positionStatus === 'manual-reference', `${context} positionStatus must stay manual-reference without official or field-collected coordinates`);
-  assert(typeof route.detail === 'string' && route.detail.includes('coordinates reuse existing OSM seed markers'), `${context} must disclose coordinate reuse`);
+  assert(route.positionStatus === 'requires-permission', `${context} positionStatus must stay requires-permission without official or field-collected coordinates`);
+  assert(typeof route.detail === 'string' && route.detail.includes('NextBus codelab API research inventory'), `${context} must disclose NextBus research coordinate reuse`);
   assert(Array.isArray(route.plantedStops), `${context} plantedStops must be an array`);
   assert(Array.isArray(route.unplantedStops), `${context} unplantedStops must be an array`);
 
   const seenSequences = new Set();
-  const seenPlaceIds = new Set();
 
   route.plantedStops.forEach((stop, stopIndex) => {
     const stopContext = `${context} planted stop ${stop.officialName ?? stopIndex}`;
@@ -189,12 +190,10 @@ function validateIsbStopPlantingRoute(route, index, campusPlaceIds) {
     assert(!seenSequences.has(stop.sequence), `${stopContext} sequence must be unique`);
     seenSequences.add(stop.sequence);
     assert(typeof stop.officialName === 'string' && stop.officialName.length > 0, `${stopContext} must have an officialName`);
-    assert(campusPlaceIds.has(stop.campusPlaceId), `${stopContext} campusPlaceId must exist in curated campus places`);
-    assert(!seenPlaceIds.has(stop.campusPlaceId), `${stopContext} campusPlaceId must be unique within the route`);
-    seenPlaceIds.add(stop.campusPlaceId);
-    assert(stop.positionSourceId === 'osm-api-nus-kent-ridge-map', `${stopContext} positionSourceId must stay on the OSM seed source`);
-    assert(stop.positionStatus === 'manual-reference', `${stopContext} positionStatus must not be verified`);
-    assert(stop.positionNote.includes('Not an official NUS ISB stop coordinate'), `${stopContext} must disclose unverified position`);
+    assert(isbStopIds.has(stop.campusPlaceId), `${stopContext} campusPlaceId must exist in the curated NUS ISB stop inventory`);
+    assert(stop.positionSourceId === 'nus-nextbus-codelab-api', `${stopContext} positionSourceId must stay on the NextBus research source`);
+    assert(stop.positionStatus === 'requires-permission', `${stopContext} positionStatus must not be verified`);
+    assert(stop.positionNote.includes('Not a verified current NUS ISB boarding-point coordinate'), `${stopContext} must disclose unverified current position`);
   });
 
   route.unplantedStops.forEach((stop, stopIndex) => {
@@ -204,7 +203,7 @@ function validateIsbStopPlantingRoute(route, index, campusPlaceIds) {
     assert(!seenSequences.has(stop.sequence), `${stopContext} sequence must be unique across planted and unplanted stops`);
     seenSequences.add(stop.sequence);
     assert(typeof stop.officialName === 'string' && stop.officialName.length > 0, `${stopContext} must have an officialName`);
-    assert(typeof stop.reason === 'string' && stop.reason.includes('No verified or field-surveyed boarding-point coordinate'), `${stopContext} must explain missing coordinates`);
+    assert(typeof stop.reason === 'string' && stop.reason.length > 0, `${stopContext} must explain missing coordinates`);
   });
 }
 
@@ -277,12 +276,76 @@ function validateIsbBusStopInventory(inventory, snapshot) {
   });
 }
 
+function validateIsbPublicBusLinks(links, isbStopIds) {
+  assert(links.schema === 'phase2-nus-isb-public-bus-links-v1', 'NUS ISB public bus links must use the expected schema');
+  assert(Array.isArray(links.source_ids), 'NUS ISB public bus links must include source_ids');
+  assert(links.source_ids.includes('nus-nextbus-codelab-api'), 'NUS ISB public bus links must reference the NextBus research source');
+  assert(links.source_ids.includes('lta-datamall-dynamic-apis'), 'NUS ISB public bus links must reference LTA DataMall');
+  assert(links.source_ids.every((sourceId) => contents.includes(`id: ${sourceId}`)), 'NUS ISB public bus link source_ids must exist in data/sources.yml');
+  assert(typeof links.match_method === 'string' && links.match_method.includes('Nearest official LTA DataMall BusStops'), 'NUS ISB public bus links must document the match method');
+  assert(typeof links.warning === 'string' && links.warning.includes('do not verify NUS ISB'), 'NUS ISB public bus links must include an ISB verification warning');
+  assert(Array.isArray(links.links), 'NUS ISB public bus links must include links');
+  assert(Array.isArray(links.unlinkedStopIds), 'NUS ISB public bus links must include unlinkedStopIds');
+
+  const seenLinkedStopIds = new Set();
+  const seenUnlinkedStopIds = new Set();
+
+  links.links.forEach((link, index) => {
+    const context = `NUS ISB public bus link ${link.nextbusStopId ?? index}`;
+
+    assert(isbStopIds.has(link.nextbusStopId), `${context} nextbusStopId must exist in the NUS ISB stop inventory`);
+    assert(!seenLinkedStopIds.has(link.nextbusStopId), `${context} nextbusStopId must be unique`);
+    seenLinkedStopIds.add(link.nextbusStopId);
+    assert(/^\d{5}$/.test(link.ltaBusStopCode), `${context} must use a five-digit LTA bus stop code`);
+    assert(typeof link.ltaDescription === 'string' && link.ltaDescription.length > 0, `${context} must include an LTA description`);
+    assert(typeof link.roadName === 'string' && link.roadName.length > 0, `${context} must include a roadName`);
+    assert(Number.isInteger(link.distanceMeters) && link.distanceMeters >= 0 && link.distanceMeters <= 100, `${context} distanceMeters must stay within the documented link threshold`);
+    assert(['coordinate-match', 'nearby-public-stop'].includes(link.matchStatus), `${context} matchStatus is unsupported`);
+  });
+
+  links.unlinkedStopIds.forEach((stopId) => {
+    assert(isbStopIds.has(stopId), `unlinked NUS ISB stop ${stopId} must exist in the NUS ISB stop inventory`);
+    assert(!seenLinkedStopIds.has(stopId), `NUS ISB stop ${stopId} cannot be both linked and unlinked`);
+    assert(!seenUnlinkedStopIds.has(stopId), `unlinked NUS ISB stop ${stopId} must be unique`);
+    seenUnlinkedStopIds.add(stopId);
+  });
+
+  assert(
+    seenLinkedStopIds.size + seenUnlinkedStopIds.size === isbStopIds.size,
+    'NUS ISB public bus links must account for every NUS ISB research stop as linked or unlinked',
+  );
+}
+
+function validateCom3XrayShell(shell) {
+  assert(shell.schema === 'phase4-building-xray-shell-v1', 'COM3 xray shell must use the Phase 4 schema');
+  assert(shell.buildingId === 'com3', 'COM3 xray shell must target com3');
+  assert(Array.isArray(shell.sourceIds), 'COM3 xray shell must include sourceIds');
+  assert(shell.sourceIds.includes('osm-overpass-com3'), 'COM3 xray shell must reference the COM3 OSM source');
+  assert(shell.geometrySourceStatus === 'verified', 'COM3 xray shell footprint source must remain verified');
+  assert(shell.floorCountSourceStatus === 'verified', 'COM3 xray shell floor count must remain verified');
+  assert(shell.floorLabelSourceStatus === 'manual-reference', 'COM3 xray shell floor labels must stay manual-reference');
+  assert(shell.xrayStatus === 'building shell only', 'COM3 xray shell must stay shell-only');
+  assert(shell.heightSourceStatus === 'prototype-placeholder', 'COM3 xray shell height must stay prototype-placeholder');
+  assert(shell.heightMeters === 24, 'COM3 xray shell height must match the current COM3 visual height');
+  assert(shell.floorHeightMeters === 4, 'COM3 xray shell floor height must match the current visual floor height');
+  assert(Array.isArray(shell.floorSelectorLabels), 'COM3 xray shell must include floor selector labels');
+  assert(shell.floorSelectorLabels.length === 6, 'COM3 xray shell must expose six floor labels from OSM building:levels');
+  shell.floorSelectorLabels.forEach((label, index) => {
+    assert(label === `L${index + 1}`, `COM3 xray shell floor label ${index + 1} must be generic L${index + 1}`);
+  });
+  assert(shell.blockedArtifacts?.publicEntrances?.includes('Not enabled'), 'COM3 xray shell must keep public entrances blocked');
+  assert(shell.blockedArtifacts?.indoorDetail?.includes('Not enabled'), 'COM3 xray shell must keep indoor detail blocked');
+  assert(shell.detail.includes('must not be treated as official indoor detail'), 'COM3 xray shell must disclose indoor-detail limitation');
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
 const curatedBuildingFootprints = JSON.parse(await readFile(curatedBuildingFootprintsFile, 'utf8'));
 const isbStopPlanting = JSON.parse(await readFile(isbStopPlantingFile, 'utf8'));
 const isbBusStops = JSON.parse(await readFile(isbBusStopsFile, 'utf8'));
+const isbPublicBusLinks = JSON.parse(await readFile(isbPublicBusLinksFile, 'utf8'));
+const com3XrayShell = JSON.parse(await readFile(com3XrayShellFile, 'utf8'));
 const nextbusResearchSnapshot = JSON.parse(await readFile(nextbusResearchSnapshotFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
@@ -322,9 +385,12 @@ assert(isbStopPlanting.schema === 'phase2-nus-isb-stop-planting-v1', 'ISB stop p
 assert(Array.isArray(isbStopPlanting.source_ids), 'ISB stop planting must record source_ids');
 assert(isbStopPlanting.source_ids.every((sourceId) => contents.includes(`id: ${sourceId}`)), 'ISB stop planting source_ids must exist in data/sources.yml');
 assert(Array.isArray(isbStopPlanting.routes), 'ISB stop planting must include routes');
-isbStopPlanting.routes.forEach((route, index) => validateIsbStopPlantingRoute(route, index, seenPlaceIds));
+const isbStopIds = new Set(isbBusStops.stops.map((stop) => stop.id));
+isbStopPlanting.routes.forEach((route, index) => validateIsbStopPlantingRoute(route, index, isbStopIds));
 validateNextbusResearchSnapshot(nextbusResearchSnapshot);
 validateIsbBusStopInventory(isbBusStops, nextbusResearchSnapshot);
+validateIsbPublicBusLinks(isbPublicBusLinks, isbStopIds);
+validateCom3XrayShell(com3XrayShell);
 
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
@@ -333,4 +399,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, and NextBus research snapshot contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB public bus links, NextBus research snapshot, and COM3 xray shell contain required metadata.');

@@ -49,7 +49,7 @@ type RawCampusPlace = {
 
 export const searchIndex: SearchEntity[] = [
   ...([
-    ...(campusPlaces.places as unknown as RawCampusPlace[]),
+    ...(campusPlaces.places as unknown as RawCampusPlace[]).filter((place) => place.type !== 'bus_stop'),
     ...(nusIsbBusStops.stops as unknown as RawCampusPlace[]),
   ]).map((place) => ({
     ...place,

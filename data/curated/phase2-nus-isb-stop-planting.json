@@ -1,124 +1,135 @@
 {
   "schema": "phase2-nus-isb-stop-planting-v1",
   "name": "Phase 2 NUS ISB stop planting seed",
-  "date_checked": "2026-10-01",
+  "date_checked": "2026-10-04",
   "coordinate_reference_system": "WGS84 / EPSG:4326",
   "coordinate_order": "[longitude, latitude]",
   "source_ids": [
     "nus-uci-internal-shuttle-bus",
-    "osm-api-nus-kent-ridge-map"
+    "nus-nextbus-codelab-api"
   ],
   "routes": [
     {
       "routeCode": "D1",
       "sourceLabel": "NUS UCI Service D1 route map, route updated as of 25 July 2022",
       "stopNameStatus": "manual-reference",
-      "positionStatus": "manual-reference",
-      "detail": "Stop labels and ordering are manually transcribed from the official NUS UCI D1 route-map image. Planted coordinates reuse existing OSM seed markers and remain unverified boarding-point positions.",
+      "positionStatus": "requires-permission",
+      "detail": "Stop labels and ordering are manually transcribed from the official NUS UCI D1 route-map image. Planted coordinates use the NextBus codelab API research inventory and remain requires-permission planning data, not verified current boarding-point positions.",
       "plantedStops": [
+        {
+          "sequence": 1,
+          "officialName": "COM 3 (Start/End)",
+          "campusPlaceId": "nextbus-com3",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
         {
           "sequence": 2,
           "officialName": "Opp HSSML",
-          "campusPlaceId": "bus-opp-hssml",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
+          "campusPlaceId": "nextbus-hssml-opp",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 3,
           "officialName": "Opp NUSS",
-          "campusPlaceId": "bus-opp-nuss",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
+          "campusPlaceId": "nextbus-nuss-opp",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 4,
           "officialName": "Ventus",
-          "campusPlaceId": "bus-ventus",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
+          "campusPlaceId": "nextbus-lt13-opp",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 5,
           "officialName": "IT",
-          "campusPlaceId": "bus-information-technology",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 7,
-          "officialName": "Museum",
-          "campusPlaceId": "bus-nus-museums",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 8,
-          "officialName": "UTown",
-          "campusPlaceId": "bus-university-town",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 10,
-          "officialName": "CLB",
-          "campusPlaceId": "bus-central-library",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 11,
-          "officialName": "LT 13",
-          "campusPlaceId": "bus-lt13",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 12,
-          "officialName": "AS 5",
-          "campusPlaceId": "bus-as5",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        },
-        {
-          "sequence": 13,
-          "officialName": "BIZ 2",
-          "campusPlaceId": "bus-biz2",
-          "positionSourceId": "osm-api-nus-kent-ridge-map",
-          "positionStatus": "manual-reference",
-          "positionNote": "Existing OSM seed marker reused for map selection. Not an official NUS ISB stop coordinate."
-        }
-      ],
-      "unplantedStops": [
-        {
-          "sequence": 1,
-          "officialName": "COM 3 (Start/End)",
-          "reason": "No verified or field-surveyed boarding-point coordinate is documented."
+          "campusPlaceId": "nextbus-it",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 6,
           "officialName": "Opp YIH",
-          "reason": "No verified or field-surveyed boarding-point coordinate is documented."
+          "campusPlaceId": "nextbus-yih-opp",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 7,
+          "officialName": "Museum",
+          "campusPlaceId": "nextbus-museum",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 8,
+          "officialName": "UTown",
+          "campusPlaceId": "nextbus-utown",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 9,
           "officialName": "YIH",
-          "reason": "No verified or field-surveyed boarding-point coordinate is documented."
+          "campusPlaceId": "nextbus-yih",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 10,
+          "officialName": "CLB",
+          "campusPlaceId": "nextbus-clb",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 11,
+          "officialName": "LT 13",
+          "campusPlaceId": "nextbus-lt13",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 12,
+          "officialName": "AS 5",
+          "campusPlaceId": "nextbus-as5",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
+        },
+        {
+          "sequence": 13,
+          "officialName": "BIZ 2",
+          "campusPlaceId": "nextbus-biz2",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         },
         {
           "sequence": 14,
           "officialName": "COM 3 (Start/End)",
-          "reason": "No verified or field-surveyed boarding-point coordinate is documented."
+          "campusPlaceId": "nextbus-com3",
+          "positionSourceId": "nus-nextbus-codelab-api",
+          "positionStatus": "requires-permission",
+          "positionNote": "NextBus codelab API research coordinate reused for route-label planting. Not a verified current NUS ISB boarding-point coordinate."
         }
-      ]
+      ],
+      "unplantedStops": []
     }
   ]
 }

@@ -8,8 +8,8 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase4-terrain-prototype`.
-- Latest `main` commit: `dbfad4d Update handoff after indoor readiness gate`.
+- Current branch: `main`.
+- Latest `main` commit: `5a4db95 Merge pull request #32 from TanYiXun/phase4-terrain-prototype`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
@@ -18,17 +18,18 @@ This file is a concise working-memory handoff for long conversations, compaction
 - PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
 - PR #30 added the NUS ISB public OSM stop/platform display-position alignment and merged to `main`.
 - PR #31 added the Phase 5 indoor readiness gate and merged to `main`.
-- Latest local commit subject: `Update handoff after indoor readiness gate`; run `git log -1 --oneline` for the exact current hash.
-- Active uncommitted work: Phase 4 terrain prototype, AWS Open Data Terrain Tiles source metadata, validation, UI toggle, docs, tests, and screenshots.
+- PR #32 added the Phase 4 terrain prototype and merged to `main`.
+- Latest local commit subject: `Merge pull request #32 from TanYiXun/phase4-terrain-prototype`; run `git log -1 --oneline` for the exact current hash.
+- Active uncommitted work: this handoff refresh only until committed.
 
 ## Current Phase
 
 - Active plan section: `PLAN.md` 13.2 terrain guidance, with section 13 3D campus detail constraints.
-- Current slice: Phase 4 terrain prototype on top of merged PR #31 and handoff refresh commit `dbfad4d`.
+- Current slice: Phase 4 terrain prototype completed and merged in PR #32.
 - Latest refinement: `data/curated/phase4-terrain-status.json` now records terrain as `prototype`; `data/sources.yml` documents AWS Open Data Terrain Tiles / Mapzen Terrarium tiles; MapLibre renders a bounded `raster-dem` terrain source, subtle hillshade, restrained exaggeration, and a layer-menu terrain toggle. The overview copy says terrain is visual slope context only and not NUS-verified slope, accessibility, or routing data.
 - Status: Phase 5 indoor navigation remains blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes. Terrain is prototype only, pending alignment, mobile performance, label readability, and boundary review.
-- Current local preview: `http://127.0.0.1:5175/` from `npm run dev -- --host 127.0.0.1`. Ports `5173` and `5174` were in use, so Vite selected `5175`.
-- The user has been reviewing the running local app. Current branch is `phase4-terrain-prototype`.
+- Current local preview: stopped. During screenshot capture, `npm run dev -- --host 127.0.0.1` used `http://127.0.0.1:5175/` because ports `5173` and `5174` were in use.
+- The user has been reviewing the running local app. Current branch is `main`.
 
 ## Current Phase 1 Slice
 
@@ -349,7 +350,14 @@ Known build warning:
   - `npm run test`: passed, 48 tests.
   - `npm run test:e2e`: passed with localhost approval, 8 passed and 8 project-skipped.
   - `npm run build`: passed with the existing Vite large-chunk warning.
+- PR #32 was pushed, opened with screenshots `docs/screenshots/phase4-terrain-prototype-overview.png`, `docs/screenshots/phase4-terrain-prototype-layers.png`, and `docs/screenshots/phase4-terrain-prototype-mobile-overview.png`, and merged to `main`. It added the Phase 4 terrain prototype. Latest checks from that branch:
+  - `npm run validate:data`: passed.
+  - `npm run typecheck`: passed.
+  - `npm run lint`: passed.
+  - `npm run test`: passed, 48 tests.
+  - `npm run test:e2e`: passed with localhost approval, 8 passed and 8 project-skipped.
+  - `npm run build`: passed with the existing Vite large-chunk warning.
 
 ## Next Recommended Action
 
-Do not start Phase 5 indoor navigation implementation until legal indoor data and QA artifacts exist for at least one building. If terrain is revisited, first document a candidate elevation source, license, alignment plan, mobile performance target, readability review, and boundary treatment.
+Do not start Phase 5 indoor navigation implementation until legal indoor data and QA artifacts exist for at least one building. Terrain is implemented only as a Phase 4 prototype; before marking it supported, review alignment, mobile performance, label readability, and boundary treatment.

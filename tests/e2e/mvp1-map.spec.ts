@@ -197,7 +197,9 @@ test('desktop labels planted D1 stops without verifying coordinates', async ({ p
   await page.mouse.click(478, 419);
 
   await expect(page.getByRole('heading', { name: 'Information Technology' })).toBeVisible();
-  await expect(page.getByText('Permission required · NUS A2, D1, R2 · D1 5. IT')).toBeVisible();
+  await expect(page.locator('.statusPanel')).toContainText('marker aligned to OSM Information Technology stop/platform');
+  await expect(page.locator('.statusPanel')).toContainText('NUS A2, D1, R2');
+  await expect(page.locator('.statusPanel')).toContainText('D1 5. IT');
   await expect(page.getByLabel('Combined bus services for selected stop')).toContainText('NUS internal shuttle');
   await expect(page.getByLabel('Combined bus services for selected stop')).toContainText('LTA public buses');
   await expect(page.getByLabel('Combined bus services for selected stop')).toContainText('Stop 16189');

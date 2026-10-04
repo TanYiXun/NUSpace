@@ -155,6 +155,14 @@
 - Decision: add `data/curated/phase4-terrain-status.json` and keep terrain unavailable in the layer menu. Do not add terrain tiles, DEM sources, hillshade, exaggeration, or user-facing terrain toggles yet.
 - Confidence: high that this matches the plan gate; terrain usefulness remains unresolved.
 
+## 2026-10-04 - NUS ISB OSM Platform Display Alignment
+
+- Task: check whether visible NUS ISB markers such as AS5 and COM3 were using correct point positions after comparing them against the basemap's bus-stop platform icons.
+- Sources checked: current OpenStreetMap API bounded Kent Ridge extract and the existing NextBus research stop inventory.
+- Finding: 20 of 33 NextBus research stops exact-match current OSM nodes tagged as public bus stops or public-transport platforms, including AS5, COM3, Information Technology, Central Library, YIH, UHC, and University Town. The AS5 OSM platform node is 41 m from the NextBus research coordinate; the COM3 OSM platform node is 59 m from the NextBus research coordinate; the University Town OSM platform node is 43 m from the NextBus research coordinate. The remaining 13 stops do not have an exact matched OSM bus stop/platform node in the checked extract.
+- Decision: add `data/curated/phase2-nus-isb-stop-display-overrides.json` and use the matched OSM bus stop/platform nodes as manual-reference display/search coordinates only. Keep route membership and stop inventory from the NextBus research snapshot, keep the overall NUS ISB stop status `requires-permission`, and disclose that the OSM alignment is not official NUS verification.
+- Confidence: high for the exact OSM node matches in the checked extract, low for treating any aligned marker as an official current boarding point without NUS confirmation or documented field survey.
+
 ## 2026-10-02 - Phase 4 COM3 Xray Shell Slice
 
 - Task: implement the `PLAN.md` section 13.1.1 one-building recognizable model and xray slice without adding unsourced indoor detail.

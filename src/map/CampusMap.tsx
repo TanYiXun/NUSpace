@@ -424,6 +424,8 @@ function createCampusBusStopsFeatureCollection(): GeoJSON.FeatureCollection {
           name: entity.name,
           source_id: entity.sourceId,
           source_status: entity.sourceStatus,
+          display_position_source_id: entity.displayPosition?.sourceId ?? '',
+          display_position_status: entity.displayPosition?.sourceStatus ?? '',
           routes: entity.nextbus?.routeNames.join(', ') ?? '',
           note: entity.detail,
         },
@@ -1607,6 +1609,9 @@ export function CampusMap() {
             <div className="sheetBody">
               <p className="busStopTrustLine">
                 {selectedBusStop.sourceStatus === 'requires-permission' ? 'Permission required' : selectedBusStop.sourceStatus}
+                {selectedBusStop.displayPosition
+                  ? ` · marker aligned to ${selectedBusStop.displayPosition.sourceLabel}`
+                  : ''}
                 {selectedNextbusRoutes.length > 0 ? ` · NUS ${selectedNextbusRoutes.join(', ')}` : ''}
                 {selectedPlantedIsbStops.length > 0
                   ? ` · D1 ${selectedPlantedIsbStops.map((stop) => `${stop.sequence}. ${stop.officialName}`).join(', ')}`
@@ -1670,7 +1675,11 @@ export function CampusMap() {
                 <summary>Data status</summary>
                 <p>
                   {selectedBusStop.sourceId === 'nus-nextbus-codelab-api' ? (
-                    'NextBus research snapshot. Stop names, coordinates, and route membership remain permission-required planning data, not live or verified current shuttle operations.'
+                    selectedBusStop.displayPosition ? (
+                      `NextBus research snapshot supplies stop names and route membership. The marker is displayed at an exact-name public OpenStreetMap bus stop/platform node ${selectedBusStop.displayPosition.distanceFromNextbusMeters} m from the NextBus coordinate. This OSM alignment is manual-reference only, not an official NUS-verified current boarding point.`
+                    ) : (
+                      'NextBus research snapshot. Stop names, coordinates, and route membership remain permission-required planning data, not live or verified current shuttle operations.'
+                    )
                   ) : selectedPlantedIsbStops.length > 0 ? (
                     `${selectedBusStop.detail} D1 stop label and order are manually referenced from the NUS UCI route-map image; this does not verify the marker as an exact boarding point or enable route geometry.`
                   ) : selectedBusStop.detail}

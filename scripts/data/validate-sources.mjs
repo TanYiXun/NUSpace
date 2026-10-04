@@ -8,6 +8,7 @@ const curatedPlacesFile = new URL('../../data/curated/mvp1-campus-places.json', 
 const curatedBuildingFootprintsFile = new URL('../../data/curated/mvp1-building-footprints.geojson', import.meta.url);
 const isbStopPlantingFile = new URL('../../data/curated/phase2-nus-isb-stop-planting.json', import.meta.url);
 const isbBusStopsFile = new URL('../../data/curated/phase2-nus-isb-bus-stops.json', import.meta.url);
+const isbStopDisplayOverridesFile = new URL('../../data/curated/phase2-nus-isb-stop-display-overrides.json', import.meta.url);
 const isbPublicBusLinksFile = new URL('../../data/curated/phase2-nus-isb-public-bus-links.json', import.meta.url);
 const com3XrayShellFile = new URL('../../data/curated/phase4-com3-xray-shell.json', import.meta.url);
 const terrainStatusFile = new URL('../../data/curated/phase4-terrain-status.json', import.meta.url);
@@ -317,6 +318,59 @@ function validateIsbPublicBusLinks(links, isbStopIds) {
   );
 }
 
+function validateIsbStopDisplayOverrides(displayOverrides, isbStops) {
+  assert(displayOverrides.schema === 'phase2-nus-isb-stop-display-overrides-v1', 'NUS ISB stop display overrides must use the expected schema');
+  assert(displayOverrides.source_status === 'manual-reference', 'NUS ISB stop display overrides must stay manual-reference');
+  assert(Array.isArray(displayOverrides.source_ids), 'NUS ISB stop display overrides must include source_ids');
+  assert(displayOverrides.source_ids.includes('osm-api-nus-kent-ridge-map'), 'NUS ISB stop display overrides must reference the OSM Kent Ridge source');
+  assert(displayOverrides.source_ids.includes('nus-nextbus-codelab-api'), 'NUS ISB stop display overrides must reference the NextBus research source');
+  assert(displayOverrides.source_ids.every((sourceId) => contents.includes(`id: ${sourceId}`)), 'NUS ISB stop display override source_ids must exist in data/sources.yml');
+  assert(typeof displayOverrides.match_method === 'string' && displayOverrides.match_method.includes('Exact normalized stop-name match'), 'NUS ISB stop display overrides must document exact-name match method');
+  assert(typeof displayOverrides.warning === 'string' && displayOverrides.warning.includes('Do not mark these display positions verified'), 'NUS ISB stop display overrides must include a verification warning');
+  assert(Array.isArray(displayOverrides.overrides), 'NUS ISB stop display overrides must include overrides');
+  assert(Array.isArray(displayOverrides.unmatchedStopIds), 'NUS ISB stop display overrides must include unmatchedStopIds');
+
+  const isbStopIds = new Set(isbStops.map((stop) => stop.id));
+  const seenOverrideStopIds = new Set();
+  const seenUnmatchedStopIds = new Set();
+
+  displayOverrides.overrides.forEach((override, index) => {
+    const context = `NUS ISB display-position override ${override.nextbusStopId ?? index}`;
+
+    assert(isbStopIds.has(override.nextbusStopId), `${context} nextbusStopId must exist in the NUS ISB stop inventory`);
+    assert(!seenOverrideStopIds.has(override.nextbusStopId), `${context} nextbusStopId must be unique`);
+    seenOverrideStopIds.add(override.nextbusStopId);
+    assertPosition(override.coordinates, `${context} coordinates`);
+    assert(override.sourceId === 'osm-api-nus-kent-ridge-map', `${context} must use the OSM Kent Ridge source for display coordinates`);
+    assert(override.sourceStatus === 'manual-reference', `${context} must stay manual-reference`);
+    assert(override.osm?.type === 'node', `${context} must preserve an OSM node reference`);
+    assert(Number.isInteger(override.osm?.id), `${context} must preserve an OSM node id`);
+    assert(typeof override.osm?.name === 'string' && override.osm.name.length > 0, `${context} must preserve the OSM name`);
+    if (override.osm.network !== undefined) {
+      assert(typeof override.osm.network === 'string' && override.osm.network.length > 0, `${context} OSM network tag must be a non-empty string when present`);
+    }
+    if (override.osm.ref !== undefined) {
+      assert(/^\d{5}$/.test(override.osm.ref), `${context} OSM public bus stop ref must be a five-digit code when present`);
+    }
+    assert(Number.isInteger(override.distanceFromNextbusMeters) && override.distanceFromNextbusMeters >= 0, `${context} must include distance from the NextBus coordinate`);
+    assert(override.reviewStatus === 'reviewed', `${context} must be reviewed before being used for display`);
+    assert(override.shipAllowed === false, `${context} must not be marked production ship allowed without official verification`);
+    assert(typeof override.note === 'string' && override.note.includes('permission-required planning data'), `${context} must disclose the NextBus coordinate boundary`);
+  });
+
+  displayOverrides.unmatchedStopIds.forEach((stopId) => {
+    assert(isbStopIds.has(stopId), `unmatched NUS ISB display-position stop ${stopId} must exist in the NUS ISB stop inventory`);
+    assert(!seenOverrideStopIds.has(stopId), `NUS ISB display-position stop ${stopId} cannot be both overridden and unmatched`);
+    assert(!seenUnmatchedStopIds.has(stopId), `unmatched NUS ISB display-position stop ${stopId} must be unique`);
+    seenUnmatchedStopIds.add(stopId);
+  });
+
+  assert(
+    seenOverrideStopIds.size + seenUnmatchedStopIds.size === isbStopIds.size,
+    'NUS ISB stop display overrides must account for every NUS ISB research stop as overridden or unmatched',
+  );
+}
+
 function validateCom3XrayShell(shell) {
   assert(shell.schema === 'phase4-building-xray-shell-v1', 'COM3 xray shell must use the Phase 4 schema');
   assert(shell.buildingId === 'com3', 'COM3 xray shell must target com3');
@@ -372,6 +426,7 @@ const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
 const curatedBuildingFootprints = JSON.parse(await readFile(curatedBuildingFootprintsFile, 'utf8'));
 const isbStopPlanting = JSON.parse(await readFile(isbStopPlantingFile, 'utf8'));
 const isbBusStops = JSON.parse(await readFile(isbBusStopsFile, 'utf8'));
+const isbStopDisplayOverrides = JSON.parse(await readFile(isbStopDisplayOverridesFile, 'utf8'));
 const isbPublicBusLinks = JSON.parse(await readFile(isbPublicBusLinksFile, 'utf8'));
 const com3XrayShell = JSON.parse(await readFile(com3XrayShellFile, 'utf8'));
 const terrainStatus = JSON.parse(await readFile(terrainStatusFile, 'utf8'));
@@ -418,6 +473,7 @@ const isbStopIds = new Set(isbBusStops.stops.map((stop) => stop.id));
 isbStopPlanting.routes.forEach((route, index) => validateIsbStopPlantingRoute(route, index, isbStopIds));
 validateNextbusResearchSnapshot(nextbusResearchSnapshot);
 validateIsbBusStopInventory(isbBusStops, nextbusResearchSnapshot);
+validateIsbStopDisplayOverrides(isbStopDisplayOverrides, isbBusStops.stops);
 validateIsbPublicBusLinks(isbPublicBusLinks, isbStopIds);
 validateCom3XrayShell(com3XrayShell);
 validateTerrainStatus(terrainStatus);
@@ -429,4 +485,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB public bus links, NextBus research snapshot, COM3 xray shell, and terrain status contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB display-position overrides, NUS ISB public bus links, NextBus research snapshot, COM3 xray shell, and terrain status contain required metadata.');

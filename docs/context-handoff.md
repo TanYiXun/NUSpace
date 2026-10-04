@@ -8,33 +8,24 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `phase4-terrain-readiness-gate`.
-- Latest `main` commit: `355bcc6 Merge pull request #28 from TanYiXun/one-building-xray-shell`.
+- Current branch: `main`.
+- Latest `main` commit: `d53ca88 Merge pull request #29 from TanYiXun/phase4-terrain-readiness-gate`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
 - PR #27 added the NUS ISB research stop inventory and was merged to `main`.
 - PR #28 added the COM3 shell-only xray slice, cleaned up app-facing NUS ISB research stops, added documented LTA public bus links for linked NUS ISB research stops, compacted the selected-stop bus services sheet, and merged to `main`.
-- Active uncommitted work: Phase 4 terrain readiness gate on `phase4-terrain-readiness-gate`. Terrain remains unavailable and data-backed through `data/curated/phase4-terrain-status.json`; the layer menu reads this status and shows the missing source/license/alignment/performance/readability/boundary requirements. Files changed:
-  - `data/curated/phase4-terrain-status.json`
-  - `docs/decisions/phase-4-terrain-readiness.md`
-  - `docs/screenshots/phase4-terrain-readiness-layer-menu.png`
-  - `README.md`
-  - `docs/data-pipeline.md`
-  - `docs/design.md`
-  - `docs/research-log.md`
-  - `scripts/data/validate-sources.mjs`
-  - `src/map/CampusMap.tsx`
-  - `tests/e2e/mvp1-map.spec.ts`
+- PR #29 added the Phase 4 terrain readiness gate and merged to `main`.
+- Active uncommitted work: none.
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 13.2, terrain guidance.
-- Current slice: Phase 4 terrain readiness gate is implemented locally and uncommitted on `phase4-terrain-readiness-gate`.
+- Active plan section: none in progress.
+- Current slice: Phase 4 terrain readiness gate is implemented and merged.
 - Latest refinement: Terrain status is now a curated data artifact, validated by `npm run validate:data`, and visible in the layer menu as `Terrain unavailable` with the missing gate requirements. No terrain tiles, DEM, hillshade, exaggeration, or terrain toggle is enabled.
-- Status: PR #28 completed and merged the COM3 shell-only xray slice. Terrain remains deferred by plan default because usefulness/source/license/alignment/performance/boundary treatment are unresolved. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
+- Status: PR #28 completed and merged the COM3 shell-only xray slice. PR #29 completed and merged the terrain readiness gate. Terrain remains deferred by plan default because usefulness/source/license/alignment/performance/boundary treatment are unresolved. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5174/` from `npm run dev -- --host 127.0.0.1`. Port `5173` was in use, so Vite selected `5174`.
-- The user has been reviewing the running local app. Current branch is `phase4-terrain-readiness-gate`, not merged `main`.
+- The user has been reviewing the running local app. Current branch is `main`.
 
 ## Current Phase 1 Slice
 
@@ -327,7 +318,7 @@ Known build warning:
 - PR #26 superseded that route surface by removing normal user-facing paths into dummy D1 routing and showing a blocked NUS shuttle route state instead. It also added procedural facade/roof depth for OSM building footprints, fixed blocked-route/layer menu overflow, added screenshots, and added `PLAN.md` section 13.1.1 for a one-building recognizable model and xray shell slice.
 - Merged PR #17 added NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest OSM seed stop suggestions from existing curated places.
 - PR #28 was pushed, opened with screenshots, and merged to `main`. It added the COM3 shell-only xray slice, direct COM3 map-click coverage, NextBus research stop cleanup, documented LTA public bus links for 21 NUS ISB research stops, and compact selected-stop bus services.
-- Current branch `phase4-terrain-readiness-gate` adds the Phase 4 terrain readiness gate. Latest checks on this branch:
+- PR #29 was pushed, opened with screenshot `docs/screenshots/phase4-terrain-readiness-layer-menu.png`, and merged to `main`. It added the Phase 4 terrain readiness gate. Latest checks from that branch:
   - `npm run validate:data`: passed.
   - `npm run typecheck`: passed.
   - `npm run lint`: passed.
@@ -337,4 +328,4 @@ Known build warning:
 
 ## Next Recommended Action
 
-Commit, push, open, and merge `phase4-terrain-readiness-gate` if the blocked terrain gate is accepted. After that, do not start Phase 5 indoor navigation until legal indoor data and QA artifacts exist for at least one building.
+Do not start Phase 5 indoor navigation until legal indoor data and QA artifacts exist for at least one building. If terrain is revisited, first document a candidate elevation source, license, alignment plan, mobile performance target, readability review, and boundary treatment.

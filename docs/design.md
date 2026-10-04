@@ -445,9 +445,9 @@ Accepted visual checkpoints:
 
 Accepted behavior:
 
-- OSM bus stop markers are labelled as seed positions.
-- Selected bus stop sheets show `Position: Unverified seed` and `Source status: manual-reference`.
-- NUSMods nearest-stop helper copy says `Nearest OSM seed stop`.
+- This checkpoint is superseded for app-facing NUS ISB stop markers by the NextBus research inventory cutover.
+- Selected NUS ISB bus stop sheets show `Position: Research snapshot` and `Source status: requires-permission`.
+- NUSMods nearest-stop helper copy says `Nearest NUS ISB research stop`.
 - The D1 route layer is labelled `Prototype route`, not `Static route`.
 - The D1 route detail sheet states that the displayed line and stop sequence are not official NUS shuttle geometry and have no verified stop positions.
 

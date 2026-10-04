@@ -2,23 +2,30 @@ import { describe, expect, it } from 'vitest';
 import { getNusIsbPlantedStopCount, getNusIsbPlantedStopsForCampusPlace } from './nusIsbStopPlanting';
 
 describe('nusIsbStopPlanting', () => {
-  it('plants only D1 stop labels that have existing unverified OSM seed markers', () => {
-    expect(getNusIsbPlantedStopCount()).toBe(10);
+  it('plants every D1 stop label against the NextBus research inventory without verifying positions', () => {
+    expect(getNusIsbPlantedStopCount()).toBe(14);
 
-    const utownStops = getNusIsbPlantedStopsForCampusPlace('bus-university-town');
+    const utownStops = getNusIsbPlantedStopsForCampusPlace('nextbus-utown');
 
     expect(utownStops).toEqual([
       expect.objectContaining({
         routeCode: 'D1',
         sequence: 8,
         officialName: 'UTown',
-        positionStatus: 'manual-reference',
+        positionStatus: 'requires-permission',
       }),
     ]);
   });
 
-  it('does not invent planted stops for missing verified coordinate references', () => {
-    expect(getNusIsbPlantedStopsForCampusPlace('com3')).toEqual([]);
-    expect(getNusIsbPlantedStopsForCampusPlace('bus-yih')).toEqual([]);
+  it('keeps repeated and formerly missing D1 labels attached to research-only stops', () => {
+    expect(getNusIsbPlantedStopsForCampusPlace('nextbus-com3').map((stop) => stop.sequence)).toEqual([1, 14]);
+    expect(getNusIsbPlantedStopsForCampusPlace('nextbus-yih')).toEqual([
+      expect.objectContaining({
+        routeCode: 'D1',
+        sequence: 9,
+        officialName: 'YIH',
+        positionStatus: 'requires-permission',
+      }),
+    ]);
   });
 });

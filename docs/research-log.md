@@ -131,6 +131,22 @@
 - Decision: store raw JSON responses under `data/raw/nextbus-research/`, a processed static planning snapshot at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, and an app-facing 33-stop inventory at `data/curated/phase2-nus-isb-bus-stops.json`. Render the stops only as labelled `requires-permission` research markers with no live ETA/current-route claim.
 - Confidence: high for captured response shape on 2026-10-01, low for production/legal reusability until NUS/NextBus permission exists.
 
+## 2026-10-04 - NUS ISB Stop Inventory Cutover
+
+- Task: remove stale app-facing OSM bus stop seed behavior after the NextBus research snapshot exposed the full campus ISB stop inventory needed for the current static research layer.
+- Sources checked: existing NextBus research snapshot and NUS UCI Service D1 route-map image already documented in `data/sources.yml`.
+- Finding: the old OSM seed records included stale/dummy stop entries such as the previous Information Technology marker and only covered ten D1 label matches. The NextBus research inventory includes 33 NUS ISB stop records, including COM3, Opp YIH, YIH, and Information Technology titles.
+- Decision: keep historical OSM bus stop seed records in the curated place file for provenance, but exclude them from the app-facing search/map bus stop layer. Attach the complete 14-label D1 stop sequence to NextBus research stop IDs with `requires-permission` position status and no route-geometry/live-arrival claim.
+- Confidence: high for matching the captured static research inventory, low for production/legal reusability and current boarding-point accuracy until NUS/NextBus permission or a documented field survey exists.
+
+## 2026-10-04 - NUS ISB To LTA Public Bus Links
+
+- Task: verify whether every NextBus research stop has an official LTA public bus stop code and add public-bus timing support where documented links exist.
+- Sources checked: official LTA DataMall `BusStops` dataset using the server-side DataMall key and the existing NextBus research stop coordinates.
+- Finding: 21 of 33 NextBus research stops have a documented LTA public stop match within 100 m. Twelve stops are intentionally left unlinked because the nearest official LTA stop is too far or not a clean current public-stop match.
+- Decision: add `data/curated/phase2-nus-isb-public-bus-links.json` for the 21 documented links. Selected NUS ISB stops can show live LTA public bus arrivals when linked, while internal NUS route rows remain `--` because no live NUS shuttle API is enabled.
+- Confidence: high for official LTA stop-code existence and coordinate-distance matching, low for treating unlinked NUS ISB stops as public LTA stops without stronger evidence.
+
 ## 2026-10-02 - Phase 4 COM3 Xray Shell Slice
 
 - Task: implement the `PLAN.md` section 13.1.1 one-building recognizable model and xray slice without adding unsourced indoor detail.

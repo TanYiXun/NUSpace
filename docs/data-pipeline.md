@@ -69,9 +69,11 @@ The full raw XML extract is not committed. The curated place JSON preserves the 
 
 The building footprint GeoJSON uses the same documented OSM source family. The initial bounded map extract identified the selected OSM objects. Complete building rings for OSM ways were then checked through OSM API `way/{id}/full` responses so that footprints are not reconstructed from clipped geometry. COM3 continues to use the previously documented OSM relation source.
 
-Phase 2 adds `phase2-nus-isb-stop-planting.json` to attach official D1 route-map stop labels/order to existing OSM seed markers where the names can be matched. The NUS UCI route-map image is used only as a manual reference for stop labels and order. Coordinates still come from the existing OSM seed markers, remain `manual-reference`, and must not be treated as exact boarding-point positions.
+Phase 2 adds `phase2-nus-isb-stop-planting.json` to attach official D1 route-map stop labels/order to matching NextBus research stop IDs. The NUS UCI route-map image is used only as a manual reference for stop labels and order. Coordinates come from the NextBus codelab API research inventory, remain `requires-permission`, and must not be treated as exact current boarding-point positions.
 
-The NextBus codelab API research snapshot lives at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. The app derives `data/curated/phase2-nus-isb-bus-stops.json` from it so all 33 captured NUS ISB stops are searchable/selectable as labelled `requires-permission` research markers. It must not be marked verified, shown as live/current arrivals, or redistributed as official NUS data until permission and terms are documented. See `docs/decisions/nextbus-research-snapshot.md`.
+The NextBus codelab API research snapshot lives at `data/processed/nextbus-research/nus-nextbus-static-snapshot.json`, with raw JSON responses under `data/raw/nextbus-research/`. The app derives `data/curated/phase2-nus-isb-bus-stops.json` from it so all 33 captured NUS ISB stops are searchable/selectable as the only app-facing NUS ISB bus stop markers. They stay labelled `requires-permission` and must not be marked verified, shown as live/current arrivals, or redistributed as official NUS data until permission and terms are documented. See `docs/decisions/nextbus-research-snapshot.md`.
+
+`phase2-nus-isb-public-bus-links.json` links the NextBus research stop inventory to official LTA DataMall public bus stop codes where a documented coordinate match exists within 100 m. It currently links 21 of the 33 NUS ISB research stops and explicitly lists the remaining 12 as unlinked. These links enable public LTA arrival lookups only; they do not verify NUS ISB boarding-point positions or internal shuttle ETAs.
 
 Phase 4 adds `phase4-com3-xray-shell.json` for the COM3 selected-building shell-only xray. It uses the sourced OSM COM3 footprint and OSM `building:levels=6` to generate six generic floor-slice labels. It does not include verified public entrances, outdoor connection points, floor plans, rooms, corridors, indoor POIs, or official floor names.
 
@@ -85,9 +87,10 @@ Validation checks the curated place schema, building footprint schema, D1 stop p
 
 - at least 20 searchable places
 - at least 10 buildings
-- at least 8 bus stops
+- at least 8 historical OSM bus stop seed records in the curated place file
 - at least 10 visible building footprints
 - exactly 33 NextBus-derived NUS ISB research stops
+- exactly 21 documented NUS ISB to LTA public bus stop links, with every unlinked NUS ISB stop explicitly accounted for
 - exactly six COM3 shell-only floor selector labels
 
 Known data quality issues:
@@ -95,8 +98,9 @@ Known data quality issues:
 - The dataset is intentionally a seed, not full campus coverage.
 - OSM building and bus stop data is community-maintained and not official NUS data.
 - Building heights are derived from available OSM `building:levels` where present or marked as prototype placeholders. They are not official architectural heights.
-- OSM bus stops do not provide live NUS shuttle arrivals, crowd levels, route membership, or official NUS ISB operating data.
-- D1 stop-label planting verifies neither exact boarding-point coordinates nor route geometry; COM3, Opp YIH, and YIH remain unplanted until official/permitted coordinate data or a documented field survey exists.
+- OSM bus stop seed records do not provide live NUS shuttle arrivals, crowd levels, route membership, or official NUS ISB operating data and are no longer app-facing NUS ISB markers.
+- D1 stop-label planting verifies neither exact boarding-point coordinates nor route geometry; the visible sequence is complete only because the labels are attached to NextBus research stop IDs with `requires-permission` position status.
 - NextBus codelab API records are `requires-permission` research data. They may render only with explicit research/permission-required labels and are not approved production stop coordinates, route geometry, live arrivals, or redistributable official data.
+- LTA public bus links are not NUS ISB live data. They may show public bus timings only where a documented LTA stop-code link exists; NUS internal shuttle timings remain unavailable.
 - COM3 xray shell floor labels are generic labels derived from OSM level count, not official NUS floor names or indoor maps.
 - The current D1 route remains a prototype simulation and is not generated from this dataset.

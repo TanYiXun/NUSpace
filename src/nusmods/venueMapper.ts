@@ -27,7 +27,7 @@ const venueAliases: Record<string, string> = {
   ERC: 'education-resource-centre',
   S17: 's17',
   UCC: 'university-cultural-centre',
-  UTOWN: 'bus-university-town',
+  UTOWN: 'nextbus-utown',
   VENTUS: 'ventus-building',
 };
 

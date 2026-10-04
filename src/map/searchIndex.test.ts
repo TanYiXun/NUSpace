@@ -18,16 +18,15 @@ describe('searchEntities', () => {
   it('seeds the MVP 1 minimum searchable coverage', () => {
     expect(searchIndex.length).toBeGreaterThanOrEqual(20);
     expect(searchIndex.filter((entity) => entity.type === 'building')).toHaveLength(13);
-    expect(searchIndex.filter((entity) => entity.type === 'bus_stop')).toHaveLength(43);
+    expect(searchIndex.filter((entity) => entity.type === 'bus_stop')).toHaveLength(33);
     expect(searchIndex.filter((entity) => entity.type === 'route')).toHaveLength(0);
   });
 
-  it('keeps OSM bus stop coordinates labelled as unverified seed references', () => {
-    const busStops = searchIndex.filter((entity) => entity.type === 'bus_stop' && entity.sourceId === 'osm-api-nus-kent-ridge-map');
+  it('does not expose stale OSM bus stop seed records in the app-facing search index', () => {
+    const busStops = searchIndex.filter((entity) => entity.type === 'bus_stop');
 
-    expect(busStops).toHaveLength(10);
-    expect(busStops.every((entity) => entity.sourceStatus === 'manual-reference')).toBe(true);
-    expect(busStops.every((entity) => entity.subtitle.includes('position unverified'))).toBe(true);
+    expect(busStops.every((entity) => entity.sourceId === 'nus-nextbus-codelab-api')).toBe(true);
+    expect(searchEntities('Information Technology bus stop')[0]?.id).toBe('nextbus-it');
   });
 
   it('adds every NUS ISB stop from the NextBus research snapshot without marking it verified', () => {

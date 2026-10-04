@@ -1,6 +1,7 @@
 import type { LngLatLike } from 'maplibre-gl';
 import campusPlaces from '../../data/curated/mvp1-campus-places.json';
 import nusIsbBusStops from '../../data/curated/phase2-nus-isb-bus-stops.json';
+import nusIsbStopDisplayOverrides from '../../data/curated/phase2-nus-isb-stop-display-overrides.json';
 
 export type SearchEntityType = 'building' | 'bus_stop' | 'food' | 'facility' | 'route';
 export type SourceStatus = 'verified' | 'prototype-placeholder' | 'manual-reference' | 'requires-permission';
@@ -11,6 +12,21 @@ export type NextbusMetadata = {
   longName: string;
   shortName: string;
   routeNames: string[];
+};
+
+export type DisplayPositionMetadata = {
+  sourceId: string;
+  sourceStatus: 'manual-reference';
+  sourceLabel: string;
+  distanceFromNextbusMeters: number;
+  note: string;
+  osm?: {
+    type: string;
+    id: number;
+    name: string;
+    altName?: string;
+    network?: string;
+  };
 };
 
 export type SearchEntity = {
@@ -28,6 +44,7 @@ export type SearchEntity = {
   sourceLabel: string;
   detail: string;
   nextbus?: NextbusMetadata;
+  displayPosition?: DisplayPositionMetadata;
 };
 
 type RawCampusPlace = {
@@ -47,14 +64,60 @@ type RawCampusPlace = {
   nextbus?: NextbusMetadata;
 };
 
+type RawDisplayPositionOverride = {
+  nextbusStopId: string;
+  coordinates: [number, number];
+  sourceId: string;
+  sourceStatus: 'manual-reference';
+  osm?: {
+    type: string;
+    id: number;
+    name: string;
+    altName?: string;
+    network?: string;
+  };
+  distanceFromNextbusMeters: number;
+  note: string;
+};
+
+const displayPositionOverridesByStopId = new Map(
+  (nusIsbStopDisplayOverrides.overrides as unknown as RawDisplayPositionOverride[]).map((override) => [
+    override.nextbusStopId,
+    override,
+  ]),
+);
+
+function applyDisplayPositionOverride(place: RawCampusPlace): SearchEntity {
+  const override = displayPositionOverridesByStopId.get(place.id);
+
+  if (!override) {
+    return {
+      ...place,
+      coordinates: place.coordinates as LngLatLike,
+    };
+  }
+
+  return {
+    ...place,
+    coordinates: override.coordinates as LngLatLike,
+    subtitle: `${place.subtitle} · OSM platform display point`,
+    detail: `${place.detail} Display marker is aligned to an exact-name OpenStreetMap NUS ISB platform node as a manual-reference display position; this does not verify current NUS shuttle operations or official boarding-point coordinates.`,
+    displayPosition: {
+      sourceId: override.sourceId,
+      sourceStatus: override.sourceStatus,
+      sourceLabel: `OSM ${override.osm?.name ?? place.name} platform`,
+      distanceFromNextbusMeters: override.distanceFromNextbusMeters,
+      note: override.note,
+      osm: override.osm,
+    },
+  };
+}
+
 export const searchIndex: SearchEntity[] = [
   ...([
     ...(campusPlaces.places as unknown as RawCampusPlace[]).filter((place) => place.type !== 'bus_stop'),
     ...(nusIsbBusStops.stops as unknown as RawCampusPlace[]),
-  ]).map((place) => ({
-    ...place,
-    coordinates: place.coordinates as LngLatLike,
-  })),
+  ]).map(applyDisplayPositionOverride),
 ];
 
 function normalizeSearchTerm(value: string) {

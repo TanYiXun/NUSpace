@@ -1,0 +1,232 @@
+{
+  "schema": "phase2-nus-isb-stop-display-overrides-v1",
+  "name": "Phase 2 NUS ISB bus stop display-position overrides",
+  "date_checked": "2026-10-04",
+  "coordinate_reference_system": "WGS84 / EPSG:4326",
+  "coordinate_order": "[longitude, latitude]",
+  "source_ids": [
+    "osm-api-nus-kent-ridge-map",
+    "nus-nextbus-codelab-api"
+  ],
+  "source_status": "manual-reference",
+  "match_method": "Exact normalized stop-name match between the NUS NextBus research stop inventory and current OpenStreetMap nodes tagged as NUS Internal Shuttle Bus Services platforms or bus stops in the bounded Kent Ridge extract. These overrides only change app display/search coordinates; route membership remains from the NextBus research snapshot.",
+  "warning": "OpenStreetMap platform nodes are public community-maintained map references, not official NUS-verified current boarding-point coordinates. Do not mark these display positions verified without official data or documented field survey.",
+  "overrides": [
+    {
+      "nextbusStopId": "nextbus-as5",
+      "coordinates": [
+        103.7718183,
+        1.2934927
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738410355,
+        "name": "AS5",
+        "altName": "AS 5",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 41,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node shown on the basemap; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-biz2",
+      "coordinates": [
+        103.7750682,
+        1.2932416
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738410356,
+        "name": "BIZ2",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 2,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-com3",
+      "coordinates": [
+        103.7750111,
+        1.2949196
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 9849950852,
+        "name": "COM3",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 59,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node shown on the basemap; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-hssml-opp",
+      "coordinates": [
+        103.7751183,
+        1.2929533
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738421864,
+        "name": "Opp Hon Sui Sen Memorial Library",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 23,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-lt13",
+      "coordinates": [
+        103.7705968,
+        1.2947447
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1554938663,
+        "name": "LT 13",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 22,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-lt13-opp",
+      "coordinates": [
+        103.7705607,
+        1.295339
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1554938656,
+        "name": "Ventus",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 6,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-nuss-opp",
+      "coordinates": [
+        103.7724383,
+        1.2932426
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 4365726785,
+        "name": "Opp NUSS",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 20,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-pgpr",
+      "coordinates": [
+        103.7810665,
+        1.2909558
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 4365706068,
+        "name": "Prince George's Park Foyer",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 11,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-tcoms",
+      "coordinates": [
+        103.7770464,
+        1.2935718
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738421848,
+        "name": "TCOMS",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 19,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    },
+    {
+      "nextbusStopId": "nextbus-tcoms-opp",
+      "coordinates": [
+        103.7770148,
+        1.29372
+      ],
+      "sourceId": "osm-api-nus-kent-ridge-map",
+      "sourceStatus": "manual-reference",
+      "osm": {
+        "type": "node",
+        "id": 1738410359,
+        "name": "Opp TCOMS",
+        "network": "NUS Internal Shuttle Bus Services"
+      },
+      "distanceFromNextbusMeters": 34,
+      "reviewStatus": "reviewed",
+      "shipAllowed": false,
+      "note": "Display marker aligned to the exact matched OSM NUS ISB platform node; original NextBus research coordinate remains permission-required planning data."
+    }
+  ],
+  "unmatchedStopIds": [
+    "nextbus-bg-mrt",
+    "nextbus-cg",
+    "nextbus-clb",
+    "nextbus-it",
+    "nextbus-jp-sch-16151",
+    "nextbus-kr-mrt",
+    "nextbus-kr-mrt-opp",
+    "nextbus-krb",
+    "nextbus-kv",
+    "nextbus-lt27",
+    "nextbus-museum",
+    "nextbus-oth",
+    "nextbus-pgp",
+    "nextbus-raffles",
+    "nextbus-s17",
+    "nextbus-sde3-opp",
+    "nextbus-uhall",
+    "nextbus-uhall-opp",
+    "nextbus-uhc",
+    "nextbus-uhc-opp",
+    "nextbus-utown",
+    "nextbus-yih",
+    "nextbus-yih-opp"
+  ]
+}

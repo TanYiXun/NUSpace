@@ -8,56 +8,33 @@ This file is a concise working-memory handoff for long conversations, compaction
 
 - Project name: NUSpace.
 - Repository: `TanYiXun/NUSpace`.
-- Current branch: `one-building-xray-shell`.
-- Latest `main` commit: `6018f77 Merge pull request #27 from TanYiXun/nus-isb-research-stops`.
+- Current branch: `phase4-terrain-readiness-gate`.
+- Latest `main` commit: `355bcc6 Merge pull request #28 from TanYiXun/one-building-xray-shell`.
 - Prototype A through F were completed and merged to `main`.
 - Phase 1 MVP campus data foundation was merged to `main` in PR #7.
 - Phase 1 MVP building footprints was merged to `main` in PR #8.
 - PR #27 added the NUS ISB research stop inventory and was merged to `main`.
-- Latest local commit on `one-building-xray-shell`: `b1e40eb Add COM3 shell-only xray slice`.
-- Active uncommitted work: NUS ISB stop inventory cleanup and selected-stop bus timing UI on top of the COM3 xray slice. The app-facing bus stop layer now excludes stale OSM bus stop seed records and uses the 33 NextBus research stops only. Linked LTA public arrivals render inside the selected bus-stop sheet where a documented LTA stop-code link exists; NUS internal shuttle rows remain non-live `--` snapshot route membership. The selected bus-stop mobile sheet was compacted on 2026-10-04 so the combined bus-services card and first LTA timing row are visible without expanding. Files changed:
-  - `data/curated/phase2-nus-isb-stop-planting.json`
-  - `data/curated/phase2-nus-isb-public-bus-links.json`
-  - `data/sources.yml`
+- PR #28 added the COM3 shell-only xray slice, cleaned up app-facing NUS ISB research stops, added documented LTA public bus links for linked NUS ISB research stops, compacted the selected-stop bus services sheet, and merged to `main`.
+- Active uncommitted work: Phase 4 terrain readiness gate on `phase4-terrain-readiness-gate`. Terrain remains unavailable and data-backed through `data/curated/phase4-terrain-status.json`; the layer menu reads this status and shows the missing source/license/alignment/performance/readability/boundary requirements. Files changed:
+  - `data/curated/phase4-terrain-status.json`
+  - `docs/decisions/phase-4-terrain-readiness.md`
+  - `docs/screenshots/phase4-terrain-readiness-layer-menu.png`
   - `README.md`
   - `docs/data-pipeline.md`
   - `docs/design.md`
   - `docs/research-log.md`
-  - `docs/screenshots/nextbus-research-stops-overview.png`
-  - `docs/screenshots/nextbus-research-selected-stop.png`
-  - `docs/screenshots/nextbus-research-selected-stop-mobile.png`
   - `scripts/data/validate-sources.mjs`
   - `src/map/CampusMap.tsx`
-  - `src/map/searchIndex.ts`
-  - `src/map/searchIndex.test.ts`
-  - `src/nusmods/venueMapper.ts`
-  - `src/transit/nusIsbPublicBusLinks.ts`
-  - `src/transit/nusIsbPublicBusLinks.test.ts`
-  - `src/transit/nusIsbStopPlanting.ts`
-  - `src/transit/nusIsbStopPlanting.test.ts`
   - `tests/e2e/mvp1-map.spec.ts`
-- COM3 shell-only xray slice files from latest local commit:
-  - `data/curated/phase4-com3-xray-shell.json`
-  - `docs/decisions/phase-4-com3-xray-shell.md`
-  - `docs/screenshots/phase4-com3-xray-shell-desktop.png`
-  - `docs/screenshots/phase4-com3-xray-shell-mobile.png`
-  - `src/map/CampusMap.tsx`
-  - `scripts/data/validate-sources.mjs`
-  - `tests/e2e/mvp1-map.spec.ts`
-  - `data/sources.yml`
-  - `README.md`
-  - `docs/data-pipeline.md`
-  - `docs/research-log.md`
-  - `src/styles.css`
 
 ## Current Phase
 
-- Active plan section: `PLAN.md` section 13.1.1, recognizable building model and xray slice.
-- Current slice: COM3 shell-only xray is implemented locally and uncommitted on `one-building-xray-shell`.
-- Latest refinement: Selecting COM3 shows a visible translucent shell, six generic `L1` through `L6` floor slices, and a selected-floor highlight. The selected-building sheet exposes a floor selector and states `building shell only`; no rooms, corridors, public entrances, outdoor connection points, indoor POIs, or official floor names are shown. A 2026-10-04 fix added a transparent COM3 map hit layer, direct-click regression coverage, desktop camera offset, and stronger xray layer ordering so clicking the COM3 building body reliably opens the shell slice and leaves it visible beside the panel.
-- Status: Phase 4 sourced 3D campus-detail scope is accepted with constraints in `docs/decisions/phase-4-review.md`; PR #26 added a stricter post-review truth checkpoint in `docs/decisions/deprototype-map-transit-3d.md`. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
+- Active plan section: `PLAN.md` section 13.2, terrain guidance.
+- Current slice: Phase 4 terrain readiness gate is implemented locally and uncommitted on `phase4-terrain-readiness-gate`.
+- Latest refinement: Terrain status is now a curated data artifact, validated by `npm run validate:data`, and visible in the layer menu as `Terrain unavailable` with the missing gate requirements. No terrain tiles, DEM, hillshade, exaggeration, or terrain toggle is enabled.
+- Status: PR #28 completed and merged the COM3 shell-only xray slice. Terrain remains deferred by plan default because usefulness/source/license/alignment/performance/boundary treatment are unresolved. Phase 5 indoor navigation is still blocked until the indoor data acquisition and QA gate in `PLAN.md` section 14.0 passes.
 - Current local preview: `http://127.0.0.1:5174/` from `npm run dev -- --host 127.0.0.1`. Port `5173` was in use, so Vite selected `5174`.
-- The user has been reviewing the running local app. Current branch is `one-building-xray-shell`, not merged `main`.
+- The user has been reviewing the running local app. Current branch is `phase4-terrain-readiness-gate`, not merged `main`.
 
 ## Current Phase 1 Slice
 
@@ -348,12 +325,16 @@ Known build warning:
 - `AGENTS.md` now includes context and credit discipline rules: use fresh tasks after checkpoints, use this handoff as the memory bridge, read only relevant `PLAN.md` sections for normal work, summarize outputs, and capture screenshots mainly at checkpoints or when visual QA needs them.
 - PR #25 restored the opt-in D1 route surface to prototype route wording, documented unverified OSM bus stop seed coordinates, and kept D1 geometry and stop positions source-pending with no live arrivals.
 - PR #26 superseded that route surface by removing normal user-facing paths into dummy D1 routing and showing a blocked NUS shuttle route state instead. It also added procedural facade/roof depth for OSM building footprints, fixed blocked-route/layer menu overflow, added screenshots, and added `PLAN.md` section 13.1.1 for a one-building recognizable model and xray shell slice.
-- Merged PR #17 added NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest OSM seed stop suggestions from existing curated places. Current uncommitted cleanup changes that nearest-stop helper to use the NextBus research stop inventory instead.
+- Merged PR #17 added NUSMods module lookup, venue-code normalization, confidence-labelled venue mappings, and nearest OSM seed stop suggestions from existing curated places.
+- PR #28 was pushed, opened with screenshots, and merged to `main`. It added the COM3 shell-only xray slice, direct COM3 map-click coverage, NextBus research stop cleanup, documented LTA public bus links for 21 NUS ISB research stops, and compact selected-stop bus services.
+- Current branch `phase4-terrain-readiness-gate` adds the Phase 4 terrain readiness gate. Latest checks on this branch:
+  - `npm run validate:data`: passed.
+  - `npm run typecheck`: passed.
+  - `npm run lint`: passed.
+  - `npm run test`: passed, 45 tests.
+  - `npm run test:e2e`: passed, 8 passed and 8 project-skipped.
+  - `npm run build`: passed with the existing Vite large-chunk warning.
 
 ## Next Recommended Action
 
-Commit, push, open, and merge the `one-building-xray-shell` branch after review. Then either:
-
-1. Decide whether the shell-only COM3 result is good enough to scale under `PLAN.md` section 13.1.1.
-2. Start terrain only after documenting elevation source, license, alignment, mobile performance, and boundary treatment.
-3. Start Phase 5 indoor navigation only after legal indoor data and QA artifacts exist for at least one building.
+Commit, push, open, and merge `phase4-terrain-readiness-gate` if the blocked terrain gate is accepted. After that, do not start Phase 5 indoor navigation until legal indoor data and QA artifacts exist for at least one building.

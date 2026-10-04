@@ -10,6 +10,7 @@ const isbStopPlantingFile = new URL('../../data/curated/phase2-nus-isb-stop-plan
 const isbBusStopsFile = new URL('../../data/curated/phase2-nus-isb-bus-stops.json', import.meta.url);
 const isbPublicBusLinksFile = new URL('../../data/curated/phase2-nus-isb-public-bus-links.json', import.meta.url);
 const com3XrayShellFile = new URL('../../data/curated/phase4-com3-xray-shell.json', import.meta.url);
+const terrainStatusFile = new URL('../../data/curated/phase4-terrain-status.json', import.meta.url);
 const nextbusResearchSnapshotFile = new URL('../../data/processed/nextbus-research/nus-nextbus-static-snapshot.json', import.meta.url);
 
 const NUS_BOUNDS = {
@@ -338,6 +339,33 @@ function validateCom3XrayShell(shell) {
   assert(shell.detail.includes('must not be treated as official indoor detail'), 'COM3 xray shell must disclose indoor-detail limitation');
 }
 
+function validateTerrainStatus(status) {
+  assert(status.schema === 'phase4-terrain-status-v1', 'terrain status must use the Phase 4 schema');
+  assert(['unavailable', 'prototype', 'supported', 'disabled-for-performance'].includes(status.status), 'terrain status has unsupported status');
+  assert(status.status === 'unavailable', 'terrain must stay unavailable until the Phase 4 terrain gate is resolved');
+  assert(Array.isArray(status.sourceIds), 'terrain status must include sourceIds');
+  assert(status.sourceIds.length === 0, 'terrain unavailable state must not reference an elevation source');
+  assert(typeof status.dateChecked === 'string' && status.dateChecked.length > 0, 'terrain status must include dateChecked');
+  assert(typeof status.nextReviewDate === 'string' && status.nextReviewDate.length > 0, 'terrain status must include nextReviewDate');
+  assert(typeof status.decision === 'string' && status.decision.includes('Do not enable terrain'), 'terrain status must document the blocked decision');
+  assert(typeof status.uiLabel === 'string' && status.uiLabel.includes('Terrain'), 'terrain status must include a UI label');
+  assert(typeof status.uiSummary === 'string' && status.uiSummary.includes('elevation source'), 'terrain status must expose the missing elevation-source requirement');
+  assert(status.layerStateLabel === 'Blocked', 'terrain unavailable state must show as Blocked');
+  assert(status.requirements?.elevationSource === 'missing', 'terrain status must keep elevation source missing');
+  assert(status.requirements?.license === 'missing', 'terrain status must keep license missing');
+  assert(status.requirements?.campusAlignment === 'missing', 'terrain status must keep alignment missing');
+  assert(status.requirements?.mobilePerformance === 'missing', 'terrain status must keep mobile performance missing');
+  assert(status.requirements?.labelAndOverlayReadability === 'missing', 'terrain status must keep readability missing');
+  assert(status.requirements?.boundaryTreatment === 'missing', 'terrain status must keep boundary treatment missing');
+  assert(status.coverage?.extentStatus === 'not-defined', 'terrain unavailable state must not define coverage');
+  assert(
+    typeof status.coverage?.boundaryPolicy === 'string' && status.coverage.boundaryPolicy.includes('unfinished square'),
+    'terrain status must document user-facing boundary policy',
+  );
+  assert(Array.isArray(status.blockedArtifacts), 'terrain status must include blockedArtifacts');
+  assert(status.blockedArtifacts.includes('terrain tiles'), 'terrain status must keep terrain tiles blocked');
+}
+
 const generatedBuildings = JSON.parse(await readFile(generatedBuildingsFile, 'utf8'));
 const generatedManifest = JSON.parse(await readFile(generatedManifestFile, 'utf8'));
 const curatedPlaces = JSON.parse(await readFile(curatedPlacesFile, 'utf8'));
@@ -346,6 +374,7 @@ const isbStopPlanting = JSON.parse(await readFile(isbStopPlantingFile, 'utf8'));
 const isbBusStops = JSON.parse(await readFile(isbBusStopsFile, 'utf8'));
 const isbPublicBusLinks = JSON.parse(await readFile(isbPublicBusLinksFile, 'utf8'));
 const com3XrayShell = JSON.parse(await readFile(com3XrayShellFile, 'utf8'));
+const terrainStatus = JSON.parse(await readFile(terrainStatusFile, 'utf8'));
 const nextbusResearchSnapshot = JSON.parse(await readFile(nextbusResearchSnapshotFile, 'utf8'));
 
 assert(generatedBuildings.type === 'FeatureCollection', 'generated buildings must be a FeatureCollection');
@@ -391,6 +420,7 @@ validateNextbusResearchSnapshot(nextbusResearchSnapshot);
 validateIsbBusStopInventory(isbBusStops, nextbusResearchSnapshot);
 validateIsbPublicBusLinks(isbPublicBusLinks, isbStopIds);
 validateCom3XrayShell(com3XrayShell);
+validateTerrainStatus(terrainStatus);
 
 assert(generatedManifest.pipeline === 'scripts/data/build-campus-data.mjs', 'manifest must record pipeline path');
 assert(Array.isArray(generatedManifest.outputs), 'manifest outputs must be an array');
@@ -399,4 +429,4 @@ assert(
   'manifest must list generated campus buildings output',
 );
 
-console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB public bus links, NextBus research snapshot, and COM3 xray shell contain required metadata.');
+console.log('data/sources.yml, generated data, curated MVP 1 places, MVP 1 building footprints, Phase 2 ISB stop planting, NUS ISB bus stops, NUS ISB public bus links, NextBus research snapshot, COM3 xray shell, and terrain status contain required metadata.');

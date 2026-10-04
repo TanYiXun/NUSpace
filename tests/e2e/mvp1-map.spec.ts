@@ -76,6 +76,8 @@ test('desktop blocks NUS shuttle routes until source data exists', async ({ page
   await page.getByRole('button', { name: 'Change map layers' }).click();
   await expect(page.getByRole('button', { name: /NUS ISB stops/ })).toContainText('On');
   await expect(page.getByRole('button', { name: /Prototype route/ })).toBeHidden();
+  await expect(page.getByText('Terrain unavailable')).toBeVisible();
+  await expect(page.getByText('Needs elevation source, license, alignment, mobile performance, and boundary treatment')).toBeVisible();
   await page.getByRole('button', { name: 'Close map layers' }).click();
 
   await page.getByRole('button', { name: 'View shuttle routes' }).click();
@@ -170,7 +172,17 @@ test('desktop exposes COM3 shell-only xray floor selector', async ({ page }, tes
   await expect(page.getByRole('heading', { name: 'NUSpace' })).toBeVisible();
   await page.waitForTimeout(1_000);
 
-  await page.mouse.click(410, 330);
+  for (const [x, y] of [[410, 330], [390, 360], [430, 340], [350, 335]]) {
+    await page.mouse.click(x, y);
+    await page.waitForTimeout(350);
+
+    if (await page.getByRole('heading', { name: 'COM3' }).isVisible()) {
+      break;
+    }
+
+    await page.getByRole('button', { name: 'Close details' }).click().catch(() => {});
+  }
+
   await expect(page.getByRole('heading', { name: 'COM3' })).toBeVisible();
   await expect(page.getByLabel('COM3 shell-only floor selector')).toBeVisible();
 });

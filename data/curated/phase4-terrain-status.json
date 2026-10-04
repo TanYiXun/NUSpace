@@ -1,0 +1,30 @@
+{
+  "schema": "phase4-terrain-status-v1",
+  "status": "unavailable",
+  "sourceIds": [],
+  "dateChecked": "2026-10-04",
+  "nextReviewDate": "2026-11-04",
+  "decision": "Do not enable terrain until an elevation source, license, campus alignment, mobile performance, and boundary treatment are documented.",
+  "uiLabel": "Terrain unavailable",
+  "uiSummary": "Needs elevation source, license, alignment, mobile performance, and boundary treatment",
+  "layerStateLabel": "Blocked",
+  "requirements": {
+    "elevationSource": "missing",
+    "license": "missing",
+    "campusAlignment": "missing",
+    "mobilePerformance": "missing",
+    "labelAndOverlayReadability": "missing",
+    "boundaryTreatment": "missing"
+  },
+  "coverage": {
+    "extentStatus": "not-defined",
+    "boundaryPolicy": "Terrain extent must be data-driven and must not show an unfinished square in user-facing map states."
+  },
+  "blockedArtifacts": [
+    "terrain tiles",
+    "DEM raster source",
+    "hillshade source",
+    "terrain exaggeration",
+    "user-facing terrain toggle"
+  ]
+}

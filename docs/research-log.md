@@ -147,6 +147,14 @@
 - Decision: add `data/curated/phase2-nus-isb-public-bus-links.json` for the 21 documented links. Selected NUS ISB stops can show live LTA public bus arrivals when linked, while internal NUS route rows remain `--` because no live NUS shuttle API is enabled.
 - Confidence: high for official LTA stop-code existence and coordinate-distance matching, low for treating unlinked NUS ISB stops as public LTA stops without stronger evidence.
 
+## 2026-10-04 - Phase 4 Terrain Readiness Gate
+
+- Task: decide whether to start Phase 4 terrain implementation after the COM3 shell-only slice.
+- Sources checked: `PLAN.md` section 13.2 terrain guidance and the open question default for Phase 4 terrain work.
+- Finding: no elevation source, license, alignment review, mobile performance measurement, label/readability review, or boundary treatment has been selected or documented.
+- Decision: add `data/curated/phase4-terrain-status.json` and keep terrain unavailable in the layer menu. Do not add terrain tiles, DEM sources, hillshade, exaggeration, or user-facing terrain toggles yet.
+- Confidence: high that this matches the plan gate; terrain usefulness remains unresolved.
+
 ## 2026-10-02 - Phase 4 COM3 Xray Shell Slice
 
 - Task: implement the `PLAN.md` section 13.1.1 one-building recognizable model and xray slice without adding unsourced indoor detail.

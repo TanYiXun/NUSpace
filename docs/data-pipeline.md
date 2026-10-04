@@ -80,7 +80,7 @@ The NextBus codelab API research snapshot lives at `data/processed/nextbus-resea
 
 Phase 4 adds `phase4-com3-xray-shell.json` for the COM3 selected-building shell-only xray. It uses the sourced OSM COM3 footprint and OSM `building:levels=6` to generate six generic floor-slice labels. It does not include verified public entrances, outdoor connection points, floor plans, rooms, corridors, indoor POIs, or official floor names.
 
-Phase 4 terrain readiness is tracked in `phase4-terrain-status.json`. The current status is `unavailable`; validation requires the missing elevation source, license, alignment, mobile performance, readability, and boundary-treatment gates to remain explicit before any terrain source or renderer is enabled.
+Phase 4 terrain readiness is tracked in `phase4-terrain-status.json`. The current status is `prototype`; validation requires the documented AWS Open Data Terrain Tiles source, Terrarium encoding, campus review bounds, restrained exaggeration, and explicit review requirements before terrain can move beyond prototype status.
 
 Phase 5 indoor readiness is tracked in `phase5-indoor-readiness-status.json`. The current status is `blocked`; validation requires the legal floor-plan source, floor list, room/POI inventory, entrances and outdoor connections, vertical connectors, inaccessible/private-area markings, confidence scores, and manual QA notes to remain explicit before any indoor source, corridor graph, accessibility path, or indoor routing surface is enabled.
 
@@ -100,6 +100,7 @@ Validation checks the curated place schema, building footprint schema, D1 stop p
 - exactly 20 manual-reference OSM display-position overrides for exact matched public bus stop/platform nodes and 13 explicitly unmatched NUS ISB stops
 - exactly 21 documented NUS ISB to LTA public bus stop links, with every unlinked NUS ISB stop explicitly accounted for
 - exactly six COM3 shell-only floor selector labels
+- prototype terrain source, bounds, Terrarium encoding, hillshade/terrain artifacts, and blocked accessibility/routing artifacts
 - blocked Phase 5 indoor readiness requirements and blocked indoor artifacts
 
 Known data quality issues:
@@ -113,5 +114,6 @@ Known data quality issues:
 - NextBus codelab API records are `requires-permission` research data. They may render only with explicit research/permission-required labels and are not approved production stop coordinates, route geometry, live arrivals, or redistributable official data.
 - LTA public bus links are not NUS ISB live data. They may show public bus timings only where a documented LTA stop-code link exists; NUS internal shuttle timings remain unavailable.
 - COM3 xray shell floor labels are generic labels derived from OSM level count, not official NUS floor names or indoor maps.
+- Terrain uses global DEM tiles for visual slope context only. It is not NUS-verified slope, stair, ramp, entrance, accessibility, or routing data.
 - Indoor navigation remains blocked. There are no legal floor plans, room/POI inventories, entrances, connectors, inaccessible/private-area markings, confidence scores, manual QA notes, corridor graphs, accessibility paths, or indoor routes in the app.
 - The current D1 route remains a prototype simulation and is not generated from this dataset.

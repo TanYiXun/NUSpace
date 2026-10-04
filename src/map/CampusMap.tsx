@@ -39,6 +39,8 @@ const COM3_XRAY_FLOORS_LAYER_ID = 'phase4-com3-xray-floors';
 const COM3_XRAY_SELECTED_FLOOR_LAYER_ID = 'phase4-com3-xray-selected-floor';
 const COM3_OUTLINE_LAYER_ID = 'prototype-com3-outline';
 const COM3_LABEL_LAYER_ID = 'prototype-com3-label';
+const TERRAIN_DEM_SOURCE_ID = 'phase4-terrain-dem';
+const TERRAIN_HILLSHADE_LAYER_ID = 'phase4-terrain-hillshade';
 const CAMPUS_BUS_STOPS_SOURCE_ID = 'mvp1-campus-bus-stops';
 const CAMPUS_BUS_STOP_HIT_LAYER_ID = 'mvp1-campus-bus-stop-hit-targets';
 const USER_LOCATION_SOURCE_ID = 'user-location';
@@ -81,11 +83,12 @@ const BUS_STOP_LAYER_IDS = [
   CAMPUS_BUS_STOP_CIRCLES_LAYER_ID,
   CAMPUS_BUS_STOP_LABELS_LAYER_ID,
 ];
+const TERRAIN_LAYER_IDS = [TERRAIN_HILLSHADE_LAYER_ID];
 
 type LngLatPosition = [number, number];
 type SelectedPanel = 'overview' | 'building' | 'search' | 'busStop' | 'module';
 type SheetState = 'collapsed' | 'half' | 'expanded';
-type LayerKey = 'buildings' | 'busStops';
+type LayerKey = 'buildings' | 'busStops' | 'terrain';
 type LocationStatus = 'idle' | 'locating' | 'unavailable' | 'denied' | 'found';
 type BuildingVisualMetadata = {
   id: string;
@@ -460,6 +463,7 @@ export function CampusMap() {
   const [visibleLayers, setVisibleLayers] = useState<Record<LayerKey, boolean>>({
     buildings: true,
     busStops: true,
+    terrain: true,
   });
   const [locationStatus, setLocationStatus] = useState<LocationStatus>('idle');
   const [selectedPublicBusArrivalState, setSelectedPublicBusArrivalState] = useState<PublicBusArrivalUiState>(
@@ -542,11 +546,33 @@ export function CampusMap() {
     });
   }, []);
 
+  const setTerrainVisibility = useCallback((visible: boolean) => {
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
+    setMapLayerVisibility(TERRAIN_LAYER_IDS, visible);
+
+    if (map.getSource(TERRAIN_DEM_SOURCE_ID)) {
+      map.setTerrain(visible ? {
+        source: TERRAIN_DEM_SOURCE_ID,
+        exaggeration: terrainStatus.exaggeration,
+      } : null);
+    }
+  }, [setMapLayerVisibility]);
+
   const toggleLayer = (layer: LayerKey) => {
     const nextValue = !visibleLayers[layer];
-    const layerIds = layer === 'buildings'
-      ? BUILDING_LAYER_IDS
-      : BUS_STOP_LAYER_IDS;
+
+    if (layer === 'terrain') {
+      setVisibleLayers((current) => ({ ...current, terrain: nextValue }));
+      setTerrainVisibility(nextValue);
+      return;
+    }
+
+    const layerIds = layer === 'buildings' ? BUILDING_LAYER_IDS : BUS_STOP_LAYER_IDS;
 
     setVisibleLayers((current) => ({ ...current, [layer]: nextValue }));
     setMapLayerVisibility(layerIds, nextValue);
@@ -781,6 +807,33 @@ export function CampusMap() {
       });
 
       const firstSymbolLayerId = getFirstSymbolLayerId(map);
+
+      map.addSource(TERRAIN_DEM_SOURCE_ID, {
+        type: 'raster-dem',
+        tiles: [terrainStatus.tileUrlTemplate],
+        tileSize: terrainStatus.tileSize,
+        maxzoom: terrainStatus.maxzoom,
+        encoding: terrainStatus.encoding as 'terrarium',
+        bounds: terrainStatus.coverage.bounds as [number, number, number, number],
+        attribution: 'Elevation tiles from Mapzen Terrain Tiles on AWS Open Data',
+      });
+
+      map.addLayer({
+        id: TERRAIN_HILLSHADE_LAYER_ID,
+        type: 'hillshade',
+        source: TERRAIN_DEM_SOURCE_ID,
+        paint: {
+          'hillshade-exaggeration': ['interpolate', ['linear'], ['zoom'], 13, 0.08, 16, 0.18, 18, 0.12],
+          'hillshade-shadow-color': '#7f8b91',
+          'hillshade-highlight-color': '#ffffff',
+          'hillshade-accent-color': '#b8c7bd',
+        },
+      }, firstSymbolLayerId);
+
+      map.setTerrain({
+        source: TERRAIN_DEM_SOURCE_ID,
+        exaggeration: terrainStatus.exaggeration,
+      });
 
       map.addLayer({
         id: CAMPUS_BUILDING_EXTRUSION_LAYER_ID,
@@ -1445,13 +1498,13 @@ export function CampusMap() {
             </span>
             <span className="layerState">{visibleLayers.busStops ? 'On' : 'Off'}</span>
           </button>
-          <div className="layerChoice layerChoiceUnavailable" role="note">
+          <button className="layerChoice" type="button" onClick={() => toggleLayer('terrain')}>
             <span className="choiceText">
               <strong>{terrainStatus.uiLabel}</strong>
               <small>{terrainStatus.uiSummary}</small>
             </span>
-            <span className="layerState">{terrainStatus.layerStateLabel}</span>
-          </div>
+            <span className="layerState">{visibleLayers.terrain ? 'On' : 'Off'}</span>
+          </button>
           <div className="layerChoice layerChoiceUnavailable" role="note">
             <span className="choiceText">
               <strong>{indoorReadinessStatus.uiLabel}</strong>
@@ -1761,10 +1814,10 @@ export function CampusMap() {
           </>
         ) : (
           <>
-            <p className="eyebrow">Phase 5 indoor readiness gate</p>
+            <p className="eyebrow">Phase 4 terrain and 3D prototype</p>
             <h1>NUSpace</h1>
             <p>
-              Indoor navigation is blocked until legal floor plans, room inventory, entrances, connectors, access boundaries, confidence scores, and QA notes exist for at least one building.
+              Open DEM terrain is enabled for visual slope context alongside sourced 3D building footprints. It is not NUS-verified slope, accessibility, or routing data.
             </p>
             <dl className="buildingFacts">
               <div>
@@ -1786,6 +1839,10 @@ export function CampusMap() {
               <div>
                 <dt>Shuttles</dt>
                 <dd>Source required</dd>
+              </div>
+              <div>
+                <dt>Terrain</dt>
+                <dd>{terrainStatus.truthLabel}</dd>
               </div>
               <div>
                 <dt>Indoor</dt>
